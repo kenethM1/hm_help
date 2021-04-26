@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -28,16 +29,40 @@ class LoginScreen extends StatelessWidget {
           Input_usuario(),
           Input_Pass(),
           PasswordRecovery_button(),
-          SizedBox(height: 30,),
-          Login_button()
+          SizedBox(
+            height: 30,
+          ),
+          Login_button(),
+          Social_signIn_button(),
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                '¿No tienes cuenta? Registrate!',
+                style: TextStyle(
+                    color: Colors.black, 
+                    fontWeight: FontWeight.bold),
+              ))
         ]));
   }
 }
 
+class Social_signIn_button extends StatelessWidget {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 25),
+      child: Row(
+        
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [SignInButton(Buttons.Google, elevation: 0, onPressed: () {})],
+      ),
+    );
+  }
+}
+
 class PasswordRecovery_button extends StatelessWidget {
-  const PasswordRecovery_button({
-    Key key,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +74,6 @@ class PasswordRecovery_button extends StatelessWidget {
 }
 
 class Login_button extends StatelessWidget {
-  const Login_button({
-    Key key,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
