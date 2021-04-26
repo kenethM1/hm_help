@@ -6,14 +6,64 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue.shade300,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [Logo(), Input_usuario(), Input_Pass()],
+            children: [
+              Logo(),
+              _form(),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _form() {
+    return Container(
+        height: 400,
+        color: Colors.white,
+        child: Column(children: [
+          Input_usuario(),
+          Input_Pass(),
+          PasswordRecovery_button(),
+          SizedBox(height: 30,),
+          Login_button()
+        ]));
+  }
+}
+
+class PasswordRecovery_button extends StatelessWidget {
+  const PasswordRecovery_button({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(primary: Colors.grey.shade500),
+        child: Text('Olvidaste tu contraseña?'));
+  }
+}
+
+class Login_button extends StatelessWidget {
+  const Login_button({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 230,
+      height: 50,
+      child: ElevatedButton(
+          child: Text('Iniciar Sesion'),
+          style: ElevatedButton.styleFrom(
+              shape: StadiumBorder(),
+              textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          onPressed: () {}),
     );
   }
 }
