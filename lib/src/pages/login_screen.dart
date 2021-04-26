@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:hm_help/src/bloc/login_bloc.dart';
+import 'package:hm_help/src/bloc/provider.dart';
+import 'package:hm_help/src/provider/usuario_provider.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
+  final usuarioProvider = new UsuarioProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +16,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               Logo(),
-              _form(),
+              _form(context),
             ],
           ),
         ),
@@ -21,49 +24,49 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _form() {
+  Widget _form(BuildContext context) {
+    final bloc = Provider.of(context);
+
     return Container(
-        height: 400,
+        height: 600,
         color: Colors.white,
         child: Column(children: [
-          Input_usuario(),
-          Input_Pass(),
-          PasswordRecovery_button(),
+          _usuario(bloc),
+          _passWord(bloc),
+          passwordRecoveryButton(),
           SizedBox(
             height: 30,
           ),
-          Login_button(),
-          Social_signIn_button(),
+          loginButton(),
+          socialSignInButton(),
           TextButton(
               onPressed: () {},
               child: Text(
                 '¿No tienes cuenta? Registrate!',
-                style: TextStyle(
-                    color: Colors.black, 
-                    fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ))
         ]));
   }
 }
 
-class Social_signIn_button extends StatelessWidget {
-
-
+// ignore: camel_case_types
+class socialSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 25),
       child: Row(
-        
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [SignInButton(Buttons.Google, elevation: 0, onPressed: () {})],
+        children: [
+          SignInButton(Buttons.Google, elevation: 0, onPressed: () {})
+        ],
       ),
     );
   }
 }
 
-class PasswordRecovery_button extends StatelessWidget {
-
+class passwordRecoveryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -73,8 +76,7 @@ class PasswordRecovery_button extends StatelessWidget {
   }
 }
 
-class Login_button extends StatelessWidget {
-
+class loginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,21 +87,23 @@ class Login_button extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               shape: StadiumBorder(),
               textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          onPressed: () {}),
+          onPressed: null),
     );
   }
 }
 
-class Input_Pass extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+Widget _passWord(LoginBloc bloc)
+{
+  return StreamBuilder(
+    stream: bloc.passwordStream ,
+    builder: (BuildContext context, AsyncSnapshot snapshot){
+      return Container(
+      height: 75,
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: TextField(
         scrollPadding: EdgeInsets.only(bottom: 15),
         autocorrect: false,
-        //maxLength: 25,
+        obscureText: true,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
             focusColor: Colors.blue,
@@ -113,33 +117,44 @@ class Input_Pass extends StatelessWidget {
                 fontWeight: FontWeight.bold)),
       ),
     );
-  }
-}
 
-class Input_usuario extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-      child: TextField(
-        scrollPadding: EdgeInsets.only(bottom: 15),
-        autocorrect: false,
-        //maxLength: 25,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-            focusColor: Colors.blue,
-            fillColor: Colors.grey.shade300,
-            filled: true,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            hintText: 'Usuario',
-            hintStyle: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 21,
-                fontWeight: FontWeight.bold)),
-      ),
-    );
+    },
+  );
+
+
+    
   }
+
+
+Widget _usuario(LoginBloc bloc) {
+
+  return StreamBuilder(
+    stream: bloc.emailStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          //maxLength: 25,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Email',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+                  onChanged: (value) => bloc.changeEmail(value),
+        ),
+      );
+    },
+  );
 }
 
 class Logo extends StatelessWidget {
