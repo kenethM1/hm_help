@@ -3,6 +3,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
+import 'package:hm_help/src/pages/registro_usuario.dart';
 
 class LoginScreen extends StatelessWidget {
   final usuarioProvider = new UsuarioProvider();
@@ -40,7 +41,9 @@ class LoginScreen extends StatelessWidget {
           loginButton(),
           socialSignInButton(),
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, new MaterialPageRoute(builder: (context) => LoginScreenUser()));
+              },
               child: Text(
                 '¿No tienes cuenta? Registrate!',
                 style:
