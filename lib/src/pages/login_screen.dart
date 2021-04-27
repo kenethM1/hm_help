@@ -6,7 +6,7 @@ import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';
 
 class LoginScreen extends StatelessWidget {
-  final usuarioProvider = new UsuarioProvider();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,14 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          loginButton(),
+          _login_button(bloc),
           socialSignInButton(),
           TextButton(
               onPressed: () {
-                Navigator.push(context, new MaterialPageRoute(builder: (context) => LoginScreenUser()));
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => LoginScreenUser()));
               },
               child: Text(
                 '¿No tienes cuenta? Registrate!',
@@ -79,58 +82,69 @@ class passwordRecoveryButton extends StatelessWidget {
   }
 }
 
-class loginButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 230,
-      height: 50,
-      child: ElevatedButton(
-          child: Text('Iniciar Sesion'),
-          style: ElevatedButton.styleFrom(
-              shape: StadiumBorder(),
-              textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          onPressed: null),
-    );
-  }
+Widget _login_button(LoginBloc bloc) {
+  return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (context, snapshot) {
+        return Container(
+          width: 230,
+          height: 50,
+          child: ElevatedButton(
+              child: Text('Iniciar Sesion'),
+              style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  textStyle:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              onPressed: snapshot.hasData ? () => _login(bloc, context) : null),
+        );
+      });
 }
 
-Widget _passWord(LoginBloc bloc)
-{
-  return StreamBuilder(
-    stream: bloc.passwordStream ,
-    builder: (BuildContext context, AsyncSnapshot snapshot){
-      return Container(
-      height: 75,
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-      child: TextField(
-        scrollPadding: EdgeInsets.only(bottom: 15),
-        autocorrect: false,
-        obscureText: true,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-            focusColor: Colors.blue,
-            fillColor: Colors.grey.shade300,
-            filled: true,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            hintText: 'Contraseña',
-            hintStyle: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 21,
-                fontWeight: FontWeight.bold)),
-      ),
-    );
+_login(LoginBloc bloc, BuildContext context) async {
+  final usuarioProvider = new UsuarioProvider();
 
-    },
-  );
-
-
-    
+  print(bloc.email);
+  print(bloc.password);
+  Map info = await usuarioProvider.login(bloc.email, bloc.password);
+  
+  if(info['ok'])
+  {
+    Navigator.pushNamed(context, 'registro');
   }
 
+}
+
+Widget _passWord(LoginBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.passwordStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          obscureText: true,
+          textAlign: TextAlign.center,
+          onChanged: bloc.changePassword,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Contraseña',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+        ),
+      );
+    },
+  );
+}
 
 Widget _usuario(LoginBloc bloc) {
-
   return StreamBuilder(
     stream: bloc.emailStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -153,7 +167,7 @@ Widget _usuario(LoginBloc bloc) {
                   color: Colors.grey.shade400,
                   fontSize: 21,
                   fontWeight: FontWeight.bold)),
-                  onChanged: (value) => bloc.changeEmail(value),
+          onChanged: bloc.changeEmail,
         ),
       );
     },
