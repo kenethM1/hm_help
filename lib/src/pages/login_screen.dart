@@ -6,8 +6,6 @@ import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';
 
 class LoginScreen extends StatelessWidget {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,12 +104,25 @@ _login(LoginBloc bloc, BuildContext context) async {
   print(bloc.email);
   print(bloc.password);
   Map info = await usuarioProvider.login(bloc.email, bloc.password);
-  
-  if(info['ok'])
-  {
-    Navigator.pushNamed(context, 'registro');
-  }
 
+  if (info['ok']) {
+    Navigator.pushNamed(context, 'registro');
+  } else {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Credenciales no validas"),
+            elevation: 3,
+            content: Text('Regresa y revisa bien tus datos'),
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Okay'))
+            ],
+          );
+        });
+  }
 }
 
 Widget _passWord(LoginBloc bloc) {
