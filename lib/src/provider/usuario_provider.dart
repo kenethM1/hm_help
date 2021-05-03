@@ -38,7 +38,7 @@ class UsuarioProvider {
 
   Future<Map<String,dynamic>> nuevoUsuario(String email, String password) async {
     String _url = 'https://is2-grupo-2-be.herokuapp.com';
-    final url = Uri.https(_url,'/users/login');
+    final url = Uri.https(_url,'/users/sign-up');
     final authData = {
       'email': email,
       'paswword': password,
@@ -49,8 +49,7 @@ class UsuarioProvider {
 
     Map<String, dynamic> decodedResp = json.decode(resp.body);
 
-    print(decodedResp);
+    print(decodedResp); 
 
-    
   }
 }

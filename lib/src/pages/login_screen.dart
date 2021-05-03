@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => LoginScreenUser()));
+                        builder: (context) => LogUPScreen()));
               },
               child: Text(
                 '¿No tienes cuenta? Registrate!',
