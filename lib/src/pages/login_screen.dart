@@ -4,7 +4,6 @@ import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';
-import 'package:hm_help/src/widgets/progress_Dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -41,10 +40,8 @@ class LoginScreen extends StatelessWidget {
           socialSignInButton(),
           TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => LoginScreenUser()));
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => LogUPScreen()));
               },
               child: Text(
                 '¿No tienes cuenta? Registrate!',
