@@ -6,8 +6,11 @@ import 'package:hm_help/src/pages/registro_contratista.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 
 void main() async {
-  final prefs = new PreferenciasUsuario();
-  await prefs.initPrefs();
+  WidgetsFlutterBinding.ensureInitialized();
+  final _prefs = new PreferenciasUsuario();
+
+  await _prefs.initPrefs();
+
   runApp(MyApp());
 }
 
@@ -18,7 +21,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-            initialRoute: 'principal',
+            initialRoute: 'login',
             routes: {
           'login': (_) => LoginScreen(),
           'registro': (_) => RegistroPage(),

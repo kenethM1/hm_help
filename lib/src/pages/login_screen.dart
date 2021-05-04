@@ -4,6 +4,7 @@ import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';
+import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -97,7 +98,6 @@ Widget _login_button(LoginBloc bloc) {
 }
 
 _login(LoginBloc bloc, BuildContext context) async {
-  bool isLoading = false;
   final usuarioProvider = new UsuarioProvider();
 
   print(bloc.email);
@@ -111,7 +111,7 @@ _login(LoginBloc bloc, BuildContext context) async {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog();
+          return AlertLogin();
         });
   }
 }
