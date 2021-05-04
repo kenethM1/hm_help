@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/logup_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 
 class LogUPScreen extends StatelessWidget {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,19 +30,16 @@ class LogUPScreen extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           _usuario(bloc),
-          _passWord(bloc),
+          _passWordLogin(bloc),
           SizedBox(
             height: 30,
           ),
-          _logUP_button(bloc),
+          _logupButton(),
         ]));
   }
 }
 
-// ignore: camel_case_types
-
-
-Widget _logUP_button(LoginBloc bloc) {
+Widget _usuario(LoginBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
@@ -68,7 +62,9 @@ _logUP(LoginBloc bloc, BuildContext context) async {
 
   print(bloc.email);
   print(bloc.password);
-  Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+
+  Map info = await usuarioProvider.nuevoUsuario(bloc.email.toString(), bloc.password.toString());
+
 
   if (info['ok']) {
     Navigator.pushNamed(context, 'registro');
@@ -120,8 +116,7 @@ Widget _passWord(LoginBloc bloc) {
   );
 }
 
-Widget _user(LoginBloc bloc) {
-
+Widget _correo(LoginBloc bloc) {
   return StreamBuilder(
     stream: bloc.emailStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -144,16 +139,16 @@ Widget _user(LoginBloc bloc) {
                   color: Colors.grey.shade400,
                   fontSize: 21,
                   fontWeight: FontWeight.bold)),
-                  onChanged: (value) => bloc.changeEmail(value),
+          onChanged: (value) => bloc.changeEmail(value),
         ),
       );
     },
   );
 }
 
-Widget _usuario(LoginBloc bloc) {
+Widget _passWordLogin(LoginBloc bloc) {
   return StreamBuilder(
-    stream: bloc.emailStream,
+    stream: bloc.passwordStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
         height: 75,
@@ -161,7 +156,7 @@ Widget _usuario(LoginBloc bloc) {
         child: TextField(
           scrollPadding: EdgeInsets.only(bottom: 15),
           autocorrect: false,
-          //maxLength: 25,
+          obscureText: true,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
               focusColor: Colors.blue,
@@ -169,12 +164,11 @@ Widget _usuario(LoginBloc bloc) {
               filled: true,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Email',
+              hintText: 'Contraseña',
               hintStyle: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 21,
                   fontWeight: FontWeight.bold)),
-          onChanged: bloc.changeEmail,
         ),
       );
     },
@@ -194,6 +188,23 @@ class Logo extends StatelessWidget {
         image: AssetImage('assets/logo.png'),
         //fit: BoxFit.contain,
       ),
+    );
+  }
+}
+
+class _logupButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 230,
+      height: 60,
+      margin: const EdgeInsets.only(top: 25),
+      child: ElevatedButton(
+          child: Text('Registrate'),
+          style: ElevatedButton.styleFrom(
+              shape: StadiumBorder(),
+              textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          onPressed: () {}),
     );
   }
 }

@@ -40,10 +40,8 @@ class LoginScreen extends StatelessWidget {
           socialSignInButton(),
           TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => LogUPScreen()));
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => LogUPScreen()));
               },
               child: Text(
                 '¿No tienes cuenta? Registrate!',
@@ -99,28 +97,21 @@ Widget _login_button(LoginBloc bloc) {
 }
 
 _login(LoginBloc bloc, BuildContext context) async {
+  bool isLoading = false;
   final usuarioProvider = new UsuarioProvider();
 
   print(bloc.email);
   print(bloc.password);
-  Map info = await usuarioProvider.login(bloc.email, bloc.password);
+  Map info = await usuarioProvider.login(
+      bloc.email.toString(), bloc.password.toString());
 
-  if (info['ok']) {
-    Navigator.pushNamed(context, 'registro');
+  if (info['ok'] == true) {
+    Navigator.pushNamed(context, 'principal');
   } else {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text("Credenciales no validas"),
-            elevation: 3,
-            content: Text('Regresa y revisa bien tus datos'),
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Okay'))
-            ],
-          );
+          return AlertDialog();
         });
   }
 }
