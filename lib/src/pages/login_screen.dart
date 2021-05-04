@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
+import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';
 import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -25,7 +28,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _form(BuildContext context) {
-    final bloc = Provider.of(context);
+    final bloc = ProviderBloc.of(context);
 
     return Container(
         height: 600,
@@ -38,7 +41,20 @@ class LoginScreen extends StatelessWidget {
             height: 30,
           ),
           _login_button(bloc),
-          socialSignInButton(),
+          ChangeNotifierProvider<GoogleSignInProvider>(
+              create: (context) => GoogleSignInProvider(),
+              child: StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  final provider = Provider.of<GoogleSignInProvider>(context);
+                  if (snapshot.hasData) {
+                    Navigator.pushNamed(context, 'principal');
+                  } else {
+                    return socialSignInButton();
+                  }
+                  return Text('');
+                },
+              )),
           TextButton(
               onPressed: () {
                 Navigator.push(context,
@@ -57,13 +73,17 @@ class LoginScreen extends StatelessWidget {
 class socialSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 25),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SignInButton(Buttons.Google, elevation: 0, onPressed: () {})
-        ],
+    return ClipRRect(
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+        // padding: EdgeInsets.only(left: 25),
+        margin: EdgeInsets.only(left: 30),
+
+        child: SignInButton(Buttons.Google, elevation: 0, onPressed: () {
+          final provider =
+              Provider.of<GoogleSignInProvider>(context, listen: false);
+          provider.login();
+        }),
       ),
     );
   }

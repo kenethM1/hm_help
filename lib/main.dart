@@ -4,9 +4,11 @@ import 'package:hm_help/src/pages/login_screen.dart';
 import 'package:hm_help/src/pages/main_contratista_screen.dart';
 import 'package:hm_help/src/pages/registro_contratista.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   final _prefs = new PreferenciasUsuario();
 
   await _prefs.initPrefs();
@@ -17,7 +19,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
+    return ProviderBloc(
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/widgets/line_chart.dart';
 
@@ -121,13 +122,14 @@ class ChartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Column(
       children: [
         SizedBox(
           height: 20,
         ),
         Text(
-          'Resumen Anual',
+          'Resumen Anual de ${user!.displayName} ',
           style: estilo,
         ),
         SizedBox(

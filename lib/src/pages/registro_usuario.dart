@@ -22,13 +22,13 @@ class LogUPScreen extends StatelessWidget {
   }
 
   Widget _form(BuildContext context) {
-    final bloc = Provider.of(context);
+    final bloc = ProviderBloc.of(context);
 
     return Container(
         height: 600,
         color: Colors.white,
         child: Column(children: [
-          _usuario(bloc),
+          _correo(bloc),
           _passWordLogin(bloc),
           SizedBox(
             height: 30,
