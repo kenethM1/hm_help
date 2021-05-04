@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/login_bloc.dart';
+import 'package:hm_help/src/bloc/logup_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 
@@ -67,7 +68,7 @@ _logUP(LoginBloc bloc, BuildContext context) async {
 
   print(bloc.email);
   print(bloc.password);
-  Map info = await usuarioProvider.login(bloc.email, bloc.password);
+  Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
 
   if (info['ok']) {
     Navigator.pushNamed(context, 'registro');
