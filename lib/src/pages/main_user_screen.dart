@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:hm_help/src/widgets/line_chart.dart';
 
 class MainUserScreen extends StatelessWidget {
-  const MainUserScreen({Key key}) : super(key: key);
+  const MainUserScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class MainUserScreen extends StatelessWidget {
 
 class ChartPage extends StatelessWidget {
   const ChartPage({
-    Key key,
-    @required this.estilo,
+    Key? key,
+    required this.estilo,
   }) : super(key: key);
 
   final TextStyle estilo;

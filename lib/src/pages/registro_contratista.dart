@@ -66,7 +66,7 @@ class RegistroPage extends StatelessWidget {
   }
 
   _seleccionarFecha(BuildContext context) async {
-    DateTime seleccionado = await showDatePicker(
+    DateTime? seleccionado = await showDatePicker(
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1900),

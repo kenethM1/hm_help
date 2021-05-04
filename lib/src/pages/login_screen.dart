@@ -105,7 +105,8 @@ _login(LoginBloc bloc, BuildContext context) async {
 
   print(bloc.email);
   print(bloc.password);
-  Map info = await usuarioProvider.login(bloc.email, bloc.password);
+  Map info = await usuarioProvider.login(
+      bloc.email.toString(), bloc.password.toString());
 
   if (info['ok'] == true) {
     Navigator.pushNamed(context, 'principal');
