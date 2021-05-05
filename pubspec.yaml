@@ -38,7 +38,13 @@ dependencies:
   google_sign_in: 
   provider:
   
+  #Agregue upload file to firebase
+  firebase_core: ^1.0.3
+  firebase_storage: ^8.0.3
 
+    #Agregue pick file
+  file_picker: ^3.0.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
