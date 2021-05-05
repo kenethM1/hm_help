@@ -7,7 +7,6 @@ class UsuarioProvider {
   Future<Map<String, dynamic>> login(String email, String password) async {
     String _url = 'is2-grupo-2-be.herokuapp.com';
 
-
     final _prefs = PreferenciasUsuario();
 
     final url = Uri.https(_url, '/users/login');
@@ -31,7 +30,6 @@ class UsuarioProvider {
     print(decodedResp);
 
     if (decodedResp.containsKey('token')) {
-
       _prefs.token = decodedResp['token'];
 
       return {'ok': true, 'token': decodedResp['token']};
@@ -50,7 +48,6 @@ class UsuarioProvider {
       'password': password,
     };
 
-
     final resp = await http.post(url,
         headers: {
           "Content-Type": "application/json",
@@ -58,15 +55,12 @@ class UsuarioProvider {
         },
         body: json.encode(authData));
 
-    final resp = await http.post(url, body: json.encode(authData));
-
+    Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if (decodedResp.containsKey('role')) {
       return {'ok': true, 'role': decodedResp['role']};
     } else {
       return {'ok': false, 'role': decodedResp['error']['message']};
-
-
     }
   }
 }

@@ -129,7 +129,7 @@ class ChartPage extends StatelessWidget {
           height: 20,
         ),
         Text(
-          'Resumen Anual de ${user!.displayName} ',
+          'Resumen Anual',
           style: estilo,
         ),
         SizedBox(
