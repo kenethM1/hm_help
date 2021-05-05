@@ -58,7 +58,7 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ButtonWidget(
-                  text: 'Seleccionar Archivo',
+                  text: 'Seleccionar Archivo PDF',
                   icon: Icons.attach_file_rounded,
                   onClicked: selectFile,
                 ),
