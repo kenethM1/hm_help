@@ -10,7 +10,14 @@ class ChartWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        color: Colors.blue.shade200,
+        decoration: BoxDecoration(color: Colors.blue, boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.red,
+              blurRadius: 5,
+              spreadRadius: 30,
+              offset: Offset(0, 10))
+        ]),
+        //color: Colors.blue.shade200,
         height: 200,
         width: 350,
         child: LineChart(LineChartData(

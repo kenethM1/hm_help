@@ -35,50 +35,60 @@ class LoginScreen extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           _usuario(bloc),
-          _passWord(bloc),
-          passwordRecoveryButton(),
+          _password(bloc),
+          PasswordRecoveryButton(),
           SizedBox(
             height: 30,
           ),
-          _login_button(bloc),
-          ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (context) => GoogleSignInProvider(),
-              child: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  final provider = Provider.of<GoogleSignInProvider>(context);
-                  if (snapshot.hasData) {
-                    Navigator.pushNamed(context, 'principal');
-                  } else {
-                    return socialSignInButton();
-                  }
-                  return Text('');
-                },
-              )),
-          TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => LogUPScreen()));
-              },
-              child: Text(
-                '¿No tienes cuenta? Registrate!',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ))
+          _loginButton(bloc),
+          googlesigninButton(),
+          ForgetPassButton()
         ]));
+  }
+
+  ChangeNotifierProvider<GoogleSignInProvider> googlesigninButton() {
+    return ChangeNotifierProvider<GoogleSignInProvider>(
+        create: (context) => GoogleSignInProvider(),
+        child: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Navigator.pushNamed(context, 'principal');
+            } else {
+              return SocialSignInButton();
+            }
+            return Text('');
+          },
+        ));
   }
 }
 
-// ignore: camel_case_types
-class socialSignInButton extends StatelessWidget {
+class ForgetPassButton extends StatelessWidget {
+  const ForgetPassButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => LogUPScreen()));
+        },
+        child: Text(
+          '¿No tienes cuenta? Registrate!',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ));
+  }
+}
+
+class SocialSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       child: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-        // padding: EdgeInsets.only(left: 25),
         margin: EdgeInsets.only(left: 30),
-
         child: SignInButton(Buttons.Google, elevation: 0, onPressed: () {
           final provider =
               Provider.of<GoogleSignInProvider>(context, listen: false);
@@ -89,7 +99,7 @@ class socialSignInButton extends StatelessWidget {
   }
 }
 
-class passwordRecoveryButton extends StatelessWidget {
+class PasswordRecoveryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -99,7 +109,7 @@ class passwordRecoveryButton extends StatelessWidget {
   }
 }
 
-Widget _login_button(LoginBloc bloc) {
+Widget _loginButton(LoginBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
@@ -125,18 +135,30 @@ _login(LoginBloc bloc, BuildContext context) async {
   Map info = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());
 
-  if (info['ok'] == true) {
-    Navigator.pushNamed(context, 'principal');
+  if (info['ok'] == true && info['rol'] == 'Contratista') {
+    Navigator.pushNamed(context, 'principal-Contratista');
+  } else if (info['ok'] == true && info['rol'] == 'Usuario') {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertLogin(
+            titulo: 'Ingresó',
+            mensaje: 'Usted es un usuario.',
+          );
+        });
   } else {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertLogin();
+          return AlertLogin(
+            titulo: 'Error',
+            mensaje: 'Correo o contraseña no válidos.',
+          );
         });
   }
 }
 
-Widget _passWord(LoginBloc bloc) {
+Widget _password(LoginBloc bloc) {
   return StreamBuilder(
     stream: bloc.passwordStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {

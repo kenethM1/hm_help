@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-            initialRoute: 'registro',
+            initialRoute: 'login',
             routes: {
           'login': (_) => LoginScreen(),
           'registro': (_) => RegistroPage(),
-          'principal': (_) => MainContratistaScreen(),
+          'principal-Contratista': (_) => MainContratistaScreen(),
           'hojaVida': (_) => PdfContratistaPage(),
         }));
   }
