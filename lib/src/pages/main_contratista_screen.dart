@@ -66,6 +66,7 @@ class TileOferta extends StatelessWidget {
       hoverColor: Colors.blue,
       onTap: () {
         showDialog(
+            barrierColor: Color.fromRGBO(135, 206, 235, 90),
             context: context,
             builder: (_) {
               return PropuestaDialog();

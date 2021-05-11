@@ -57,11 +57,13 @@ class _PropuestaState extends State<PropuestaDialog> {
                       ElevatedButton(
                           child: Icon(
                             Icons.arrow_circle_up,
+                            size: 25,
                           ),
                           onPressed: () {}),
                       ElevatedButton(
                           child: Icon(
                             Icons.arrow_circle_down,
+                            size: 25,
                           ),
                           onPressed: () {})
                     ],
@@ -95,6 +97,9 @@ class _PropuestaState extends State<PropuestaDialog> {
                     ),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 20,
               )
             ],
           ),
