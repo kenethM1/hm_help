@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hm_help">
    <application
+        android:usesCleartextTraffic="true"
         android:label="hm_help"
         android:icon="@mipmap/ic_launcher">
         <activity
