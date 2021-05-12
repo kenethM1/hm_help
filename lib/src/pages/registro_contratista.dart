@@ -9,6 +9,7 @@ class RegistroPage extends StatefulWidget {
 class _registroState extends State<RegistroPage> {
   String _fecha = '';
   String _nombre = '';
+
   TextEditingController _relacionFecha = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,6 @@ class _registroState extends State<RegistroPage> {
               height: 90,
               width: 90,
               image: AssetImage('assets/logo.png'),
-              //fit: BoxFit.contain,
             ),
           ),
         ],
@@ -33,21 +33,24 @@ class _registroState extends State<RegistroPage> {
         children: <Widget>[
           _crearNombre(),
           Divider(),
+          _crearApellido(),
+          Divider(),
+          _crearFecha(context),
+          Divider(),
           _crearCorreo(),
           Divider(),
           _crearContrasena(),
           Divider(),
-          _crearFecha(context),
+          _crearGenero(),
           Divider(),
           _crearBoton(context),
-          Divider(),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+          ElevatedButton(
             child: Text('Terminos y condiciones'),
+            style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                textStyle:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             onPressed: () => _mostrarAlert(context),
-            color: Colors.blue,
-            textColor: Colors.white,
           ),
         ],
       ),
@@ -61,12 +64,12 @@ class _registroState extends State<RegistroPage> {
   }
 
   Widget _crearBoton(BuildContext context) {
-    return RaisedButton.icon(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      color: Colors.blue,
-      textColor: Colors.white,
+    return ElevatedButton.icon(
       label: Text('Agregar CV'),
-      icon: Icon(Icons.article_outlined),
+      icon: Icon(Icons.picture_as_pdf_rounded),
+      style: ElevatedButton.styleFrom(
+          shape: StadiumBorder(),
+          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       onPressed: () => Navigator.pushNamed(context, 'hojaVida'),
     );
   }
@@ -80,9 +83,29 @@ class _registroState extends State<RegistroPage> {
           counter: Text('Letras ${_nombre.length}'),
           hintText: 'Ingrese su nombre',
           labelText: 'Nombre',
-          helperText: 'Solo el nombre',
-          suffixIcon: Icon(Icons.accessibility),
-          icon: Icon(Icons.account_circle)),
+          helperText: 'Agregue su nombre',
+          suffixIcon: Icon(Icons.assignment_ind_rounded),
+          icon: Icon(Icons.group_outlined)),
+      onChanged: (valor) {
+        setState(() {
+          _nombre = valor;
+        });
+      },
+    );
+  }
+
+  _crearApellido() {
+    return TextField(
+      autofocus: false,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          counter: Text('Letras ${_nombre.length}'),
+          hintText: 'Ingrese su nombre',
+          labelText: 'Apellido',
+          helperText: 'Agregue su apellido',
+          suffixIcon: Icon(Icons.assignment_ind_rounded),
+          icon: Icon(Icons.group_outlined)),
       onChanged: (valor) {
         setState(() {
           _nombre = valor;
@@ -100,8 +123,8 @@ class _registroState extends State<RegistroPage> {
         labelText: 'No utilizado antes',
 
         //Iconos
-        suffixIcon: Icon(Icons.alternate_email_outlined),
-        icon: Icon(Icons.email_rounded),
+        suffixIcon: Icon(Icons.contact_mail_rounded),
+        icon: Icon(Icons.attach_email_rounded),
       ),
     );
   }
@@ -127,7 +150,7 @@ class _registroState extends State<RegistroPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
           hintText: 'Fecha de nacimiento',
           labelText: 'Fecha de nacimiento',
-          suffixIcon: Icon(Icons.perm_contact_calendar_rounded),
+          suffixIcon: Icon(Icons.cake_rounded),
           icon: Icon(Icons.calendar_today_rounded)),
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -142,9 +165,6 @@ class _registroState extends State<RegistroPage> {
       initialDate: new DateTime.now(),
       firstDate: new DateTime(1900),
       lastDate: new DateTime(2040),
-
-      //Idioma
-      // locale: Locale('es')
     );
 
     if (seleccionado != null) {
@@ -154,6 +174,24 @@ class _registroState extends State<RegistroPage> {
       });
     }
   }
+
+  _crearGenero() {
+    return TextField(
+      obscureText: true,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          labelText: 'Genero',
+          suffixIcon: Icon(Icons.wc_rounded),
+          icon: Icon(Icons.wc_rounded)),
+    );
+  }
+}
+
+class Consts {
+  Consts._();
+
+  static const double padding = 16.0;
+  static const double avatarRadius = 30.0;
 }
 
 void _mostrarAlert(BuildContext context) {
@@ -163,13 +201,11 @@ void _mostrarAlert(BuildContext context) {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          //Shape: Para colocar el borde
-          //
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           backgroundColor: Colors.blue,
           title: Text('Terminos HMHelp'),
-
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -177,23 +213,31 @@ void _mostrarAlert(BuildContext context) {
                   'HMHelp accedera a su curriculm con el fin de ayudarle y ayudar a las personas que necesiten de sus servicios'),
               Container(
                 padding: EdgeInsets.all(20.0),
+              ),
+              Positioned(
+                left: Consts.padding,
+                right: Consts.padding,
                 child: Image(
-                  height: 50,
-                  width: 50,
+                  height: 150,
+                  width: 120,
                   image: AssetImage('assets/logo.png'),
                 ),
               ),
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Cancelar'),
-              textColor: Colors.black,
+              style: TextButton.styleFrom(
+                primary: Colors.black87,
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            FlatButton(
+            TextButton(
               child: Text('Aceptar'),
-              textColor: Colors.black,
+              style: TextButton.styleFrom(
+                primary: Colors.black87,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },

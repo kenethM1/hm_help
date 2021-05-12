@@ -7,11 +7,11 @@ class UsuarioProvider {
   get decodedResp => null;
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    String _url = 'is2-grupo-2-be.herokuapp.com';
+    String _url = 'mahamtr1-001-site1.ctempurl.com';
 
     final _prefs = PreferenciasUsuario();
 
-    final url = Uri.https(_url, '/users/login');
+    final url = Uri.http(_url, 'api/Usuario/Login');
     print(url.path);
     final authData = {
       'email': email,

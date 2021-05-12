@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: title,
-        theme: ThemeData(primarySwatch: Colors.blue),
+        color: Colors.black,
+        theme: ThemeData(primaryColor: Colors.blue),
         home: PdfContratistaPage(),
       );
 }
@@ -53,16 +54,17 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
       ),
       body: Container(
           padding: EdgeInsets.all(25),
+          color: Colors.blue.shade200,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ButtonWidget(
                   text: 'Seleccionar Archivo PDF',
-                  icon: Icons.attach_file_rounded,
+                  icon: Icons.picture_as_pdf_rounded,
                   onClicked: selectFile,
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 5),
                 Text(
                   fileName,
                   style: TextStyle(
@@ -70,13 +72,13 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
                       fontWeight: FontWeight.w500,
                       color: Colors.black),
                 ),
-                SizedBox(height: 48),
+                SizedBox(height: 18),
                 ButtonWidget(
                   text: 'Cargar Documento',
                   icon: Icons.cloud_upload_outlined,
                   onClicked: uploadFile,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 50),
                 task != null ? buildUploadStatus(task!) : Container(),
               ],
             ),
