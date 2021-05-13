@@ -16,7 +16,7 @@ class AlertLogin extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15))),
         title: Text(this.titulo.toString()),
         elevation: 3,
-        content: Text('Regresa y revisa bien tus datos'),
+        content: Text(''),
         actions: [
           ElevatedButton(
               onPressed: () => Navigator.of(context).pop(), child: Text('Okay'))

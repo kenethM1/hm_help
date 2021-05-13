@@ -8,7 +8,9 @@ class UsuarioProvider {
 
     final _prefs = PreferenciasUsuario();
 
-    final url = Uri.http(_url, '/api/Usuario/Login');
+
+    final url = Uri.http(_url, 'api/Usuario/Login');
+
     print(url.path);
     final authData = {
       'email': email,
