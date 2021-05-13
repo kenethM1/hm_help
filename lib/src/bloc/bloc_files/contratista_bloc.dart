@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import 'package:hm_help/src/bloc/contratistaValidator.dart';
+import 'package:hm_help/src/bloc/bloc_validators/contratistaValidator.dart';
 
 class ContratistaBloc with ValidatorContratista {
   final _nombreController = BehaviorSubject<String>();

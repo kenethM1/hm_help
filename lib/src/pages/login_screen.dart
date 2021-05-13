@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
+import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
@@ -12,18 +13,18 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue.shade300,
-        body: SafeArea(
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Logo(),
-          _form(context),
-        ],
-      ),
-    ),
+      backgroundColor: Colors.blue.shade300,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Logo(),
+              _form(context),
+            ],
+          ),
         ),
-      );
+      ),
+    );
   }
 
   Widget _form(BuildContext context) {
@@ -39,7 +40,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          _login_button(bloc),
+          _loginButton(bloc),
           ChangeNotifierProvider<GoogleSignInProvider>(
               create: (context) => GoogleSignInProvider(),
               child: StreamBuilder(
@@ -49,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                   if (snapshot.hasData) {
                     Navigator.pushNamed(context, 'principal');
                   } else {
-                    return socialSignInButton();
+                    return SocialSignInButton();
                   }
                   return Text('');
                 },
@@ -61,7 +62,6 @@ class LoginScreen extends StatelessWidget {
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ))
-
         ]));
   }
 
@@ -92,7 +92,7 @@ class ForgetPassButton extends StatelessWidget {
     return TextButton(
         onPressed: () {
           Navigator.push(context,
-              new MaterialPageRoute(builder: (context) => LogUPScreen()));
+              new MaterialPageRoute(builder: (context) => LogupUsuario()));
         },
         child: Text(
           '¿No tienes cuenta? Registrate!',
