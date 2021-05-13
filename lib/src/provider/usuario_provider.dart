@@ -1,24 +1,23 @@
 import 'dart:convert';
-
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
-  get decodedResp => null;
-
   Future<Map<String, dynamic>> login(String email, String password) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
 
     final _prefs = PreferenciasUsuario();
 
+
     final url = Uri.http(_url, 'api/Usuario/Login');
+
     print(url.path);
     final authData = {
       'email': email,
       'password': password,
     };
 
-    final resp = await http.post(url,
+    final peticion = await http.post(url,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
@@ -27,44 +26,50 @@ class UsuarioProvider {
 
     print(authData);
 
-    Map<String, dynamic> decodedResp = json.decode(resp.body);
+    Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-    print(decodedResp);
+    print(respuestaJson);
 
-    if (decodedResp.containsKey('token')) {
-      _prefs.token = decodedResp['token'];
-
-      return {'ok': true, 'token': decodedResp['token']};
+    if (peticion.statusCode == 200) {
+      _prefs.token = respuestaJson['token'];
+      _prefs.nombreUsuario = respuestaJson['nombre'];
+      return {
+        'ok': true,
+        'token': respuestaJson['token'],
+        'rol': respuestaJson['rol']
+      };
     } else {
-      return {'ok': false, 'token': decodedResp['error']['message']};
+      return {'ok': false, 'token': 'Correo o usuario incorrecto'};
     }
   }
 
   Future<Map<String, dynamic>> nuevoUsuario(
-      String email, String password) async {
-    String _url = 'is2-grupo-2-be.herokuapp.com';
+      String nombre, String apellido, String email, String password) async {
+      String _url = 'mahamtr1-001-site1.ctempurl.com';
 
-    final url = Uri.https(_url, '/users/sign-up');
+    final url = Uri.http(_url, '/api/Usuario/SignUpUsuario');
     final authData = {
+      'nombre': nombre,
+      'apellido': apellido,
       'email': email,
       'password': password,
     };
 
-    // ignore: unused_local_variable
-    final resp = await http.post(url,
+    final peticion = await http.post(url,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: json.encode(authData));
 
-    // ignore: unused_local_variable
-    final respt = await http.post(url, body: json.encode(authData));
+    Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-    if (decodedResp.containsKey('role')) {
-      return {'ok': true, 'role': decodedResp['role']};
+
+    if (decodedResp.containsKey('rol')) {
+      return {'ok': true, 'rol': decodedResp['rol']};
     } else {
-      return {'ok': false, 'role': decodedResp['error']['message']};
+      return {'ok': false, 'rol': decodedResp['error']};
+
     }
   }
 }

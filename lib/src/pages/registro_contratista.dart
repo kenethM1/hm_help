@@ -6,6 +6,12 @@ class RegistroPage extends StatefulWidget {
   _registroState createState() => _registroState();
 }
 
+bool textoobs = true;
+@override
+void initState() {
+  textoobs = false;
+}
+
 class _registroState extends State<RegistroPage> {
   String _fecha = '';
   String _nombre = '';
@@ -15,6 +21,7 @@ class _registroState extends State<RegistroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Registo del Contratista'),
         actions: <Widget>[
           Container(
@@ -39,7 +46,7 @@ class _registroState extends State<RegistroPage> {
           Divider(),
           _crearCorreo(),
           Divider(),
-          _crearContrasena(),
+          _crearContrasena(textoobs),
           Divider(),
           _crearGenero(),
           Divider(),
@@ -57,7 +64,7 @@ class _registroState extends State<RegistroPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.first_page_rounded),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushNamed(context, 'login');
         },
       ),
     );
@@ -129,17 +136,25 @@ class _registroState extends State<RegistroPage> {
     );
   }
 
-  _crearContrasena() {
+  _crearContrasena(bool isobscure) {
     return TextField(
-      obscureText: true,
-      decoration: InputDecoration(
+        obscureText: isobscure,
+        decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
           hintText: 'Contraseña',
           labelText: 'Contraseña',
           helperText: 'Incluya mayusculas y minusculas',
           suffixIcon: Icon(Icons.lock_open_rounded),
-          icon: Icon(Icons.lock_rounded)),
-    );
+          icon: IconButton(
+            icon: Icon(
+                isobscure ? Icons.visibility : Icons.visibility_off_rounded),
+            onPressed: () => {
+              setState(() {
+                isobscure = !isobscure;
+              })
+            },
+          ),
+        ));
   }
 
   _crearFecha(BuildContext context) {

@@ -9,7 +9,7 @@ class FirebaseApi {
       final ref = FirebaseStorage.instance.ref(destination);
 
       return ref.putFile(file);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       return null;
     }
   }
@@ -19,7 +19,7 @@ class FirebaseApi {
       final ref = FirebaseStorage.instance.ref(destination);
 
       return ref.putData(data);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       return null;
     }
   }

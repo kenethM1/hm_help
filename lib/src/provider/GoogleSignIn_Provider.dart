@@ -10,8 +10,10 @@ class GoogleSignInProvider extends ChangeNotifier {
     _isSignIn = false;
   }
 
+  //Getter
   bool get isSignIn => _isSignIn!;
 
+  //Setter
   set isSignIn(bool isSingIn) {
     _isSignIn = isSignIn;
     notifyListeners();

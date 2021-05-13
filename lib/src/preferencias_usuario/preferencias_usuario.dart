@@ -28,12 +28,19 @@ class PreferenciasUsuario {
     this._prefs = await SharedPreferences.getInstance();
   }
 
-  // GET y SET de la última página
   String get token {
     return _prefs!.getString('token') ?? '';
   }
 
   set token(String value) {
     _prefs!.setString('token', value);
+  }
+
+  String get nombreUsuario {
+    return _prefs!.getString('nombre') ?? '';
+  }
+
+  set nombreUsuario(String value) {
+    _prefs!.setString('nombre', value);
   }
 }
