@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/widgets/line_chart.dart';
+import 'package:hm_help/src/widgets/propuesta_dialog.dart';
 
 class MainContratistaScreen extends StatelessWidget {
   const MainContratistaScreen({Key? key}) : super(key: key);
@@ -16,20 +18,20 @@ class MainContratistaScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            ChartPage(estilo: estilo),
+            ContenedorGrafico(estilo: estilo),
             Container(
               padding: EdgeInsets.only(top: 10),
               child: ListView(
                 children: [
-                  Tile_Oferta(
+                  TileOferta(
                       rubro: 'Pintura',
                       nombre: "Keneth",
                       estiloWhite: estiloWhite),
-                  Tile_Oferta(
+                  TileOferta(
                       rubro: 'Albanil',
                       nombre: "Fernando",
                       estiloWhite: estiloWhite),
-                  Tile_Oferta(
+                  TileOferta(
                       rubro: 'Fontaneria',
                       nombre: "Hugo",
                       estiloWhite: estiloWhite),
@@ -46,8 +48,8 @@ class MainContratistaScreen extends StatelessWidget {
   }
 }
 
-class Tile_Oferta extends StatelessWidget {
-  const Tile_Oferta({
+class TileOferta extends StatelessWidget {
+  const TileOferta({
     Key? key,
     required this.estiloWhite,
     required this.nombre,
@@ -61,6 +63,14 @@ class Tile_Oferta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      hoverColor: Colors.blue,
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return PropuestaDialog();
+            });
+      },
       subtitle: Text(
         rubro.toString(),
         style:
@@ -77,22 +87,22 @@ class Tile_Oferta extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Trailing_button(
+          TrailingButton(
             color: Colors.blue,
             texto: "ACEPTAR",
           ),
-          Trailing_button(color: Colors.red, texto: 'RECHAZAR')
+          TrailingButton(color: Colors.red, texto: "RECHAZAR")
         ],
       ),
     );
   }
 }
 
-class Trailing_button extends StatelessWidget {
-  const Trailing_button({
+class TrailingButton extends StatelessWidget {
+  const TrailingButton({
     Key? key,
-    required String? this.texto,
-    required Color? this.color,
+    required this.texto,
+    required this.color,
   }) : super(key: key);
 
   final String? texto;
@@ -106,14 +116,14 @@ class Trailing_button extends StatelessWidget {
         elevation: 5,
         primary: color,
       ),
-      child: Text('ACEPTAR'),
+      child: Text(texto!),
       onPressed: () {},
     );
   }
 }
 
-class ChartPage extends StatelessWidget {
-  const ChartPage({
+class ContenedorGrafico extends StatelessWidget {
+  const ContenedorGrafico({
     Key? key,
     required this.estilo,
   }) : super(key: key);
@@ -122,14 +132,17 @@ class ChartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
+    final preferenciasUsuario = new PreferenciasUsuario();
+
+    //final user = FirebaseAuth.instance.currentUser;
+
     return Column(
       children: [
         SizedBox(
           height: 20,
         ),
         Text(
-          'Resumen Anual',
+          'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
           style: estilo,
         ),
         SizedBox(
