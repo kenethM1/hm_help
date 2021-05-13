@@ -5,7 +5,6 @@ import 'package:hm_help/src/bloc/login_bloc.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
-import 'package:hm_help/src/pages/registro_usuario.dart';
 import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -13,18 +12,18 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade300,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Logo(),
-              _form(context),
-            ],
-          ),
-        ),
+        backgroundColor: Colors.blue.shade300,
+        body: SafeArea(
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          Logo(),
+          _form(context),
+        ],
       ),
-    );
+    ),
+        ),
+      );
   }
 
   Widget _form(BuildContext context) {
@@ -40,9 +39,29 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          _loginButton(bloc),
-          googlesigninButton(),
-          ForgetPassButton()
+          _login_button(bloc),
+          ChangeNotifierProvider<GoogleSignInProvider>(
+              create: (context) => GoogleSignInProvider(),
+              child: StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  final provider = Provider.of<GoogleSignInProvider>(context);
+                  if (snapshot.hasData) {
+                    Navigator.pushNamed(context, 'principal');
+                  } else {
+                    return socialSignInButton();
+                  }
+                  return Text('');
+                },
+              )),
+          TextButton(
+              onPressed: () => Navigator.pushNamed(context, 'nuevoUser'),
+              child: Text(
+                '¿No tienes cuenta? Registrate!',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ))
+
         ]));
   }
 

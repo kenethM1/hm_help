@@ -42,11 +42,13 @@ class UsuarioProvider {
   }
 
   Future<Map<String, dynamic>> nuevoUsuario(
-      String email, String password) async {
-    String _url = 'is2-grupo-2-be.herokuapp.com';
+      String nombre, String apellido, String email, String password) async {
+      String _url = 'mahamtr1-001-site1.ctempurl.com';
 
-    final url = Uri.https(_url, '/users/sign-up');
+    final url = Uri.http(_url, '/api/Usuario/SignUpUsuario');
     final authData = {
+      'nombre': nombre,
+      'apellido': apellido,
       'email': email,
       'password': password,
     };
@@ -60,10 +62,12 @@ class UsuarioProvider {
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-    if (respuestaJson.containsKey('role')) {
-      return {'ok': true, 'role': respuestaJson['role']};
+
+    if (decodedResp.containsKey('rol')) {
+      return {'ok': true, 'rol': decodedResp['rol']};
     } else {
-      return {'ok': false, 'role': respuestaJson['error']['message']};
+      return {'ok': false, 'rol': decodedResp['error']};
+
     }
   }
 }
