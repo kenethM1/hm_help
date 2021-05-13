@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
-import 'package:hm_help/src/bloc/bloc_files/logup_bloc.dart';
-import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
+
+import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
+
 import 'package:hm_help/src/provider/usuario_provider.dart';
 
-class LogUPScreen extends StatelessWidget {
+import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+
+class LogupUsuario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +25,32 @@ class LogUPScreen extends StatelessWidget {
   }
 
   Widget _form(BuildContext context) {
-    final bloc = ProviderBloc.of(context);
+    final bloc = Provider2.of(context);
 
     return Container(
         height: 600,
         color: Colors.white,
         child: Column(children: [
+          _nombre(bloc),
+          _apellido(bloc),
           _correo(bloc),
-          _passWordLogin(bloc),
+          _passWord(bloc),
           SizedBox(
             height: 30,
           ),
-          _logupButton(),
+          _logup_button(bloc),
+          TextButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+              child: Text(
+                '¿Ya tienes cuenta? Inicia Sesion!',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ))
         ]));
   }
 }
 
-Widget _usuario(LoginBloc bloc) {
+Widget _logup_button(LogupBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
@@ -52,41 +63,39 @@ Widget _usuario(LoginBloc bloc) {
                   shape: StadiumBorder(),
                   textStyle:
                       TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              onPressed: snapshot.hasData ? () => _logUP(bloc, context) : null),
+              onPressed: snapshot.hasData ? () => _logup(bloc, context) : null),
         );
       });
 }
 
-_logUP(LoginBloc bloc, BuildContext context) async {
+_logup(LogupBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
 
   print(bloc.email);
   print(bloc.password);
-
+  print(bloc.nombre);
+  print(bloc.apellido);
   Map info = await usuarioProvider.nuevoUsuario(
-      bloc.email.toString(), bloc.password.toString());
+      bloc.nombre.toString(),
+      bloc.apellido.toString(),
+      bloc.email.toString(),
+      bloc.password.toString());
 
-  if (info['ok']) {
-    Navigator.pushNamed(context, 'registro');
+  if (info['ok'] == true) {
+    Navigator.pushNamed(context, 'principal');
   } else {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text("El correo ya esta en uso"),
-            elevation: 3,
-            content: Text('Ingrese un correo nuevo'),
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Okay'))
-            ],
+          return AlertLogin(
+            titulo: 'Posible error',
+            mensaje: 'Verifique sus datos',
           );
         });
   }
 }
 
-Widget _passWord(LoginBloc bloc) {
+Widget _passWord(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.passwordStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -116,7 +125,7 @@ Widget _passWord(LoginBloc bloc) {
   );
 }
 
-Widget _correo(LoginBloc bloc) {
+Widget _correo(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.emailStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -134,21 +143,21 @@ Widget _correo(LoginBloc bloc) {
               filled: true,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Usuario',
+              hintText: 'Email',
               hintStyle: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 21,
                   fontWeight: FontWeight.bold)),
-          onChanged: (value) => bloc.changeEmail(value),
+          onChanged: bloc.changeEmail,
         ),
       );
     },
   );
 }
 
-Widget _passWordLogin(LoginBloc bloc) {
+Widget _nombre(LogupBloc bloc) {
   return StreamBuilder(
-    stream: bloc.passwordStream,
+    stream: bloc.nombreStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
         height: 75,
@@ -156,7 +165,7 @@ Widget _passWordLogin(LoginBloc bloc) {
         child: TextField(
           scrollPadding: EdgeInsets.only(bottom: 15),
           autocorrect: false,
-          obscureText: true,
+          //maxLength: 25,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
               focusColor: Colors.blue,
@@ -164,11 +173,42 @@ Widget _passWordLogin(LoginBloc bloc) {
               filled: true,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Contraseña',
+              hintText: 'Nombre',
               hintStyle: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 21,
                   fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeNombre,
+        ),
+      );
+    },
+  );
+}
+
+Widget _apellido(LogupBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.apellidoStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          //maxLength: 25,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Apellido',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeApellido,
         ),
       );
     },
@@ -188,23 +228,6 @@ class Logo extends StatelessWidget {
         image: AssetImage('assets/logo.png'),
         //fit: BoxFit.contain,
       ),
-    );
-  }
-}
-
-class _logupButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 230,
-      height: 60,
-      margin: const EdgeInsets.only(top: 25),
-      child: ElevatedButton(
-          child: Text('Registrate'),
-          style: ElevatedButton.styleFrom(
-              shape: StadiumBorder(),
-              textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          onPressed: () {}),
     );
   }
 }
