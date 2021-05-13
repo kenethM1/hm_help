@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/models/propuesta.dart';
+import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/widgets/line_chart.dart';
 import 'package:hm_help/src/widgets/propuesta_dialog.dart';
@@ -9,9 +11,15 @@ class MainContratistaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final propuestasProvider = new PropuestasProvider();
+
+    propuestasProvider.getPropuestas();
+
     var tamano = MediaQuery.of(context).size;
+
     TextStyle estilo = TextStyle(
         color: Colors.blue.shade200, fontSize: 24, fontWeight: FontWeight.bold);
+
     TextStyle estiloWhite = TextStyle(
         color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
     return Scaffold(
@@ -21,21 +29,29 @@ class MainContratistaScreen extends StatelessWidget {
             ContenedorGrafico(estilo: estilo),
             Container(
               padding: EdgeInsets.only(top: 10),
-              child: ListView(
-                children: [
-                  TileOferta(
-                      rubro: 'Pintura',
-                      nombre: "Keneth",
-                      estiloWhite: estiloWhite),
-                  TileOferta(
-                      rubro: 'Albanil',
-                      nombre: "Fernando",
-                      estiloWhite: estiloWhite),
-                  TileOferta(
-                      rubro: 'Fontaneria',
-                      nombre: "Hugo",
-                      estiloWhite: estiloWhite),
-                ],
+              child: StreamBuilder<List<Propuesta>>(
+                stream: propuestasProvider.propuestasStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          if (snapshot.hasData) {
+                            return TileOferta(
+                              estiloWhite: estiloWhite,
+                              nombre: snapshot.data![index].nombreUsuario,
+                              rubro: snapshot.data![index].rubro,
+                              monto: snapshot.data![index].monto,
+                              info: snapshot.data![index].descripcion,
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        });
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
               height: tamano.height * 0.4678,
               width: tamano.width,
@@ -54,12 +70,16 @@ class TileOferta extends StatelessWidget {
     required this.estiloWhite,
     required this.nombre,
     required this.rubro,
+    required this.monto,
+    required this.info,
   }) : super(key: key);
 
   final TextStyle estiloWhite;
   final String? nombre;
   final String? rubro;
-
+  final double? monto;
+  final String? info;
+  get nombreCliente => nombre!.split(' ');
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -68,8 +88,12 @@ class TileOferta extends StatelessWidget {
         showDialog(
             barrierColor: Color.fromRGBO(135, 206, 235, 90),
             context: context,
-            builder: (_) {
-              return PropuestaDialog();
+            builder: (context) {
+              return PropuestaDialog(
+                nombreCliente: nombre!,
+                monto: monto!,
+                info: this.info.toString(),
+              );
             });
       },
       subtitle: Text(
@@ -82,7 +106,7 @@ class TileOferta extends StatelessWidget {
         size: 50,
       ),
       title: Text(
-        nombre.toString(),
+        nombreCliente[0].toString(),
         style: estiloWhite,
       ),
       trailing: Row(

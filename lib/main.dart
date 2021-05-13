@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/bloc/provider.dart';
+import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/login_screen.dart';
 import 'package:hm_help/src/pages/main_contratista_screen.dart';
 import 'package:hm_help/src/pages/pdf_Contratista.dart';

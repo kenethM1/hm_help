@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:hm_help/src/bloc/login_bloc.dart';
-import 'package:hm_help/src/bloc/provider.dart';
+import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
+import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/pages/registro_usuario.dart';

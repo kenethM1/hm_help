@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/bloc/login_bloc.dart';
+import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 
 class ProviderBloc extends InheritedWidget {
   final loginBloc = LoginBloc();

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:hm_help/src/bloc/validators.dart';
+import 'package:hm_help/src/bloc/bloc_validators/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc with Validator {
@@ -13,6 +13,7 @@ class LoginBloc with Validator {
       _emailController.stream.transform(validarEmail);
   Stream<String> get passwordStream =>
       _passwordController.stream.transform(validarPassword);
+
   Stream<bool> get formValidStream =>
       Rx.combineLatest2(emailStream, passwordStream, (e, p) => true);
 
