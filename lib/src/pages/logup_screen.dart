@@ -4,7 +4,7 @@ import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
 
 import 'package:hm_help/src/provider/usuario_provider.dart';
 
-import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 
 class LogupUsuario extends StatelessWidget {
   @override

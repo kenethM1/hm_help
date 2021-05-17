@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import 'package:hm_help/src/bloc/bloc_validators/contratistaValidator.dart';
+import 'package:hm_help/src/bloc/bloc_validators/Validators.dart';
 
-class ContratistaBloc with ValidatorContratista {
+class ContratistaBloc with Validator {
   final _nombreController = BehaviorSubject<String>();
   final _apellidoController = BehaviorSubject<String>();
   final _correoController = BehaviorSubject<String>();
@@ -14,9 +14,9 @@ class ContratistaBloc with ValidatorContratista {
   Stream<String> get nombreStream => _nombreController.stream;
   Stream<String> get apellidoStram => _apellidoController.stream;
   Stream<String> get correoStream =>
-      _correoController.stream.transform(validarCorreo);
+      _correoController.stream.transform(validarEmail);
   Stream<String> get contrasenaStream =>
-      _contrasenaController.stream.transform(validarContra);
+      _contrasenaController.stream.transform(validarPassword);
   Stream<String> get fechaNacimientoStream => _fechaController.stream;
   Stream<String> get generoStream => _generoController.stream;
 

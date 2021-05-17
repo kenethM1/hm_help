@@ -7,14 +7,6 @@ import 'package:http/http.dart' as http;
 
 class PropuestasProvider {
   final token = PreferenciasUsuario().token;
-
-  String _url = 'mahamtr1-001-site1.ctempurl.com';
-
-  final url = Uri.http(
-      'mahamtr1-001-site1.ctempurl.com', 'api/Propuesta/GetMyPropuestas');
-
-  List<Propuesta> _propuestas = [];
-
   final _propuestasStreamController =
       StreamController<List<Propuesta>>.broadcast();
 
@@ -27,6 +19,13 @@ class PropuestasProvider {
   void dispose() {
     _propuestasStreamController.close();
   }
+
+  static String _url = 'mahamtr1-001-site1.ctempurl.com';
+  static String _path = 'api/Propuesta/GetMyPropuestas';
+
+  final url = Uri.http(_url, _path);
+
+  List<Propuesta> _propuestas = [];
 
   Future<List<Propuesta>> getPropuestas() async {
     final propuestas = await _procesarRespuesta();
@@ -44,21 +43,24 @@ class PropuestasProvider {
       "Accept": "application/json",
       "Authorization": "Bearer $token",
     });
-    print(peticion.statusCode);
 
-    if (peticion.statusCode == 200) {
+    bool isOk = verifyConnection(peticion);
+
+    if (isOk) {
       final decodedData = json.decode(peticion.body);
-      print(token);
-      print(decodedData);
 
       final propuestas = new Propuestas.fromJsonList(decodedData);
 
-      print(propuestas.items[0].nombreContratista);
-
       return propuestas.items;
     } else {
-      print('No hay propuestas');
       return [];
     }
+  }
+
+  bool verifyConnection(http.Response peticion) {
+    if (peticion.statusCode != 200) {
+      return false;
+    } else
+      return true;
   }
 }

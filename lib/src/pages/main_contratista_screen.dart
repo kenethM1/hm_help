@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:hm_help/src/widgets/line_chart.dart';
-import 'package:hm_help/src/widgets/propuesta_dialog.dart';
+import 'package:hm_help/src/styles/Styles.dart';
+import 'package:hm_help/src/widgets/Line_Chart.dart';
+import 'package:hm_help/src/widgets/Propuesta_Dialog.dart';
 
 class MainContratistaScreen extends StatelessWidget {
   const MainContratistaScreen({Key? key}) : super(key: key);
@@ -12,21 +13,17 @@ class MainContratistaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final propuestasProvider = new PropuestasProvider();
+    final estilos = new Styles();
 
     propuestasProvider.getPropuestas();
 
     var tamano = MediaQuery.of(context).size;
 
-    TextStyle estilo = TextStyle(
-        color: Colors.blue.shade200, fontSize: 24, fontWeight: FontWeight.bold);
-
-    TextStyle estiloWhite = TextStyle(
-        color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            ContenedorGrafico(estilo: estilo),
+            ContenedorGrafico(estilo: estilos.estilo),
             Container(
               padding: EdgeInsets.only(top: 10),
               child: StreamBuilder<List<Propuesta>>(
@@ -36,17 +33,13 @@ class MainContratistaScreen extends StatelessWidget {
                     return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          if (snapshot.hasData) {
-                            return TileOferta(
-                              estiloWhite: estiloWhite,
-                              nombre: snapshot.data![index].nombreUsuario,
-                              rubro: snapshot.data![index].rubro,
-                              monto: snapshot.data![index].monto,
-                              info: snapshot.data![index].descripcion,
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
+                          return TileOferta(
+                            estilo: estilos.estiloWhite,
+                            nombre: snapshot.data![index].nombreUsuario,
+                            rubro: snapshot.data![index].rubro,
+                            monto: snapshot.data![index].monto,
+                            info: snapshot.data![index].descripcion,
+                          );
                         });
                   } else {
                     return Center(child: CircularProgressIndicator());
@@ -67,19 +60,19 @@ class MainContratistaScreen extends StatelessWidget {
 class TileOferta extends StatelessWidget {
   const TileOferta({
     Key? key,
-    required this.estiloWhite,
+    required this.estilo,
     required this.nombre,
     required this.rubro,
     required this.monto,
     required this.info,
   }) : super(key: key);
-
-  final TextStyle estiloWhite;
+  final TextStyle estilo;
   final String? nombre;
   final String? rubro;
   final double? monto;
   final String? info;
   get nombreCliente => nombre!.split(' ');
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -98,16 +91,15 @@ class TileOferta extends StatelessWidget {
       },
       subtitle: Text(
         rubro.toString(),
-        style:
-            estiloWhite.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
+        style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
       leading: Icon(
         Icons.person,
         size: 50,
       ),
       title: Text(
-        nombreCliente[0].toString(),
-        style: estiloWhite,
+        '${nombreCliente[0].toString()} ${nombreCliente[3].toString()}',
+        style: estilo,
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

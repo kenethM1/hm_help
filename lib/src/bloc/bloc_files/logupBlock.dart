@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import 'package:hm_help/src/bloc/bloc_validators/validators2.dart';
+import 'package:hm_help/src/bloc/bloc_validators/validators.dart';
 
-class LogupBloc with Validator2 {
+class LogupBloc with Validator {
   final _nombreController = BehaviorSubject<String>();
   final _apellidoController = BehaviorSubject<String>();
   final _emailController = BehaviorSubject<String>();

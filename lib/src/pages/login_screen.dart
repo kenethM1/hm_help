@@ -6,7 +6,7 @@ import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
-import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -149,13 +149,11 @@ Widget _loginButton(LoginBloc bloc) {
 _login(LoginBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
 
-  print(bloc.email);
-  print(bloc.password);
   Map info = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());
 
   if (info['ok'] == true && info['rol'] == 'Contratista') {
-    Navigator.pushNamed(context, 'principal-Contratista');
+    Navigator.pushNamed(context, 'principal');
   } else if (info['ok'] == true && info['rol'] == 'Usuario') {
     showDialog(
         context: context,
@@ -248,7 +246,6 @@ class Logo extends StatelessWidget {
         height: 250,
         width: 250,
         image: AssetImage('assets/logo.png'),
-        //fit: BoxFit.contain,
       ),
     );
   }
