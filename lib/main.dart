@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/bloc/contratistaProvider.dart';
 import 'package:hm_help/src/bloc/provider.dart';
 import 'package:hm_help/src/bloc/provider2.dart';
 import 'package:hm_help/src/pages/login_screen.dart';
@@ -25,13 +26,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: 'login',
+        initialRoute: 'registro',
         routes: {
-      'login': (_) => ProviderBloc(child: LoginScreen()),
-      'nuevoUser': (_) => Provider2(child:LogupUsuario()),
-      'registro': (_) => RegistroPage(),
-      'principal': (_) => MainContratistaScreen(),
-      'hojaVida': (_) => PdfContratistaPage(),
-    });
+          'login': (_) => ProviderBloc(child: LoginScreen()),
+          'nuevoUser': (_) => Provider2(child: LogupUsuario()),
+          'registro': (_) => ProviderContratista(child: RegistroPage()),
+          'principal': (_) => MainContratistaScreen(),
+          'hojaVida': (_) => PdfContratistaPage(),
+        });
   }
 }

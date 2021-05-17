@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:hm_help/src/bloc/provider2.dart';
@@ -7,27 +6,25 @@ import 'package:hm_help/src/provider/usuario_provider.dart';
 
 import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
 
-
 class LogupUsuario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue.shade300,
-        body: SafeArea(
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Logo(),
-          _form(context),
-        ],
-      ),
-    ),
+      backgroundColor: Colors.blue.shade300,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Logo(),
+              _form(context),
+            ],
+          ),
         ),
-      );
+      ),
+    );
   }
 
   Widget _form(BuildContext context) {
-
     final bloc = Provider2.of(context);
 
     return Container(
@@ -53,7 +50,6 @@ class LogupUsuario extends StatelessWidget {
   }
 }
 
-
 Widget _logup_button(LogupBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
@@ -73,7 +69,6 @@ Widget _logup_button(LogupBloc bloc) {
 }
 
 _logup(LogupBloc bloc, BuildContext context) async {
-
   final usuarioProvider = new UsuarioProvider();
 
   print(bloc.email);
@@ -81,7 +76,10 @@ _logup(LogupBloc bloc, BuildContext context) async {
   print(bloc.nombre);
   print(bloc.apellido);
   Map info = await usuarioProvider.nuevoUsuario(
-      bloc.nombre.toString(), bloc.apellido.toString(), bloc.email.toString(), bloc.password.toString());
+      bloc.nombre.toString(),
+      bloc.apellido.toString(),
+      bloc.email.toString(),
+      bloc.password.toString());
 
   if (info['ok'] == true) {
     Navigator.pushNamed(context, 'principal');
@@ -89,7 +87,10 @@ _logup(LogupBloc bloc, BuildContext context) async {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertLogin();
+          return AlertLogin(
+            mensaje: '',
+            titulo: '',
+          );
         });
   }
 }

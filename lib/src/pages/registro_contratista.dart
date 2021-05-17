@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hm_help/src/bloc/contratistaProvider.dart';
+import 'package:hm_help/src/provider/contratista_Provider.dart';
+import 'package:hm_help/src/widgets/contratistaDialog.dart';
 
 class RegistroPage extends StatefulWidget {
   @override
@@ -14,11 +17,12 @@ void initState() {
 
 class _registroState extends State<RegistroPage> {
   String _fecha = '';
-  String _nombre = '';
 
   TextEditingController _relacionFecha = new TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final bloc = ProviderContratista.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -38,17 +42,17 @@ class _registroState extends State<RegistroPage> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
         children: <Widget>[
-          _crearNombre(),
+          _crearNombre(bloc),
           Divider(),
-          _crearApellido(),
+          _crearApellido(bloc),
           Divider(),
           _crearFecha(context),
           Divider(),
-          _crearCorreo(),
+          _crearCorreo(bloc),
           Divider(),
-          _crearContrasena(textoobs),
+          _crearContrasena(bloc),
           Divider(),
-          _crearGenero(),
+          _crearGenero(bloc),
           Divider(),
           _crearBoton(context),
           ElevatedButton(
@@ -59,6 +63,8 @@ class _registroState extends State<RegistroPage> {
                     TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             onPressed: () => _mostrarAlert(context),
           ),
+          Divider(),
+          _crearGuardar(bloc),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -81,80 +87,145 @@ class _registroState extends State<RegistroPage> {
     );
   }
 
-  _crearNombre() {
-    return TextField(
-      autofocus: false,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          counter: Text('Letras ${_nombre.length}'),
-          hintText: 'Ingrese su nombre',
-          labelText: 'Nombre',
-          helperText: 'Agregue su nombre',
-          suffixIcon: Icon(Icons.assignment_ind_rounded),
-          icon: Icon(Icons.group_outlined)),
-      onChanged: (valor) {
-        setState(() {
-          _nombre = valor;
-        });
+  Widget _crearGuardar(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return ElevatedButton.icon(
+            label: Text('Guardar'),
+            icon: Icon(Icons.save),
+            style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                textStyle:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            onPressed:
+                snapshot.hasData ? () => _contratista(bloc, context) : null);
       },
     );
   }
 
-  _crearApellido() {
-    return TextField(
-      autofocus: false,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          counter: Text('Letras ${_nombre.length}'),
-          hintText: 'Ingrese su nombre',
-          labelText: 'Apellido',
-          helperText: 'Agregue su apellido',
-          suffixIcon: Icon(Icons.assignment_ind_rounded),
-          icon: Icon(Icons.group_outlined)),
-      onChanged: (valor) {
-        setState(() {
-          _nombre = valor;
-        });
-      },
-    );
+  _contratista(ContratistaBloc bloc, BuildContext context) async {
+    final contratistaProvider = ContratistaProvider();
+
+    print(bloc.nombre);
+    print(bloc.apellido);
+    print(bloc.correo);
+    print(bloc.contra);
+    print(bloc.fecha);
+    print(bloc.genero);
+    Map info = await contratistaProvider.nuevoContratista(
+        bloc.nombre.toString(),
+        bloc.apellido.toString(),
+        bloc.genero.toString(),
+        bloc.correo.toString(),
+        bloc.fecha.toString(),
+        bloc.contra.toString());
+
+    if (info['ok'] == true) {
+      Navigator.pushNamed(context, 'principal');
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertLoginContratista(
+              mensaje: '',
+              titulo: '',
+            );
+          });
+    }
   }
 
-  _crearCorreo() {
-    return TextField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-        hintText: 'Ingresar correo',
-        labelText: 'No utilizado antes',
-
-        //Iconos
-        suffixIcon: Icon(Icons.contact_mail_rounded),
-        icon: Icon(Icons.attach_email_rounded),
-      ),
-    );
-  }
-
-  _crearContrasena(bool isobscure) {
-    return TextField(
-        obscureText: isobscure,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          hintText: 'Contraseña',
-          labelText: 'Contraseña',
-          helperText: 'Incluya mayusculas y minusculas',
-          suffixIcon: Icon(Icons.lock_open_rounded),
-          icon: IconButton(
-            icon: Icon(
-                isobscure ? Icons.visibility : Icons.visibility_off_rounded),
-            onPressed: () => {
-              setState(() {
-                isobscure = !isobscure;
-              })
-            },
+  _crearNombre(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.nombreStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            autofocus: false,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                hintText: 'Ingrese su nombre',
+                labelText: 'Nombre',
+                helperText: 'Agregue su nombre',
+                suffixIcon: Icon(Icons.assignment_ind_rounded),
+                icon: Icon(Icons.group_outlined)),
+            onChanged: bloc.changeNombre,
           ),
-        ));
+        );
+      },
+    );
+  }
+
+  _crearApellido(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.apellidoStram,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            autofocus: false,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                hintText: 'Ingrese su apellido',
+                labelText: 'Apellido',
+                helperText: 'Agregue su apellido',
+                suffixIcon: Icon(Icons.assignment_ind_rounded),
+                icon: Icon(Icons.group_outlined)),
+            onChanged: bloc.changeApellido,
+          ),
+        );
+      },
+    );
+  }
+
+  _crearCorreo(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.correoStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+              hintText: 'Ingresar correo',
+              labelText: 'No utilizado antes',
+              //errorText: snapshot.error,
+              suffixIcon: Icon(Icons.contact_mail_rounded),
+              icon: Icon(Icons.attach_email_rounded),
+            ),
+            onChanged: bloc.changeCorreo,
+          ),
+        );
+      },
+    );
+  }
+
+  _crearContrasena(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.contrasenaStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                hintText: 'Contraseña',
+                labelText: 'Contraseña',
+                helperText: 'Incluya mayusculas y minusculas',
+                suffixIcon: Icon(Icons.lock_open_rounded),
+                counterText: snapshot.data,
+                // errorText: snapshot.error,
+                icon: Icon(Icons.lock_rounded)),
+            onChanged: bloc.changeContrasena,
+          ),
+        );
+      },
+    );
   }
 
   _crearFecha(BuildContext context) {
@@ -190,14 +261,23 @@ class _registroState extends State<RegistroPage> {
     }
   }
 
-  _crearGenero() {
-    return TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          labelText: 'Genero',
-          suffixIcon: Icon(Icons.wc_rounded),
-          icon: Icon(Icons.wc_rounded)),
+  _crearGenero(ContratistaBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.generoStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                labelText: 'Genero',
+                suffixIcon: Icon(Icons.wc_rounded),
+                icon: Icon(Icons.wc_rounded)),
+            onChanged: bloc.changeGenero,
+          ),
+        );
+      },
     );
   }
 }

@@ -3,11 +3,12 @@ import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
+  get decodedResp => null;
+
   Future<Map<String, dynamic>> login(String email, String password) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
 
     final _prefs = PreferenciasUsuario();
-
 
     final url = Uri.http(_url, 'api/Usuario/Login');
 
@@ -45,7 +46,7 @@ class UsuarioProvider {
 
   Future<Map<String, dynamic>> nuevoUsuario(
       String nombre, String apellido, String email, String password) async {
-      String _url = 'mahamtr1-001-site1.ctempurl.com';
+    String _url = 'mahamtr1-001-site1.ctempurl.com';
 
     final url = Uri.http(_url, '/api/Usuario/SignUpUsuario');
     final authData = {
@@ -64,12 +65,10 @@ class UsuarioProvider {
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-
     if (decodedResp.containsKey('rol')) {
       return {'ok': true, 'rol': decodedResp['rol']};
     } else {
       return {'ok': false, 'rol': decodedResp['error']};
-
     }
   }
 }

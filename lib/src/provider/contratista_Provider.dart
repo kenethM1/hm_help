@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
-class UsuarioProvider {
+class ContratistaProvider {
   get decodedResp => null;
 
   Future<Map<String, dynamic>> registro(String nombre, String correo,
@@ -18,6 +18,7 @@ class UsuarioProvider {
       'email': correo,
       'nombre': nombre,
       'apellido': apellido,
+      'genero': genero,
       'password': contra,
       'fecha': fecha,
     };
@@ -44,6 +45,36 @@ class UsuarioProvider {
       };
     } else {
       return {'ok': false, 'token': 'Error en algún dato.'};
+    }
+  }
+
+  Future<Map<String, dynamic>> nuevoContratista(String nombre, String correo,
+      String contra, String fecha, String genero, String apellido) async {
+    String _url = 'mahamtr1-001-site1.ctempurl.com';
+
+    final url = Uri.http(_url, '/api/Usuario/SignUpContratista');
+    final authData = {
+      'email': correo,
+      'nombre': nombre,
+      'apellido': apellido,
+      'genero': genero,
+      'password': contra,
+      'fecha': fecha,
+    };
+
+    final peticion = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: json.encode(authData));
+
+    Map<String, dynamic> respuestaJson = json.decode(peticion.body);
+
+    if (decodedResp.containsKey('rol')) {
+      return {'ok': true, 'rol': decodedResp['rol']};
+    } else {
+      return {'ok': false, 'rol': decodedResp['error']};
     }
   }
 }

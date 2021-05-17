@@ -1,6 +1,24 @@
 import 'dart:async';
 
 class ValidatorContratista {
+  final validarNombre = StreamTransformer<String, String>.fromHandlers(
+      handleData: (nombre, sink) {
+    if (nombre.length >= 5) {
+      sink.add(nombre);
+    } else {
+      sink.addError('Nombre invalido , ingrese su nombre completo');
+    }
+  });
+
+  final validarApellido = StreamTransformer<String, String>.fromHandlers(
+      handleData: (apellido, sink) {
+    if (apellido.length >= 2) {
+      sink.add(apellido);
+    } else {
+      sink.addError('Apellido invalido , ingrese su apellido completo');
+    }
+  });
+
   final validarCorreo = StreamTransformer<String, String>.fromHandlers(
       handleData: (correo, sink) {
     Pattern pattern =
