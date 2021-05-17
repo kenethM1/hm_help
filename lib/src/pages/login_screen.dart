@@ -186,6 +186,7 @@ Widget _password(LoginBloc bloc) {
           height: 75,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: CampoPersonalizado(
+            isEmail: false,
             bloc: bloc,
             isObscure: true,
             texto: 'Contraseña',
@@ -201,8 +202,8 @@ Widget _usuario(LoginBloc bloc) {
       return Container(
           height: 75,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-          child:
-              CampoPersonalizado(bloc: bloc, isObscure: false, texto: 'Email'));
+          child: CampoPersonalizado(
+              isEmail: true, bloc: bloc, isObscure: false, texto: 'Email'));
     },
   );
 }

@@ -156,7 +156,8 @@ class _PropuestaState extends State<PropuestaDialog> {
             children: [
               CircleAvatar(
                 radius: 35,
-                child: Image(
+                child: FadeInImage(
+                  placeholder: AssetImage('./assets/jar-loading.gif'),
                   image: NetworkImage(
                       'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
                 ),
