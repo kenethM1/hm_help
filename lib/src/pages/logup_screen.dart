@@ -38,7 +38,7 @@ class LogupUsuario extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          _logup_button(bloc),
+          logUpButton(bloc),
           TextButton(
               onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
               child: Text(
@@ -50,7 +50,7 @@ class LogupUsuario extends StatelessWidget {
   }
 }
 
-Widget _logup_button(LogupBloc bloc) {
+Widget logUpButton(LogupBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
