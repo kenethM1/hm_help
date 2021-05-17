@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:hm_help/src/bloc/login_bloc.dart';
-import 'package:hm_help/src/bloc/provider.dart';
+import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
+import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
+import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
-import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
+import 'package:hm_help/src/widgets/campoContrasena.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -45,7 +48,7 @@ class LoginScreen extends StatelessWidget {
               child: StreamBuilder(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  final provider = Provider.of<GoogleSignInProvider>(context);
+                  //final provider = Provider.of<GoogleSignInProvider>(context);
                   if (snapshot.hasData) {
                     Navigator.pushNamed(context, 'principal');
                   } else {
@@ -91,7 +94,7 @@ class ForgetPassButton extends StatelessWidget {
     return TextButton(
         onPressed: () {
           Navigator.push(context,
-              new MaterialPageRoute(builder: (context) => LoginScreen()));
+              new MaterialPageRoute(builder: (context) => LogupUsuario()));
         },
         child: Text(
           '¿No tienes cuenta? Registrate!',
@@ -148,14 +151,12 @@ Widget _loginButton(LoginBloc bloc) {
 _login(LoginBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
 
-  print(bloc.email);
-  print(bloc.password);
-  Map info = await usuarioProvider.login(
+  Map respuesta = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());
 
-  if (info['ok'] == true && info['rol'] == 'Contratista') {
-    Navigator.pushNamed(context, 'principal-Contratista');
-  } else if (info['ok'] == true && info['rol'] == 'Usuario') {
+  if (respuesta['ok'] == true && respuesta['rol'] == 'Contratista') {
+    Navigator.pushNamed(context, 'principal');
+  } else if (respuesta['ok'] == true && respuesta['rol'] == 'Usuario') {
     showDialog(
         context: context,
         builder: (context) {
@@ -181,27 +182,13 @@ Widget _password(LoginBloc bloc) {
     stream: bloc.passwordStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
-        height: 75,
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-        child: TextField(
-          scrollPadding: EdgeInsets.only(bottom: 15),
-          autocorrect: false,
-          obscureText: true,
-          textAlign: TextAlign.center,
-          onChanged: bloc.changePassword,
-          decoration: InputDecoration(
-              focusColor: Colors.blue,
-              fillColor: Colors.grey.shade300,
-              filled: true,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Contraseña',
-              hintStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold)),
-        ),
-      );
+          height: 75,
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          child: CampoPersonalizado(
+            bloc: bloc,
+            isObscure: true,
+            texto: 'Contraseña',
+          ));
     },
   );
 }
@@ -211,27 +198,10 @@ Widget _usuario(LoginBloc bloc) {
     stream: bloc.emailStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
-        height: 75,
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-        child: TextField(
-          scrollPadding: EdgeInsets.only(bottom: 15),
-          autocorrect: false,
-          //maxLength: 25,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              focusColor: Colors.blue,
-              fillColor: Colors.grey.shade300,
-              filled: true,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Email',
-              hintStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold)),
-          onChanged: bloc.changeEmail,
-        ),
-      );
+          height: 75,
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          child:
+              CampoPersonalizado(bloc: bloc, isObscure: false, texto: 'Email'));
     },
   );
 }
@@ -247,7 +217,6 @@ class Logo extends StatelessWidget {
         height: 250,
         width: 250,
         image: AssetImage('assets/logo.png'),
-        //fit: BoxFit.contain,
       ),
     );
   }

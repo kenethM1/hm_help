@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:hm_help/src/bloc/provider2.dart';
+import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
 
 import 'package:hm_help/src/provider/usuario_provider.dart';
 
-import 'package:hm_help/src/widgets/alertLogin_dialog.dart';
+import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 
 class LogupUsuario extends StatelessWidget {
   @override
@@ -38,7 +38,7 @@ class LogupUsuario extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          _logup_button(bloc),
+          logUpButton(bloc),
           TextButton(
               onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
               child: Text(
@@ -50,7 +50,7 @@ class LogupUsuario extends StatelessWidget {
   }
 }
 
-Widget _logup_button(LogupBloc bloc) {
+Widget logUpButton(LogupBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (context, snapshot) {
@@ -88,8 +88,8 @@ _logup(LogupBloc bloc, BuildContext context) async {
         context: context,
         builder: (context) {
           return AlertLogin(
-            mensaje: '',
-            titulo: '',
+            titulo: 'Posible error',
+            mensaje: 'Verifique sus datos',
           );
         });
   }

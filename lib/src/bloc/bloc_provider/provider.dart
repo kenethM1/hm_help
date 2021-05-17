@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/bloc/login_bloc.dart';
 
+import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 
 class ProviderBloc extends InheritedWidget {
   final loginBloc = LoginBloc();
-
 
   ProviderBloc({Key? key, required Widget child})
       : super(key: key, child: child);
@@ -17,5 +16,4 @@ class ProviderBloc extends InheritedWidget {
         .dependOnInheritedWidgetOfExactType<ProviderBloc>()!
         .loginBloc;
   }
-  }
-
+}
