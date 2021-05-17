@@ -39,12 +39,8 @@ android {
         applicationId "com.example.hm_help"
         minSdkVersion 16
         targetSdkVersion 30
-<<<<<<< HEAD
-        multiDexEnabled true
-=======
         // Agregue
         multiDexEnable true
->>>>>>> 85eb57cd7987b70f80157bfa1b835936e7887736
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -64,13 +60,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-<<<<<<< HEAD
-    implementation 'com.android.support:multidex:1.0.3'
-=======
     //Agregue 
     implementation 'com.android.support:multidex:1.0.3'
 
->>>>>>> 85eb57cd7987b70f80157bfa1b835936e7887736
 }
 
 

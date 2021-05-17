@@ -8,7 +8,7 @@ import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
-import 'package:hm_help/src/widgets/campoContrasena.dart';
+import 'package:hm_help/src/widgets/campoPersonalizado.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {

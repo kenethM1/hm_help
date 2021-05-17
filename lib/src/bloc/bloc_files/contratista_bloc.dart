@@ -10,10 +10,8 @@ class ContratistaBloc with Validator {
   final _fechaController = BehaviorSubject<String>();
   final _generoController = BehaviorSubject<String>();
 
-  Stream<String> get nombreStream =>
-      _nombreController.stream.transform(validarNombre);
-  Stream<String> get apellidoStram =>
-      _apellidoController.stream.transform(validarApellido);
+  Stream<String> get nombreStream => _nombreController.stream;
+  Stream<String> get apellidoStram => _apellidoController.stream;
   Stream<String> get correoStream =>
       _correoController.stream.transform(validarEmail);
   Stream<String> get contrasenaStream =>

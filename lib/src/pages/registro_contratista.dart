@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hm_help/src/bloc/bloc_files/contratista_bloc.dart';
 import 'package:hm_help/src/bloc/contratistaProvider.dart';
 import 'package:hm_help/src/provider/contratista_Provider.dart';
 import 'package:hm_help/src/widgets/contratistaDialog.dart';
@@ -107,12 +108,6 @@ class _registroState extends State<RegistroPage> {
   _contratista(ContratistaBloc bloc, BuildContext context) async {
     final contratistaProvider = ContratistaProvider();
 
-    print(bloc.nombre);
-    print(bloc.apellido);
-    print(bloc.correo);
-    print(bloc.contra);
-    print(bloc.fecha);
-    print(bloc.genero);
     Map info = await contratistaProvider.nuevoContratista(
         bloc.nombre.toString(),
         bloc.apellido.toString(),

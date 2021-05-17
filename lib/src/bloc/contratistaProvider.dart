@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/bloc/contratista_bloc.dart';
-export 'package:hm_help/src/bloc/contratista_bloc.dart';
+
+import 'bloc_files/contratista_bloc.dart';
 
 class ProviderContratista extends InheritedWidget {
   final contratistaBloc = ContratistaBloc();

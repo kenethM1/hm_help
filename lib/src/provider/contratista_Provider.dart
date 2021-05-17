@@ -71,10 +71,10 @@ class ContratistaProvider {
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-    if (decodedResp.containsKey('rol')) {
-      return {'ok': true, 'rol': decodedResp['rol']};
+    if (respuestaJson.containsKey('rol')) {
+      return {'ok': true, 'rol': respuestaJson['rol']};
     } else {
-      return {'ok': false, 'rol': decodedResp['error']};
+      return {'ok': false, 'rol': respuestaJson['error']};
     }
   }
 }
