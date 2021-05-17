@@ -123,8 +123,8 @@ class _registroState extends State<RegistroPage> {
           context: context,
           builder: (context) {
             return AlertLoginContratista(
-              mensaje: '',
-              titulo: '',
+              mensaje: 'No se pudo hacer el registro',
+              titulo: 'ERROR',
             );
           });
     }
