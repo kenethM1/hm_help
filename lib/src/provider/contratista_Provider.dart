@@ -54,12 +54,12 @@ class ContratistaProvider {
 
     final url = Uri.http(_url, '/api/Usuario/SignUpContratista');
     final authData = {
-      'email': correo,
       'nombre': nombre,
-      'apellido': apellido,
-      'genero': genero,
+      'email': correo,
       'password': contra,
       'fecha': fecha,
+      'genero': genero,
+      'apellido': apellido,
     };
 
     final peticion = await http.post(url,

@@ -19,6 +19,9 @@ void initState() {
 class _registroState extends State<RegistroPage> {
   String _fecha = '';
 
+  static const generos = <String>['Masculino', 'Femenino'];
+  String generoSeleccionado = generos.first;
+
   TextEditingController _relacionFecha = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -44,18 +47,21 @@ class _registroState extends State<RegistroPage> {
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
         children: <Widget>[
           _crearNombre(bloc),
-          Divider(),
+          Divider(color: Colors.blueAccent),
           _crearApellido(bloc),
-          Divider(),
+          Divider(color: Colors.blueAccent),
           _crearFecha(context),
-          Divider(),
+          Divider(color: Colors.blueAccent),
           _crearCorreo(bloc),
-          Divider(),
+          Divider(color: Colors.blueAccent),
           _crearContrasena(bloc),
-          Divider(),
-          _crearGenero(bloc),
-          Divider(),
+          Divider(color: Colors.blueAccent),
+          _crearGenero(),
+          Divider(color: Colors.blueAccent),
+          _crearbuildRadios(context, bloc),
+          Divider(color: Colors.blueAccent),
           _crearBoton(context),
+          Divider(color: Colors.blueAccent),
           ElevatedButton(
             child: Text('Terminos y condiciones'),
             style: ElevatedButton.styleFrom(
@@ -110,11 +116,11 @@ class _registroState extends State<RegistroPage> {
 
     Map info = await contratistaProvider.nuevoContratista(
         bloc.nombre.toString(),
-        bloc.apellido.toString(),
-        bloc.genero.toString(),
         bloc.correo.toString(),
+        bloc.contra.toString(),
         bloc.fecha.toString(),
-        bloc.contra.toString());
+        bloc.genero.toString(),
+        bloc.apellido.toString());
 
     if (info['ok'] == true) {
       Navigator.pushNamed(context, 'principal');
@@ -143,7 +149,6 @@ class _registroState extends State<RegistroPage> {
                     borderRadius: BorderRadius.circular(15.0)),
                 hintText: 'Ingrese su nombre',
                 labelText: 'Nombre',
-                helperText: 'Agregue su nombre',
                 suffixIcon: Icon(Icons.assignment_ind_rounded),
                 icon: Icon(Icons.group_outlined)),
             onChanged: bloc.changeNombre,
@@ -166,7 +171,6 @@ class _registroState extends State<RegistroPage> {
                     borderRadius: BorderRadius.circular(15.0)),
                 hintText: 'Ingrese su apellido',
                 labelText: 'Apellido',
-                helperText: 'Agregue su apellido',
                 suffixIcon: Icon(Icons.assignment_ind_rounded),
                 icon: Icon(Icons.group_outlined)),
             onChanged: bloc.changeApellido,
@@ -188,7 +192,6 @@ class _registroState extends State<RegistroPage> {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
               hintText: 'Ingresar correo',
               labelText: 'No utilizado antes',
-              //errorText: snapshot.error,
               suffixIcon: Icon(Icons.contact_mail_rounded),
               icon: Icon(Icons.attach_email_rounded),
             ),
@@ -210,11 +213,9 @@ class _registroState extends State<RegistroPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
                 hintText: 'Contraseña',
-                labelText: 'Contraseña',
-                helperText: 'Incluya mayusculas y minusculas',
+                labelText: 'Incluya mayusculas y minusculas',
                 suffixIcon: Icon(Icons.lock_open_rounded),
                 counterText: snapshot.data,
-                // errorText: snapshot.error,
                 icon: Icon(Icons.lock_rounded)),
             onChanged: bloc.changeContrasena,
           ),
@@ -256,21 +257,39 @@ class _registroState extends State<RegistroPage> {
     }
   }
 
-  _crearGenero(ContratistaBloc bloc) {
+  _crearGenero() {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Text(
+            'Seleccione genero',
+            style: TextStyle(fontSize: 15.0),
+            textAlign: TextAlign.end,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _crearbuildRadios(BuildContext context, ContratistaBloc bloc) {
     return StreamBuilder(
       stream: bloc.generoStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          child: TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                labelText: 'Genero',
-                suffixIcon: Icon(Icons.wc_rounded),
-                icon: Icon(Icons.wc_rounded)),
-            onChanged: bloc.changeGenero,
-          ),
+        return Column(
+          children: generos.map(
+            (genero) {
+              return RadioListTile(
+                value: genero,
+                groupValue: generoSeleccionado,
+                title: Text(
+                  genero,
+                  style: TextStyle(),
+                ),
+                onChanged: (value) =>
+                    setState(() => this.generoSeleccionado = genero),
+              );
+            },
+          ).toList(),
         );
       },
     );
