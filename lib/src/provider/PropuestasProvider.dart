@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hm_help/src/models/propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
@@ -25,14 +26,26 @@ class PropuestasProvider {
 
   final url = Uri.http(_url, _path);
 
-  List<Propuesta> _propuestas = [];
-
   Future<List<Propuesta>> getPropuestas() async {
     final propuestas = await _procesarRespuesta();
 
-    _propuestas.addAll(propuestas);
+    final existing = Set<Propuesta>();
+    final unique =
+        propuestas.where((propuestas) => existing.add(propuestas)).toList();
 
-    propuestasSink(_propuestas);
+    propuestasSink(unique);
+
+    return propuestas;
+  }
+
+  Future<List<Propuesta>> recargar(String idPropuesta) async {
+    final propuestas = await _procesarRespuesta();
+    final existing = Set<Propuesta>();
+    final unique =
+        propuestas.where((propuestas) => existing.add(propuestas)).toList();
+
+    unique.removeWhere((element) => element.id == idPropuesta);
+    propuestasSink(unique);
 
     return propuestas;
   }
@@ -55,6 +68,29 @@ class PropuestasProvider {
     } else {
       return [];
     }
+  }
+
+  void removePropuesta(String propuestaId) async {
+    String _url = 'mahamtr1-001-site1.ctempurl.com';
+    String _path = 'api/Propuesta/DeletePropuestaById';
+
+    final url = Uri.http(_url, _path);
+    final jsonbody = {'id': propuestaId};
+
+    final peticion = await http.delete(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(jsonbody));
+
+    bool isOk = verifyConnection(peticion);
+    print(peticion.body);
+
+    isOk
+        ? print('Propuesta removida con exito')
+        : print('Propuesta no removida');
   }
 
   bool verifyConnection(http.Response peticion) {

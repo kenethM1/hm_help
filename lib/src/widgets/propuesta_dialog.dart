@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/models/propuesta.dart';
+import 'package:hm_help/src/provider/PropuestasProvider.dart';
 
 class PropuestaDialog extends StatefulWidget {
   PropuestaDialog({
     Key? key,
-    required this.nombreCliente,
-    required this.monto,
-    required this.info,
+    required this.propuestaList,
+    required this.recargar,
   }) : super(key: key);
 
-  String nombreCliente = '';
-  double monto = 0;
-  String info;
+  Propuesta propuestaList;
+  Function recargar;
 
   @override
   _PropuestaState createState() => _PropuestaState();
@@ -20,8 +19,6 @@ class PropuestaDialog extends StatefulWidget {
 class _PropuestaState extends State<PropuestaDialog> {
   @override
   Widget build(BuildContext context) {
-    final preferenciaUsuario = new PreferenciasUsuario();
-
     var textStyle = TextStyle(
         color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 18);
     return SingleChildScrollView(
@@ -38,7 +35,8 @@ class _PropuestaState extends State<PropuestaDialog> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                userInformacion(widget.nombreCliente, widget.monto),
+                userInformacion(widget.propuestaList.nombre.toString(),
+                    widget.propuestaList.monto!),
                 SizedBox(
                   height: 10,
                 ),
@@ -47,7 +45,7 @@ class _PropuestaState extends State<PropuestaDialog> {
                   style: textStyle,
                 ),
                 Text(
-                  widget.info,
+                  widget.propuestaList.descripcion!,
                   style: Theme.of(context).textTheme.bodyText1,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.clip,
@@ -66,7 +64,7 @@ class _PropuestaState extends State<PropuestaDialog> {
                       width: 10,
                     ),
                     Text(
-                      widget.monto.toString(),
+                      widget.propuestaList.monto.toString(),
                       style: textStyle.copyWith(
                           fontSize: 30, fontWeight: FontWeight.bold),
                     ),
@@ -79,7 +77,9 @@ class _PropuestaState extends State<PropuestaDialog> {
                             ),
                             onPressed: () {
                               setState(() {
-                                widget.monto += 10;
+                                if (widget.propuestaList.monto != null)
+                                  widget.propuestaList.monto =
+                                      widget.propuestaList.monto! + 10;
                               });
                             }),
                         ElevatedButton(
@@ -89,7 +89,9 @@ class _PropuestaState extends State<PropuestaDialog> {
                             ),
                             onPressed: () {
                               setState(() {
-                                widget.monto -= 10;
+                                if (widget.propuestaList.monto != null)
+                                  widget.propuestaList.monto =
+                                      widget.propuestaList.monto! - 10;
                               });
                             })
                       ],
@@ -112,7 +114,14 @@ class _PropuestaState extends State<PropuestaDialog> {
                                 fontWeight: FontWeight.normal,
                                 color: Colors.white))),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        PropuestasProvider propuestasProvider =
+                            new PropuestasProvider();
+                        propuestasProvider.removePropuesta(
+                            widget.propuestaList.id.toString());
+                        Navigator.pop(context);
+                        widget.recargar(widget.propuestaList.id);
+                      },
                       child: Text(
                         'Rechazar',
                         style: textStyle.copyWith(

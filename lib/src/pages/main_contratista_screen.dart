@@ -5,6 +5,7 @@ import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:hm_help/src/widgets/Line_Chart.dart';
+import 'package:hm_help/src/widgets/Lista_Propuestas.dart';
 import 'package:hm_help/src/widgets/Propuesta_Dialog.dart';
 
 class MainContratistaScreen extends StatelessWidget {
@@ -30,17 +31,22 @@ class MainContratistaScreen extends StatelessWidget {
                 stream: propuestasProvider.propuestasStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return TileOferta(
-                            estilo: estilos.estiloWhite,
-                            nombre: snapshot.data![index].nombreUsuario,
-                            rubro: snapshot.data![index].rubro,
-                            monto: snapshot.data![index].monto,
-                            info: snapshot.data![index].descripcion,
-                          );
-                        });
+                    return RefreshIndicator(
+                      onRefresh: () {
+                        return propuestasProvider.getPropuestas();
+                      },
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            List<Propuesta> propuestas =
+                                snapshot.data!.toList();
+                            return TileOferta(
+                              funcion: propuestasProvider.recargar,
+                              propuesta: propuestas[index],
+                              estilo: estilos.estiloWhite,
+                            );
+                          }),
+                    );
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -60,18 +66,15 @@ class MainContratistaScreen extends StatelessWidget {
 class TileOferta extends StatelessWidget {
   const TileOferta({
     Key? key,
+    required this.propuesta,
     required this.estilo,
-    required this.nombre,
-    required this.rubro,
-    required this.monto,
-    required this.info,
+    required this.funcion,
   }) : super(key: key);
+  final Propuesta propuesta;
   final TextStyle estilo;
-  final String? nombre;
-  final String? rubro;
-  final double? monto;
-  final String? info;
-  get nombreCliente => nombre!.split(' ');
+  final Function funcion;
+
+  get nombreCliente => propuesta.nombreUsuario!.split(' ');
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +86,13 @@ class TileOferta extends StatelessWidget {
             context: context,
             builder: (context) {
               return PropuestaDialog(
-                nombreCliente: nombre!,
-                monto: monto!,
-                info: this.info.toString(),
+                recargar: funcion,
+                propuestaList: propuesta,
               );
             });
       },
       subtitle: Text(
-        rubro.toString(),
+        propuesta.rubro.toString(),
         style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
       leading: Icon(
@@ -98,7 +100,7 @@ class TileOferta extends StatelessWidget {
         size: 50,
       ),
       title: Text(
-        '${nombreCliente[0].toString()} ${nombreCliente[3].toString()}',
+        '${propuesta.nombre}',
         style: estilo,
       ),
       trailing: Row(
