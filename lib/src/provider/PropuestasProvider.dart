@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:hm_help/src/models/propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
@@ -10,15 +9,23 @@ class PropuestasProvider {
   final token = PreferenciasUsuario().token;
   final _propuestasStreamController =
       StreamController<List<Propuesta>>.broadcast();
+  final _propuestasTotalStreamController = StreamController<String>.broadcast();
 
   Function(List<Propuesta>) get propuestasSink =>
       _propuestasStreamController.sink.add;
 
+  Function(String) get propuestasTotalSink =>
+      _propuestasTotalStreamController.sink.add;
+
   Stream<List<Propuesta>> get propuestasStream =>
       _propuestasStreamController.stream;
 
+  Stream<String> get propuestasTotalStream =>
+      _propuestasTotalStreamController.stream;
+
   void dispose() {
     _propuestasStreamController.close();
+    _propuestasTotalStreamController.close();
   }
 
   static String _url = 'mahamtr1-001-site1.ctempurl.com';
@@ -68,6 +75,16 @@ class PropuestasProvider {
     } else {
       return [];
     }
+  }
+
+  Future<String> montoTotal() async {
+    List<Propuesta> propuestas = await getPropuestas();
+
+    double total = propuestas.fold(0, (sum, item) => sum + item.monto!);
+
+    propuestasTotalSink(total.toString());
+
+    return total.toString();
   }
 
   void removePropuesta(String propuestaId) async {

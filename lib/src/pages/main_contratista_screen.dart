@@ -1,11 +1,12 @@
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
+import 'package:hm_help/src/widgets/Ganancias_widget.dart';
 import 'package:hm_help/src/widgets/Line_Chart.dart';
-import 'package:hm_help/src/widgets/Lista_Propuestas.dart';
 import 'package:hm_help/src/widgets/Propuesta_Dialog.dart';
 
 class MainContratistaScreen extends StatelessWidget {
@@ -17,44 +18,44 @@ class MainContratistaScreen extends StatelessWidget {
     final estilos = new Styles();
 
     propuestasProvider.getPropuestas();
-
-    var tamano = MediaQuery.of(context).size;
+    propuestasProvider.montoTotal();
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             ContenedorGrafico(estilo: estilos.estilo),
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: StreamBuilder<List<Propuesta>>(
-                stream: propuestasProvider.propuestasStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return RefreshIndicator(
-                      onRefresh: () {
-                        return propuestasProvider.getPropuestas();
-                      },
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            List<Propuesta> propuestas =
-                                snapshot.data!.toList();
-                            return TileOferta(
-                              funcion: propuestasProvider.recargar,
-                              propuesta: propuestas[index],
-                              estilo: estilos.estiloWhite,
-                            );
-                          }),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: StreamBuilder<List<Propuesta>>(
+                  stream: propuestasProvider.propuestasStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return RefreshIndicator(
+                        onRefresh: () {
+                          propuestasProvider.montoTotal();
+                          return propuestasProvider.getPropuestas();
+                        },
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              List<Propuesta> propuestas =
+                                  snapshot.data!.toList();
+                              return TileOferta(
+                                funcion: propuestasProvider.recargar,
+                                propuesta: propuestas[index],
+                                estilo: estilos.estiloWhite,
+                              );
+                            }),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                color: Colors.blue.shade200,
               ),
-              height: tamano.height * 0.4678,
-              width: tamano.width,
-              color: Colors.blue.shade200,
             )
           ],
         ),
@@ -73,8 +74,6 @@ class TileOferta extends StatelessWidget {
   final Propuesta propuesta;
   final TextStyle estilo;
   final Function funcion;
-
-  get nombreCliente => propuesta.nombreUsuario!.split(' ');
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +151,7 @@ class ContenedorGrafico extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final preferenciasUsuario = new PreferenciasUsuario();
+    final propuestasProvider = new PropuestasProvider();
 
     //final user = FirebaseAuth.instance.currentUser;
 
@@ -174,10 +174,15 @@ class ContenedorGrafico extends StatelessWidget {
               'Ganancias',
               style: estilo,
             ),
-            Text(
-              'L. 9500',
-              style: estilo,
-            ),
+            StreamBuilder<String>(
+                stream: propuestasProvider.propuestasTotalStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return GananciasText(snapshot: snapshot);
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }),
           ],
         ),
         SizedBox(
