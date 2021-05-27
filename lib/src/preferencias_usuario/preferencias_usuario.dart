@@ -43,4 +43,12 @@ class PreferenciasUsuario {
   set nombreUsuario(String value) {
     _prefs!.setString('nombre', value);
   }
+
+  String get cvUsuario {
+    return _prefs!.getString('cvUsuario') ?? '';
+  }
+
+  set cvUsuario(String value) {
+    _prefs!.setString('cvUsuario', value);
+  }
 }
