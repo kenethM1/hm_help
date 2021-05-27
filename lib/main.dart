@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
           'nuevoUser': (_) => Provider2(child: LogupUsuario()),
           'registro': (_) => RegistroPage(),
           'principal': (_) => MainContratistaScreen(),
-          'hojaVida': (_) => PdfContratistaPage(),
         });
   }
 }
