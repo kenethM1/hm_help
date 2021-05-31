@@ -82,7 +82,7 @@ _logup(LogupBloc bloc, BuildContext context) async {
       bloc.password.toString());
 
   if (info['ok'] == true) {
-    Navigator.pushNamed(context, 'principal');
+    Navigator.pushNamed(context, 'mainUser');
   } else {
     showDialog(
         context: context,
