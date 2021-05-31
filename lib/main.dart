@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
           'mainUser': (_) => MainUsuarioScreen(),
           'registro': (_) => RegistroPage(),
           'principal': (_) => MainContratistaScreen(),
-          'hojaVida': (_) => PdfContratistaPage(),
         });
   }
 }

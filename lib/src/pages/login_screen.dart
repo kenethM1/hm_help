@@ -9,8 +9,8 @@ import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 import 'package:hm_help/src/widgets/campoContrasena.dart';
+import 'package:hm_help/src/widgets/registro_usuario_contratista.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -49,7 +49,6 @@ class LoginScreen extends StatelessWidget {
               child: StreamBuilder(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  //final provider = Provider.of<GoogleSignInProvider>(context);
                   if (snapshot.hasData) {
                     Navigator.pushNamed(context, 'principal');
                   } else {
@@ -59,7 +58,11 @@ class LoginScreen extends StatelessWidget {
                 },
               )),
           TextButton(
-              onPressed: () => Navigator.pushNamed(context, 'nuevoUser'),
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SignUpDecide();
+                  }),
               child: Text(
                 '¿No tienes cuenta? Registrate!',
                 style:
@@ -141,6 +144,7 @@ Widget _loginButton(LoginBloc bloc) {
           child: ElevatedButton(
               child: Text('Iniciar Sesion'),
               style: ElevatedButton.styleFrom(
+                  elevation: 10,
                   shape: StadiumBorder(),
                   textStyle:
                       TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
