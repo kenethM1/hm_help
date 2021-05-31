@@ -1,7 +1,7 @@
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/models/propuesta.dart';
+import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
@@ -35,19 +35,11 @@ class MainContratistaScreen extends StatelessWidget {
                       return RefreshIndicator(
                         onRefresh: () {
                           propuestasProvider.montoTotal();
+                          propuestasProvider.gananciasPorMes();
                           return propuestasProvider.getPropuestas();
                         },
-                        child: ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              List<Propuesta> propuestas =
-                                  snapshot.data!.toList();
-                              return TileOferta(
-                                funcion: propuestasProvider.recargar,
-                                propuesta: propuestas[index],
-                                estilo: estilos.estiloWhite,
-                              );
-                            }),
+                        child: buildListaOfertas(
+                            snapshot, propuestasProvider, estilos),
                       );
                     } else {
                       return Center(child: CircularProgressIndicator());
@@ -61,6 +53,20 @@ class MainContratistaScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ListView buildListaOfertas(AsyncSnapshot<List<Propuesta>> snapshot,
+      PropuestasProvider propuestasProvider, Styles estilos) {
+    return ListView.builder(
+        itemCount: snapshot.data!.length,
+        itemBuilder: (context, index) {
+          List<Propuesta> propuestas = snapshot.data!.toList();
+          return TileOferta(
+            funcion: propuestasProvider.recargar,
+            propuesta: propuestas[index],
+            estilo: estilos.estiloWhite,
+          );
+        });
   }
 }
 
@@ -153,8 +159,6 @@ class ContenedorGrafico extends StatelessWidget {
     final preferenciasUsuario = new PreferenciasUsuario();
     final propuestasProvider = new PropuestasProvider();
 
-    //final user = FirebaseAuth.instance.currentUser;
-
     return Column(
       children: [
         SizedBox(
@@ -190,7 +194,6 @@ class ContenedorGrafico extends StatelessWidget {
         ),
         ChartWidget(),
         Container(
-            //color: Colors.red,
             alignment: Alignment.center,
             height: 70,
             width: 200,

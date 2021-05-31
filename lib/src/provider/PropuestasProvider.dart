@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:hm_help/src/models/propuesta.dart';
+import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,12 +47,15 @@ class PropuestasProvider {
 
   Future<List<Propuesta>> recargar(String idPropuesta) async {
     final propuestas = await _procesarRespuesta();
+
     final existing = Set<Propuesta>();
-    final unique =
+
+    final propuestasNoRepetidas =
         propuestas.where((propuestas) => existing.add(propuestas)).toList();
 
-    unique.removeWhere((element) => element.id == idPropuesta);
-    propuestasSink(unique);
+    propuestasNoRepetidas.removeWhere((element) => element.id == idPropuesta);
+
+    propuestasSink(propuestasNoRepetidas);
 
     return propuestas;
   }
@@ -115,5 +118,11 @@ class PropuestasProvider {
       return false;
     } else
       return true;
+  }
+
+  Future<Map<String, String>> gananciasPorMes() async {
+    final propuestas = await _procesarRespuesta();
+
+    return {"": ""};
   }
 }

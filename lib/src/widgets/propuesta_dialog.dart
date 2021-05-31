@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/models/propuesta.dart';
+import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 
 class PropuestaDialog extends StatefulWidget {

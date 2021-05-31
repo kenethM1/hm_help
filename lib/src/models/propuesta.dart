@@ -20,15 +20,22 @@ class Propuesta {
   String? descripcion;
   double? monto;
   String? id;
+  DateTime? created;
+  DateTime? updated;
+  String? status;
 
-  Propuesta(
-      {this.rubro,
-      this.nombreUsuario,
-      this.nombreContratista,
-      this.nombre,
-      this.descripcion,
-      this.monto,
-      this.id});
+  Propuesta({
+    this.rubro,
+    this.nombreUsuario,
+    this.nombreContratista,
+    this.nombre,
+    this.descripcion,
+    this.monto,
+    this.id,
+    this.created,
+    this.updated,
+    this.status,
+  });
 
   Propuesta.fromJsonMap(Map<String, dynamic> json) {
     rubro = json['rubro'];
@@ -38,5 +45,13 @@ class Propuesta {
     descripcion = json['descripcion'];
     monto = json['monto'];
     id = json['id'];
+    created = castStringtoDate(json['created']);
+    updated = castStringtoDate(json['updated']);
+    status = json['status'];
+  }
+
+  DateTime castStringtoDate(String fecha) {
+    DateTime date = DateTime.parse(fecha.replaceAll('T', ' '));
+    return date;
   }
 }
