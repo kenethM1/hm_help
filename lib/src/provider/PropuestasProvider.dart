@@ -37,8 +37,7 @@ class PropuestasProvider {
     final propuestas = await _procesarRespuesta();
 
     final existing = Set<Propuesta>();
-    final unique =
-        propuestas.where((propuestas) => existing.add(propuestas)).toList();
+    final unique = propuestas.where((propuestas) => existing.add(propuestas)).toList();
 
     propuestasSink(unique);
 
