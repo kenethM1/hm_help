@@ -79,6 +79,8 @@ class MainUsuarioScreen extends StatelessWidget{
       builder:(context, snapshot){
         if(snapshot.hasData){
          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context , index){
               List<Contratista> contratista = 
