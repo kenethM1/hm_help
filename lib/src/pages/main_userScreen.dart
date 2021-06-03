@@ -80,16 +80,14 @@ class MainUsuarioScreen extends StatelessWidget {
           stream: contratistasProvider.contratistaStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return SingleChildScrollView(
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      List<Contratista> contratista = snapshot.data!.toList();
-                      return ListaContratista(contratista: contratista[index]);
-                    }),
-              );
+              return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    List<Contratista> contratista = snapshot.data!.toList();
+                    return ListaContratista(contratista: contratista[index]);
+                  });
             } else {
               print(snapshot.connectionState);
               return Center(child: CircularProgressIndicator());
