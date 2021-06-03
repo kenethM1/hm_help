@@ -24,7 +24,9 @@ class MainContratistaScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            ContenedorGrafico(estilo: estilos.estilo),
+            ContenedorGrafico(
+              estilo: estilos.estilo,
+            ),
             Expanded(
               child: Container(
                 padding: EdgeInsets.only(top: 10),
@@ -178,21 +180,34 @@ class ContenedorGrafico extends StatelessWidget {
               'Ganancias',
               style: estilo,
             ),
-            StreamBuilder<String>(
-                stream: propuestasProvider.propuestasTotalStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return GananciasText(snapshot: snapshot);
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
+            Container(
+              child: StreamBuilder<String>(
+                  stream: propuestasProvider.montoTotal(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.connectionState);
+                      return GananciasText(snapshot: snapshot);
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
+            ),
           ],
         ),
         SizedBox(
           height: 20,
         ),
-        ChartWidget(),
+        StreamBuilder<List<MesAgrupado>>(
+            stream: propuestasProvider.gananciasPorMes(),
+            builder: (context, snapshot) {
+              if (snapshot.data!.length == 0) {
+                return Center(child: Text('No hay propuestas aceptadas.'));
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return ChartWidget(snapshot: snapshot);
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
         Container(
             alignment: Alignment.center,
             height: 70,

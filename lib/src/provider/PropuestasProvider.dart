@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
+import "package:collection/collection.dart";
 
 class PropuestasProvider {
   final token = PreferenciasUsuario().token;
   final _propuestasStreamController =
       StreamController<List<Propuesta>>.broadcast();
+
   final _propuestasTotalStreamController = StreamController<String>.broadcast();
 
   Function(List<Propuesta>) get propuestasSink =>
@@ -37,7 +40,8 @@ class PropuestasProvider {
     final propuestas = await _procesarRespuesta();
 
     final existing = Set<Propuesta>();
-    final unique = propuestas.where((propuestas) => existing.add(propuestas)).toList();
+    final unique =
+        propuestas.where((propuestas) => existing.add(propuestas)).toList();
 
     propuestasSink(unique);
 
@@ -79,14 +83,16 @@ class PropuestasProvider {
     }
   }
 
-  Future<String> montoTotal() async {
+  Stream<String> montoTotal() async* {
     List<Propuesta> propuestas = await getPropuestas();
 
     double total = propuestas.fold(0, (sum, item) => sum + item.monto!);
 
     propuestasTotalSink(total.toString());
 
-    return total.toString();
+    print('monto total: $total');
+
+    yield total.toString();
   }
 
   void removePropuesta(String propuestaId) async {
@@ -119,9 +125,31 @@ class PropuestasProvider {
       return true;
   }
 
-  Future<Map<String, String>> gananciasPorMes() async {
+  Stream<List<MesAgrupado>> gananciasPorMes() async* {
     final propuestas = await _procesarRespuesta();
 
-    return {"": ""};
+    propuestas.removeWhere((element) =>
+        element.status == 'En revisión' ||
+        element.status == 'En proceso' ||
+        element.status == 'Rechazado');
+
+    final groupByDate = groupBy(propuestas, (Propuesta orderpropuestas) {
+      return '${orderpropuestas.updated!.month}';
+    });
+    List<MesAgrupado> listaAgrupada = [];
+
+    groupByDate.forEach((key, listaPropuestas) {
+      double suma = listaPropuestas
+          .map((propuesta) => propuesta.monto)
+          .fold(0, (previousValue, monto) => previousValue + monto!);
+
+      MesAgrupado mes = MesAgrupado(key, suma);
+      print(key);
+
+      listaAgrupada.add(mes);
+      print(listaAgrupada);
+    });
+
+    yield listaAgrupada;
   }
 }

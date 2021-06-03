@@ -16,7 +16,6 @@ class ContratistasProvider {
   Stream<List<Contratista>> get contratistaStream =>
       _contratistasStreamController.stream;
 
-
   void dispose() {
     _contratistasStreamController.close();
   }
@@ -29,7 +28,6 @@ class ContratistasProvider {
   Future<List<Contratista>> getContratista() async {
     final contratista = await _procesarRespuesta();
 
-
     contratistaSink(contratista);
 
     return contratista;
@@ -38,8 +36,9 @@ class ContratistasProvider {
   Future<List<Contratista>> recargar(String idPropuesta) async {
     final contratistas = await _procesarRespuesta();
     final existing = Set<Contratista>();
-    final unique =
-        contratistas.where((constratistas) => existing.add(constratistas)).toList();
+    final unique = contratistas
+        .where((constratistas) => existing.add(constratistas))
+        .toList();
 
     unique.removeWhere((element) => element.id == idPropuesta);
     contratistaSink(unique);
