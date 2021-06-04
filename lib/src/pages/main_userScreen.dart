@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hm_help/src/components/Carrusel.dart';
 import 'package:hm_help/src/components/Menu.dart';
@@ -78,20 +79,21 @@ class MainUsuarioScreen extends StatelessWidget{
       stream: contratistasProvider.contratistaStream, 
       builder:(context, snapshot){
         if(snapshot.hasData){
-         return ListView.builder(
+         return SingleChildScrollView(
+         child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context , index){
-              List<Contratista> contratista = 
-              snapshot.data!.toList();
-              return ListaContratista(contratista:contratista[index]);
-            });
+              List<Contratista> contratista = snapshot.data!.toList();
+              return ListaContratista(contratista: contratista[index]);
+            }),
+         );
         }
         else 
         {
           print(snapshot.connectionState);
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: Colors.red,));
         }
       } ,
     ),
