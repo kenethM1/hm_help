@@ -86,7 +86,9 @@ class PropuestasProvider {
   Stream<String> montoTotal() async* {
     List<Propuesta> propuestas = await getPropuestas();
 
-    double total = propuestas.fold(0, (sum, item) => sum + item.monto!);
+    final propuestasLimpias = erasePropuestas(propuestas);
+
+    double total = propuestasLimpias.fold(0, (sum, item) => sum + item.monto!);
 
     propuestasTotalSink(total.toString());
 
@@ -128,12 +130,9 @@ class PropuestasProvider {
   Stream<List<MesAgrupado>> gananciasPorMes() async* {
     final propuestas = await _procesarRespuesta();
 
-    propuestas.removeWhere((element) =>
-        element.status == 'En revisión' ||
-        element.status == 'En proceso' ||
-        element.status == 'Rechazado');
+    final propuestasLimpias = erasePropuestas(propuestas);
 
-    final groupByDate = groupBy(propuestas, (Propuesta orderpropuestas) {
+    final groupByDate = groupBy(propuestasLimpias, (Propuesta orderpropuestas) {
       return '${orderpropuestas.updated!.month}';
     });
     List<MesAgrupado> listaAgrupada = [];
@@ -151,5 +150,13 @@ class PropuestasProvider {
     });
 
     yield listaAgrupada;
+  }
+
+  List<Propuesta> erasePropuestas(List<Propuesta> propuestas) {
+    propuestas.removeWhere((element) =>
+        element.status == 'En revisión' ||
+        element.status == 'En proceso' ||
+        element.status == 'Rechazado');
+    return propuestas;
   }
 }

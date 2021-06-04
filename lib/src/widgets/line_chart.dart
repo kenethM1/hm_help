@@ -146,7 +146,7 @@ class ChartWidget extends StatelessWidget {
           case 3000:
             return 'L3,000';
           case 7000:
-            return 'L7,000';
+            return 'L5,000';
         }
         return '';
       },
