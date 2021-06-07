@@ -213,7 +213,7 @@ class _registroState extends State<RegistroPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
                 hintText: 'Contraseña',
-                labelText: 'Incluya mayusculas y minusculas',
+                labelText: 'Incluya mayusculas y minusculas por su seguridad',
                 suffixIcon: Icon(Icons.lock_open_rounded),
                 counterText: snapshot.data,
                 icon: Icon(Icons.lock_rounded)),
