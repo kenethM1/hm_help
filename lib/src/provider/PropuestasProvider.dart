@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
@@ -129,6 +127,7 @@ class PropuestasProvider {
 
   Stream<List<MesAgrupado>> gananciasPorMes() async* {
     final propuestas = await _procesarRespuesta();
+    final prefs = PreferenciasUsuario();
 
     final propuestasLimpias = erasePropuestas(propuestas);
 
@@ -137,16 +136,15 @@ class PropuestasProvider {
     });
     List<MesAgrupado> listaAgrupada = [];
 
-    groupByDate.forEach((key, listaPropuestas) {
+    groupByDate.forEach((fecha, listaPropuestas) {
       double suma = listaPropuestas
           .map((propuesta) => propuesta.monto)
           .fold(0, (previousValue, monto) => previousValue + monto!);
 
-      MesAgrupado mes = MesAgrupado(key, suma);
-      print(key);
+      MesAgrupado mes = MesAgrupado(fecha, suma);
 
+      prefs.gananciaMaxima = suma.toInt();
       listaAgrupada.add(mes);
-      print(listaAgrupada);
     });
 
     yield listaAgrupada;

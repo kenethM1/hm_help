@@ -4,7 +4,7 @@ import 'package:hm_help/src/components/Carrusel.dart';
 import 'package:hm_help/src/components/Menu.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/components/listaContratistas.dart';
-import 'package:hm_help/src/models/contratistas.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 
 class MainUsuarioScreen extends StatelessWidget {
   final menuBar = Menu();

@@ -43,4 +43,20 @@ class PreferenciasUsuario {
   set nombreUsuario(String value) {
     _prefs!.setString('nombre', value);
   }
+
+  int? get gananciaMaxima {
+    return _prefs!.getInt('gananciaMaxima');
+  }
+
+  set gananciaMaxima(int? value) {
+    _prefs!.setInt('gananciaMaxima', value!);
+  }
+
+  String get imageUsuario {
+    return _prefs!.getString('image') ?? '';
+  }
+
+  set imageUsuario(String value) {
+    _prefs!.setString('image', value);
+  }
 }

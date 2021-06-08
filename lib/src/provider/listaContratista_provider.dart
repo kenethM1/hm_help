@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:hm_help/src/models/contratistas.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 

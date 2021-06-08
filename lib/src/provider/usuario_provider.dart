@@ -31,6 +31,7 @@ class UsuarioProvider {
     if (isOk) {
       _prefs.token = respuestaJson['token'];
       _prefs.nombreUsuario = respuestaJson['nombre'];
+      _prefs.imageUsuario = respuestaJson['image_URL'];
       return {
         'ok': true,
         'token': respuestaJson['token'],

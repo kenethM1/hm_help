@@ -26,16 +26,16 @@ class _PropuestaState extends State<PropuestaDialog> {
         child: AlertDialog(
           contentPadding: EdgeInsets.all(0),
           insetPadding: EdgeInsets.only(bottom: 150, top: 150),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25))),
           elevation: 10,
           content: Container(
-            height: 450,
+            height: 380,
             width: 150,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                userInformacion(widget.propuestaList.nombre.toString(),
+                userInformacion(widget.propuestaList.nombreUsuario.toString(),
                     widget.propuestaList.monto!),
                 SizedBox(
                   height: 10,
@@ -58,44 +58,17 @@ class _PropuestaState extends State<PropuestaDialog> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      widget.propuestaList.monto.toString(),
+                      'L${widget.propuestaList.monto!.toInt().toString()}.00',
                       style: textStyle.copyWith(
                           fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    Column(
-                      children: [
-                        ElevatedButton(
-                            child: Icon(
-                              Icons.arrow_circle_up,
-                              size: 25,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                if (widget.propuestaList.monto != null)
-                                  widget.propuestaList.monto =
-                                      widget.propuestaList.monto! + 10;
-                              });
-                            }),
-                        ElevatedButton(
-                            child: Icon(
-                              Icons.arrow_circle_down,
-                              size: 25,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                if (widget.propuestaList.monto != null)
-                                  widget.propuestaList.monto =
-                                      widget.propuestaList.monto! - 10;
-                              });
-                            })
-                      ],
-                    )
                   ],
                 ),
                 SizedBox(

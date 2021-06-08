@@ -1,6 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
+import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/provider/PropuestasProvider.dart';
+import 'package:hm_help/src/provider/line_chart.dart';
+import 'package:provider/provider.dart';
 
 class ChartWidget extends StatelessWidget {
   const ChartWidget({
@@ -12,6 +16,7 @@ class ChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefs = PreferenciasUsuario();
     final List<Color> gradiente = [Colors.white, Colors.grey.shade200];
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -31,11 +36,11 @@ class ChartWidget extends StatelessWidget {
             titlesData: FlTitlesData(
               show: true,
               bottomTitles: buildButtonTitle(),
-              leftTitles: builLeftTitle(),
+              leftTitles: builLeftTitle(context),
             ),
             minX: 0,
             maxX: 11,
-            maxY: 10000,
+            maxY: prefs.gananciaMaxima!.toDouble() + 1000,
             minY: 0,
             borderData: FlBorderData(
                 show: true,
@@ -123,9 +128,9 @@ class ChartWidget extends StatelessWidget {
     return listofPoints;
   }
 
-  SideTitles builLeftTitle() {
+  SideTitles builLeftTitle(BuildContext context) {
     return SideTitles(
-      reservedSize: 35,
+      reservedSize: 65,
       interval: 2,
       margin: 10,
       getTextStyles: (value) {
@@ -135,22 +140,27 @@ class ChartWidget extends StatelessWidget {
           fontSize: 11,
         );
       },
-      getTitles: (value) {
-        switch (value.toInt()) {
-          case 0:
-            return 'L0.00';
-          case 1000:
-            return 'L1,000';
-          case 2000:
-            return 'L2,000';
-          case 3000:
-            return 'L3,000';
-          case 7000:
-            return 'L5,000';
-        }
-        return '';
-      },
+      getTitles: (value) => returnTitle(value, context),
       showTitles: true,
     );
+  }
+
+  String returnTitle(double value, BuildContext context) {
+    final preferencias = PreferenciasUsuario();
+    int maximo = preferencias.gananciaMaxima!;
+    List<double> intervalo = retornarIntervalo(maximo);
+
+    return (intervalo.contains(value)) ? 'L${value.toInt().toString()}.00' : '';
+  }
+
+  List<double> retornarIntervalo(int maximo) {
+    double intervalo = maximo / 10;
+    List<double> listaIntervalos = [];
+    listaIntervalos.add(0);
+    for (var i = intervalo; i <= maximo;) {
+      i += intervalo;
+      listaIntervalos.add(i);
+    }
+    return listaIntervalos;
   }
 }

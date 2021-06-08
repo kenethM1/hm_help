@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/models/contratistas.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 
 class ListaContratista extends StatelessWidget {
   final Contratista contratista;
