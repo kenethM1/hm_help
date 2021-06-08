@@ -1,4 +1,3 @@
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
@@ -29,6 +28,9 @@ class MainContratistaScreen extends StatelessWidget {
             ),
             Expanded(
               child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(20)),
                 padding: EdgeInsets.only(top: 10),
                 child: StreamBuilder<List<Propuesta>>(
                   stream: propuestasProvider.propuestasStream,
@@ -48,7 +50,6 @@ class MainContratistaScreen extends StatelessWidget {
                     }
                   },
                 ),
-                color: Colors.blue.shade200,
               ),
             )
           ],
@@ -59,14 +60,26 @@ class MainContratistaScreen extends StatelessWidget {
 
   ListView buildListaOfertas(AsyncSnapshot<List<Propuesta>> snapshot,
       PropuestasProvider propuestasProvider, Styles estilos) {
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) {
+          return Divider(
+            color: Colors.white,
+            thickness: 1.4,
+            endIndent: 4,
+            indent: 4,
+          );
+        },
         itemCount: snapshot.data!.length,
         itemBuilder: (context, index) {
           List<Propuesta> propuestas = snapshot.data!.toList();
-          return TileOferta(
-            funcion: propuestasProvider.recargar,
-            propuesta: propuestas[index],
-            estilo: estilos.estiloWhite,
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+            child: TileOferta(
+              funcion: propuestasProvider.recargar,
+              propuesta: propuestas[index],
+              estilo: estilos.estiloWhite,
+            ),
           );
         });
   }
@@ -110,16 +123,16 @@ class TileOferta extends StatelessWidget {
         '${propuesta.nombre}',
         style: estilo,
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TrailingButton(
-            color: Colors.blue,
-            texto: "ACEPTAR",
-          ),
-          TrailingButton(color: Colors.red, texto: "RECHAZAR")
-        ],
-      ),
+      //trailing: Row(
+      //  mainAxisSize: MainAxisSize.min,
+      //  children: [
+      //    TrailingButton(
+      //      color: Colors.blue,
+      //      texto: "ACEPTAR",
+      //    ),
+      //    TrailingButton(color: Colors.red, texto: "RECHAZAR")
+      //  ],
+      //),
     );
   }
 }
@@ -166,9 +179,31 @@ class ContenedorGrafico extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        Text(
-          'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
-          style: estilo,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
+              style: estilo,
+            ),
+            Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: new BoxDecoration(
+                color: Colors.blue.shade300,
+                image: new DecorationImage(
+                  image: new NetworkImage(preferenciasUsuario.imageUsuario),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                border: new Border.all(
+                  color: Colors.blue.shade300,
+                  width: 4.0,
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 20,
@@ -201,7 +236,11 @@ class ContenedorGrafico extends StatelessWidget {
             stream: propuestasProvider.gananciasPorMes(),
             builder: (context, snapshot) {
               if (snapshot.data!.length == 0) {
-                return Center(child: Text('No hay propuestas aceptadas.'));
+                return Center(
+                    child: Text(
+                  'No hay ganacias reportadas este año.',
+                  style: new Styles().estilo.copyWith(fontSize: 15),
+                ));
               } else if (snapshot.connectionState == ConnectionState.done) {
                 return ChartWidget(snapshot: snapshot);
               } else {
