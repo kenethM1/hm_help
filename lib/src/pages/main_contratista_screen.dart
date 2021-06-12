@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
+import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
@@ -254,7 +255,15 @@ class ContenedorGrafico extends StatelessWidget {
             child: Text(
               'Ofertas',
               style: estilo,
-            ))
+            )),
+        ElevatedButton(
+            onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return UploadPropuesta();
+                  },
+                ),
+            child: Text('Upload'))
       ],
     );
   }

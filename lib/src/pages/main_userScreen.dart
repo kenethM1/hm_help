@@ -4,7 +4,7 @@ import 'package:hm_help/src/components/Carrusel.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/components/listaContratistas.dart';
 import 'package:hm_help/src/models/Usuario.dart';
-
+import 'package:hm_help/src/styles/Styles.dart';
 
 class MainUsuarioScreen extends StatelessWidget {
 /*
@@ -30,19 +30,17 @@ class MainUsuarioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-     
-        body: SafeArea(
+      body: SafeArea(
         child: ListView(
-        children: <Widget>[
-          _barraBusqueda(),
-        //  _bienvenida(),
-          _tituloCategorias(context),
-          _tituloContratista(context),
-       ],
-    ),
-    ),
+          children: <Widget>[
+            _barraBusqueda(),
+            //  _bienvenida(),
+            _tituloCategorias(context),
+            _tituloContratista(context),
+          ],
+        ),
+      ),
     );
   }
 
@@ -58,11 +56,12 @@ class MainUsuarioScreen extends StatelessWidget {
             icon: SvgPicture.asset('assets/icons/icons8-settings.svg'),
             onPressed: () {},
           ),
-          Image(image: AssetImage('assets/logo.png'),
-          height: 50,
-          width: 50,
+          Image(
+            image: AssetImage('assets/logo.png'),
+            height: 50,
+            width: 50,
           )
-         /* IconButton(
+          /* IconButton(
             iconSize: 40.0,
             icon: AssetImage('assets/logo.png'),
             onPressed: () {},
@@ -72,13 +71,12 @@ class MainUsuarioScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _tituloCategorias(context) {
     return Column(
       children: <Widget>[
-        Text('CATEGORIAS',
-          style: Theme.of(context).textTheme.headline5,
+        Text(
+          'CATEGORIAS',
+          style: new Styles().estilo,
         ),
         ListaCategorias(),
       ],
@@ -99,14 +97,14 @@ class MainUsuarioScreen extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),                 
-                shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  List<Contratista> contratista = snapshot.data!.toList();
-                  return ListaContratista(contratista: contratista[index]);
-                  }),
+                child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      List<Contratista> contratista = snapshot.data!.toList();
+                      return ListaContratista(contratista: contratista[index]);
+                    }),
               );
             } else {
               print(snapshot.connectionState);

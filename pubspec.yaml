@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: 
   provider:
   
+
   #Agregue upload file to firebase
   firebase_core: ^1.0.3
   firebase_storage: ^8.0.3
@@ -72,6 +73,7 @@ flutter:
       - assets/fontaneria2.jpg
       - assets/construccion.jpg
       - assets/icons/
+      - assets/upload.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
