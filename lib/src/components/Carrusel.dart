@@ -10,8 +10,8 @@ class ListaCategorias extends StatelessWidget{
     options: CarouselOptions(
     enableInfiniteScroll: false,
     reverse: false,
-    viewportFraction: 0.86,
-    height: 230.0),
+    viewportFraction: 0.66,
+    height: 275.0),
 
     items: <Widget>[
     tipoCategoria(),
