@@ -4,8 +4,6 @@ import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
-  get decodedResp => null;
-
   Future<Map<String, dynamic>> login(String email, String password) async {
     const String _url = 'mahamtr1-001-site1.ctempurl.com';
     const String _path = 'api/Usuario/Login';
