@@ -8,7 +8,7 @@ import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
-import 'package:hm_help/src/widgets/campoContrasena.dart';
+import 'package:hm_help/src/widgets/campoPersonalizado.dart';
 import 'package:hm_help/src/widgets/registro_usuario_contratista.dart';
 import 'package:provider/provider.dart';
 
@@ -44,19 +44,19 @@ class LoginScreen extends StatelessWidget {
             height: 30,
           ),
           _loginButton(bloc),
-          ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (context) => GoogleSignInProvider(),
-              child: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Navigator.pushNamed(context, 'principal');
-                  } else {
-                    return SocialSignInButton();
-                  }
-                  return Text('');
-                },
-              )),
+          //ChangeNotifierProvider<GoogleSignInProvider>(
+          //    create: (context) => GoogleSignInProvider(),
+          //    child: StreamBuilder(
+          //      stream: FirebaseAuth.instance.authStateChanges(),
+          //      builder: (context, snapshot) {
+          //        if (snapshot.hasData) {
+          //          Navigator.pushNamed(context, 'principal');
+          //        } else {
+          //          return SocialSignInButton();
+          //        }
+          //        return Text('');
+          //      },
+          //    )),
           TextButton(
               onPressed: () => showDialog(
                   context: context,

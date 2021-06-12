@@ -1,17 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/*
-  Recordar instalar el paquete de:
-    shared_preferences:
-
-  Inicializar en el main
-    final prefs = new PreferenciasUsuario();
-    await prefs.initPrefs();
-    
-    Recuerden que el main() debe de ser async {...
-
-*/
-
 class PreferenciasUsuario {
   static final PreferenciasUsuario _instancia =
       new PreferenciasUsuario._internal();
@@ -58,5 +46,13 @@ class PreferenciasUsuario {
 
   set imageUsuario(String value) {
     _prefs!.setString('image', value);
+  }
+
+  String get cvUsuario {
+    return _prefs!.getString('cvUsuario') ?? '';
+  }
+
+  set cvUsuario(String value) {
+    _prefs!.setString('cvUsuario', value);
   }
 }
