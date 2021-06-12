@@ -47,6 +47,7 @@ class MainUsuarioScreen extends StatelessWidget {
   }
 
   Widget _barraBusqueda() {
+    final MainAxisAlignment mainAxisAlignment;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Row(

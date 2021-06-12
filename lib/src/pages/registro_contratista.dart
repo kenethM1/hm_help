@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hm_help/src/bloc/bloc_files/contratista_bloc.dart';
-import 'package:hm_help/src/bloc/bloc_provider/contratistaProvider.dart';
-import 'package:hm_help/src/provider/contratista_Provider.dart';
-import 'package:hm_help/src/widgets/contratistaDialog.dart';
 
 class RegistroPage extends StatefulWidget {
   @override
-  RegistroState createState() => RegistroState();
+  _registroState createState() => _registroState();
 }
 
 bool textoobs = true;
@@ -16,21 +12,17 @@ void initState() {
   textoobs = false;
 }
 
-class RegistroState extends State<RegistroPage> {
+class _registroState extends State<RegistroPage> {
   String _fecha = '';
-
-  static const generos = <String>['Masculino', 'Femenino'];
-  String generoSeleccionado = generos.first;
+  String _nombre = '';
 
   TextEditingController _relacionFecha = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final bloc = ProviderContratista.of(context);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Registo de los Contratistas'),
+        title: Text('Registo del Contratista'),
         actions: <Widget>[
           Container(
             padding: EdgeInsets.all(5.0),
@@ -46,22 +38,19 @@ class RegistroState extends State<RegistroPage> {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
         children: <Widget>[
-          _crearNombre(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearApellido(bloc),
-          Divider(color: Colors.blueAccent),
+          _crearNombre(),
+          Divider(),
+          _crearApellido(),
+          Divider(),
           _crearFecha(context),
-          Divider(color: Colors.blueAccent),
-          _crearCorreo(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearContrasena(bloc),
-          Divider(color: Colors.blueAccent),
+          Divider(),
+          _crearCorreo(),
+          Divider(),
+          _crearContrasena(textoobs),
+          Divider(),
           _crearGenero(),
-          Divider(color: Colors.blueAccent),
-          _crearbuildRadios(context, bloc),
-          Divider(color: Colors.blueAccent),
+          Divider(),
           _crearBoton(context),
-          Divider(color: Colors.blueAccent),
           ElevatedButton(
             child: Text('Terminos y condiciones'),
             style: ElevatedButton.styleFrom(
@@ -70,8 +59,6 @@ class RegistroState extends State<RegistroPage> {
                     TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             onPressed: () => _mostrarAlert(context),
           ),
-          Divider(),
-          _crearGuardar(bloc),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -94,134 +81,80 @@ class RegistroState extends State<RegistroPage> {
     );
   }
 
-  Widget _crearGuardar(ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return ElevatedButton.icon(
-            label: Text('Guardar'),
-            icon: Icon(Icons.save),
-            style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                textStyle:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed:
-                snapshot.hasData ? () => _contratista(bloc, context) : null);
+  _crearNombre() {
+    return TextField(
+      autofocus: false,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          counter: Text('Letras ${_nombre.length}'),
+          hintText: 'Ingrese su nombre',
+          labelText: 'Nombre',
+          helperText: 'Agregue su nombre',
+          suffixIcon: Icon(Icons.assignment_ind_rounded),
+          icon: Icon(Icons.group_outlined)),
+      onChanged: (valor) {
+        setState(() {
+          _nombre = valor;
+        });
       },
     );
   }
 
-  _contratista(ContratistaBloc bloc, BuildContext context) async {
-    final contratistaProvider = UsuarioProvider();
-
-    Map info = await contratistaProvider.nuevoContratista(
-        bloc.nombre.toString(),
-        bloc.correo.toString(),
-        bloc.contra.toString(),
-        bloc.fecha.toString(),
-        bloc.genero.toString(),
-        bloc.apellido.toString());
-
-    if (info['ok'] == true) {
-      Navigator.pushNamed(context, 'principal');
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertLoginContratista(
-              mensaje: 'No se pudo hacer el registro',
-              titulo: 'ERROR',
-            );
-          });
-    }
+  _crearApellido() {
+    return TextField(
+      autofocus: false,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          counter: Text('Letras ${_nombre.length}'),
+          hintText: 'Ingrese su nombre',
+          labelText: 'Apellido',
+          helperText: 'Agregue su apellido',
+          suffixIcon: Icon(Icons.assignment_ind_rounded),
+          icon: Icon(Icons.group_outlined)),
+      onChanged: (valor) {
+        setState(() {
+          _nombre = valor;
+        });
+      },
+    );
   }
 
-  _crearNombre(ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.nombreStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          child: TextField(
-            autofocus: false,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                hintText: 'Ingrese su nombre',
-                labelText: 'Nombre',
-                suffixIcon: Icon(Icons.assignment_ind_rounded),
-                icon: Icon(Icons.group_outlined)),
-            onChanged: bloc.changeNombre,
+  _crearCorreo() {
+    return TextField(
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+        hintText: 'Ingresar correo',
+        labelText: 'No utilizado antes',
+
+        //Iconos
+        suffixIcon: Icon(Icons.contact_mail_rounded),
+        icon: Icon(Icons.attach_email_rounded),
+      ),
+    );
+  }
+
+  _crearContrasena(bool isobscure) {
+    return TextField(
+        obscureText: isobscure,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          hintText: 'Contraseña',
+          labelText: 'Contraseña',
+          helperText: 'Incluya mayusculas y minusculas',
+          suffixIcon: Icon(Icons.lock_open_rounded),
+          icon: IconButton(
+            icon: Icon(
+                isobscure ? Icons.visibility : Icons.visibility_off_rounded),
+            onPressed: () => {
+              setState(() {
+                isobscure = !isobscure;
+              })
+            },
           ),
-        );
-      },
-    );
-  }
-
-  _crearApellido(ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.apellidoStram,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          child: TextField(
-            autofocus: false,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                hintText: 'Ingrese su apellido',
-                labelText: 'Apellido',
-                suffixIcon: Icon(Icons.assignment_ind_rounded),
-                icon: Icon(Icons.group_outlined)),
-            onChanged: bloc.changeApellido,
-          ),
-        );
-      },
-    );
-  }
-
-  _crearCorreo(ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.correoStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-              hintText: 'Ingresar correo',
-              labelText: 'No utilizado antes',
-              suffixIcon: Icon(Icons.contact_mail_rounded),
-              icon: Icon(Icons.attach_email_rounded),
-            ),
-            onChanged: bloc.changeCorreo,
-          ),
-        );
-      },
-    );
-  }
-
-  _crearContrasena(ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.contrasenaStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          child: TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                hintText: 'Contraseña',
-                labelText: 'Incluya mayusculas y minusculas por su seguridad',
-                suffixIcon: Icon(Icons.lock_open_rounded),
-                counterText: snapshot.data,
-                icon: Icon(Icons.lock_rounded)),
-            onChanged: bloc.changeContrasena,
-          ),
-        );
-      },
-    );
+        ));
   }
 
   _crearFecha(BuildContext context) {
@@ -258,40 +191,13 @@ class RegistroState extends State<RegistroPage> {
   }
 
   _crearGenero() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Text(
-            'Seleccione genero',
-            style: TextStyle(fontSize: 15.0),
-            textAlign: TextAlign.end,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _crearbuildRadios(BuildContext context, ContratistaBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.generoStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Column(
-          children: generos.map(
-            (genero) {
-              return RadioListTile(
-                value: genero,
-                groupValue: generoSeleccionado,
-                title: Text(
-                  genero,
-                  style: TextStyle(),
-                ),
-                onChanged: (value) =>
-                    setState(() => this.generoSeleccionado = genero),
-              );
-            },
-          ).toList(),
-        );
-      },
+    return TextField(
+      obscureText: true,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+          labelText: 'Genero',
+          suffixIcon: Icon(Icons.wc_rounded),
+          icon: Icon(Icons.wc_rounded)),
     );
   }
 }

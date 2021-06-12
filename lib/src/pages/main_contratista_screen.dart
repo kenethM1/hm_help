@@ -1,15 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
-import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:hm_help/src/widgets/Ganancias_widget.dart';
 import 'package:hm_help/src/widgets/Line_Chart.dart';
 import 'package:hm_help/src/widgets/Propuesta_Dialog.dart';
-import 'package:provider/provider.dart';
 
 class MainContratistaScreen extends StatelessWidget {
   const MainContratistaScreen({Key? key}) : super(key: key);
@@ -126,16 +123,16 @@ class TileOferta extends StatelessWidget {
         '${propuesta.nombre}',
         style: estilo,
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TrailingButton(
-            color: Colors.blue,
-            texto: "ACEPTAR",
-          ),
-          TrailingButton(color: Colors.red, texto: "RECHAZAR")
-        ],
-      ),
+      //trailing: Row(
+      //  mainAxisSize: MainAxisSize.min,
+      //  children: [
+      //    TrailingButton(
+      //      color: Colors.blue,
+      //      texto: "ACEPTAR",
+      //    ),
+      //    TrailingButton(color: Colors.red, texto: "RECHAZAR")
+      //  ],
+      //),
     );
   }
 }
@@ -240,11 +237,11 @@ class ContenedorGrafico extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.data!.length == 0) {
                 return Center(
-                  child: Text('No hay ganancias.'),
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasData) {
+                    child: Text(
+                  'No hay ganacias reportadas este año.',
+                  style: new Styles().estilo.copyWith(fontSize: 15),
+                ));
+              } else if (snapshot.connectionState == ConnectionState.done) {
                 return ChartWidget(snapshot: snapshot);
               } else {
                 return CircularProgressIndicator();
@@ -257,14 +254,7 @@ class ContenedorGrafico extends StatelessWidget {
             child: Text(
               'Ofertas',
               style: estilo,
-            )),
-        ElevatedButton(
-            onPressed: () => showDialog(
-                context: context,
-                builder: (context) {
-                  return UploadPropuesta();
-                }),
-            child: Text('Subir Imagen'))
+            ))
       ],
     );
   }
