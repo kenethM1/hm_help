@@ -35,7 +35,6 @@ class MainUsuarioScreen extends StatelessWidget {
   }
 
   Widget _barraBusqueda() {
-    final MainAxisAlignment mainAxisAlignment;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Row(
@@ -95,23 +94,6 @@ class MainUsuarioScreen extends StatelessWidget {
           },
         ),
       ],
-    );
-  }
-
-  Widget _menuBar(context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Inicio",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Ajustes",
-          ),
-        ],
-      ),
     );
   }
 }

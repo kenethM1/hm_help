@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class RegistroPage extends StatefulWidget {
   @override
-  _registroState createState() => _registroState();
+  RegistroState createState() => RegistroState();
 }
 
 bool textoobs = true;
@@ -12,7 +12,7 @@ void initState() {
   textoobs = false;
 }
 
-class _registroState extends State<RegistroPage> {
+class RegistroState extends State<RegistroPage> {
   String _fecha = '';
   String _nombre = '';
 

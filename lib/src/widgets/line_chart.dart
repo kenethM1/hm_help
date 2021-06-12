@@ -1,10 +1,9 @@
+import 'dart:ffi';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:hm_help/src/provider/PropuestasProvider.dart';
-import 'package:hm_help/src/provider/line_chart.dart';
-import 'package:provider/provider.dart';
 
 class ChartWidget extends StatelessWidget {
   const ChartWidget({
@@ -112,8 +111,6 @@ class ChartWidget extends StatelessWidget {
 
   List<FlSpot> _generarPuntos(AsyncSnapshot<List<MesAgrupado>> snapshot) {
     final List<FlSpot> listofPoints = [];
-    final FlSpot flSpot;
-    double mes;
     int contadorMes = 0;
 
     for (var i = 0; i < 12; i++) {
@@ -154,13 +151,18 @@ class ChartWidget extends StatelessWidget {
   }
 
   List<double> retornarIntervalo(int maximo) {
-    double intervalo = maximo / 10;
     List<double> listaIntervalos = [];
-    listaIntervalos.add(0);
-    for (var i = intervalo; i <= maximo;) {
-      i += intervalo;
-      listaIntervalos.add(i);
+    if (maximo != 0) {
+      double intervalo = maximo / 10;
+
+      listaIntervalos.add(0);
+      for (var i = intervalo; i <= maximo;) {
+        i += intervalo;
+        listaIntervalos.add(i);
+      }
+      return listaIntervalos;
+    } else {
+      return listaIntervalos;
     }
-    return listaIntervalos;
   }
 }

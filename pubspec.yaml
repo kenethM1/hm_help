@@ -40,6 +40,7 @@ dependencies:
   firebase_auth:
   google_sign_in: 
   provider:
+  path_provider: 
   
   #Agregue upload file to firebase
   firebase_core: ^1.0.3
@@ -47,7 +48,8 @@ dependencies:
 
     #Agregue pick file
   file_picker: 
-  image_picker:
+  multi_image_picker2: ^5.0.2
+
   
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,8 @@ flutter:
       - assets/construir.png
       - assets/plomeria.png
       - assets/icons/
+      - assets/upload.png
+      - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

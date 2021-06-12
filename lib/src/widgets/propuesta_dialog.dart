@@ -119,7 +119,6 @@ class _PropuestaState extends State<PropuestaDialog> {
 
   Widget userInformacion(String datosUsuario, double monto1) {
     var nombreCliente = datosUsuario.split(" ");
-    double monto = monto1;
     var textStyle = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,

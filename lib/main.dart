@@ -8,7 +8,7 @@ import 'package:hm_help/src/pages/main_userScreen.dart';
 import 'package:hm_help/src/pages/registro_contratista.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hm_help/src/provider/line_chart.dart';
+import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -26,8 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<lineChartProvider>(
-            create: (_) => lineChartProvider())
+        ChangeNotifierProvider(create: (context) => ImagesProvider())
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
