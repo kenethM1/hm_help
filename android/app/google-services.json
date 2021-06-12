@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "441618301210",
-    "project_id": "hm-help",
-    "storage_bucket": "hm-help.appspot.com"
+    "project_number": "952984843695",
+    "project_id": "hmhelp-1804",
+    "storage_bucket": "hmhelp-1804.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:441618301210:android:0391baf6918d4aa440eca3",
+        "mobilesdk_app_id": "1:952984843695:android:ac4c26a476e76160c5ab5a",
         "android_client_info": {
           "package_name": "com.example.hm_help"
         }
       },
       "oauth_client": [
         {
-          "client_id": "441618301210-8k5bp5bj6titltfmms6q4o6sf8qqb90d.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.hm_help",
-            "certificate_hash": "33d0a53fd1d6fba8572a253e4b226cd98fe8b8ea"
-          }
-        },
-        {
-          "client_id": "441618301210-35jnrn4tuk5ji7kls5gjbgt8hkt4nvcs.apps.googleusercontent.com",
+          "client_id": "952984843695-5gher6mb21h0mcgeoj5veaeuc2pi2i6d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCnE-prkh1eh4sRalQuJZ3Zwex6WuHVvOc"
+          "current_key": "AIzaSyAMPpnnaLqIcFA2Y1yB-LXp2XpAPlHxyos"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "441618301210-35jnrn4tuk5ji7kls5gjbgt8hkt4nvcs.apps.googleusercontent.com",
+              "client_id": "952984843695-5gher6mb21h0mcgeoj5veaeuc2pi2i6d.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
