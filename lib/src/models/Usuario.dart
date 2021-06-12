@@ -17,23 +17,24 @@ class Contratista {
   String? correo;
   String? rol;
   String? nombre;
+  String? sexo;
+  String? image_URL;
   String? apellido;
-  String? image_url;
 
   Contratista(
       {this.id,
       this.correo,
       this.rol,
       this.nombre,
-      this.apellido,
-      this.image_url});
+      this.apellido,});
 
   Contratista.fromJsonMap(Map<String, dynamic> json) {
     id = json['id'];
     correo = json['correo'];
     rol = json['rol'];
     nombre = json['nombre'];
+    sexo = json['sexo'];
+    image_URL = json['image_URL'];
     apellido = json['apellido'];
-    image_url = json['image_URL'];
   }
 }

@@ -68,9 +68,9 @@ flutter:
   assets:
       - assets/logo.png
       - assets/jar-loading.gif
-      - assets/pintura.png
-      - assets/construir.png
-      - assets/plomeria.png
+      - assets/pintura.jpg
+      - assets/fontaneria2.jpg
+      - assets/construccion.jpg
       - assets/icons/
   #   - images/a_dot_ham.jpeg
 
