@@ -44,19 +44,19 @@ class LoginScreen extends StatelessWidget {
             height: 30,
           ),
           _loginButton(bloc),
-          ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (context) => GoogleSignInProvider(),
-              child: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Navigator.pushNamed(context, 'principal');
-                  } else {
-                    return SocialSignInButton();
-                  }
-                  return Text('');
-                },
-              )),
+          //ChangeNotifierProvider<GoogleSignInProvider>(
+          //    create: (context) => GoogleSignInProvider(),
+          //    child: StreamBuilder(
+          //      stream: FirebaseAuth.instance.authStateChanges(),
+          //      builder: (context, snapshot) {
+          //        if (snapshot.hasData) {
+          //          Navigator.pushNamed(context, 'principal');
+          //        } else {
+          //          return SocialSignInButton();
+          //        }
+          //        return Text('');
+          //      },
+          //    )),
           TextButton(
               onPressed: () => showDialog(
                   context: context,
