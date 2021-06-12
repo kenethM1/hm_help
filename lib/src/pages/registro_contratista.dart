@@ -30,7 +30,7 @@ class _registroState extends State<RegistroPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Registo del Contratista'),
+        title: Text('Registo de los Contratistas'),
         actions: <Widget>[
           Container(
             padding: EdgeInsets.all(5.0),
