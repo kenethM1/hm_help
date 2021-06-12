@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
+
 import 'package:hm_help/src/bloc/bloc_provider/contratistaProvider.dart';
+
+import 'package:hm_help/src/pages/homePageUser.dart';
+
 import 'package:hm_help/src/pages/login_screen.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/pages/main_contratista_screen.dart';
@@ -10,6 +14,7 @@ import 'package:hm_help/src/pages/registro_contratista.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
+import 'package:hm_help/src/provider/ui_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -27,7 +32,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ImagesProvider())
+        ChangeNotifierProvider(create: (context) => ImagesProvider()),
+        ChangeNotifierProvider(create: (_) => new UiProvider()
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -41,5 +47,6 @@ class MyApp extends StatelessWidget {
             'principal': (_) => MainContratistaScreen(),
           }),
     );
+
   }
 }

@@ -56,11 +56,43 @@ class TipoCategoria extends StatelessWidget {
         )
       ],
     );
+
+  Widget build(BuildContext context){
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 100,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 300,
+            child: Opacity(
+              opacity: 0.6,
+             child: Image(
+              image: AssetImage('assets/pintura.jpg'),
+              fit: BoxFit.fill,
+            ), 
+            ),
+            
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            child: Text("PINTURA",
+            style: TextStyle(fontSize: 30,
+            color: Colors.blue.shade400,
+            fontWeight: FontWeight.bold,
+            ),
+            ),
+          )
+        ]
+      ),
+    );   
+
   }
 }
 
 class TipoCategoria2 extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 15.0, bottom: 20.0, top: 20.0),
@@ -99,9 +131,38 @@ class TipoCategoria2 extends StatelessWidget {
       margin: EdgeInsets.only(top: 20.0),
       child: Image(
         image: AssetImage('assets/plomeria.png'),
+
+  Widget build(BuildContext context){
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 100,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 300,
+            child: Opacity(
+              opacity: 0.6,
+             child: Image(
+              image: AssetImage('assets/fontaneria2.jpg'),
+              fit: BoxFit.fill,
+            ), 
+            ),
+            
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            child: Text("FONTANERIA",
+            style: TextStyle(fontSize: 30, color: Colors.blue,
+            fontWeight: FontWeight.bold,
+            ),
+            ),
+          )
+        ]
+
       ),
     );
   }
+
 
   Widget _textoCate(context) {
     return Column(
@@ -116,10 +177,14 @@ class TipoCategoria2 extends StatelessWidget {
       ],
     );
   }
+=======
+ 
+
 }
 
 class TipoCategoria3 extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 15.0, bottom: 20.0, top: 20.0),
@@ -158,9 +223,38 @@ class TipoCategoria3 extends StatelessWidget {
       margin: EdgeInsets.only(top: 20.0),
       child: Image(
         image: AssetImage('assets/construir.png'),
+=======
+  Widget build(BuildContext context){
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 100,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: 300,
+            child: Opacity(
+              opacity: 0.6,
+             child: Image(
+              image: AssetImage('assets/construccion.jpg'),
+              fit: BoxFit.fill,
+            ), 
+            ),
+            
+          ),
+          Container(
+            alignment: Alignment.bottomLeft,
+            child: Text("CONSTRUCCION",
+            style: TextStyle(fontSize: 30, color: Colors.blue,
+            fontWeight: FontWeight.bold,
+            ),
+            ),
+          )
+        ]
+
       ),
     );
   }
+
 
   Widget _textoCate(context) {
     return Column(
@@ -175,4 +269,5 @@ class TipoCategoria3 extends StatelessWidget {
       ],
     );
   }
+
 }
