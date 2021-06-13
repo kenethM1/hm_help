@@ -148,7 +148,17 @@ Widget _loginButton(LoginBloc bloc) {
                   shape: StadiumBorder(),
                   textStyle:
                       TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              onPressed: snapshot.hasData ? () => _login(bloc, context) : null),
+              onPressed: snapshot.hasData
+                  ? () {
+                      _login(bloc, context);
+                      showDialog(
+                        context: (context),
+                        builder: (context) => Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  : null),
         );
       });
 }

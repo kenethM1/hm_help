@@ -4,6 +4,7 @@ import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:hm_help/src/widgets/Ganancias_widget.dart';
 import 'package:hm_help/src/widgets/Line_Chart.dart';
@@ -116,48 +117,35 @@ class TileOferta extends StatelessWidget {
         propuesta.rubro.toString(),
         style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
-      leading: Icon(
-        Icons.person,
-        size: 50,
+      leading: FutureBuilder<String?>(
+        future: ContratistasProvider()
+            .contratistaImageURL(propuesta.nombreContratista!),
+        builder: (context, snapshot) {
+          return (snapshot.hasData)
+              ? Container(
+                  width: 60.0,
+                  height: 60.0,
+                  decoration: new BoxDecoration(
+                    color: Colors.blue.shade300,
+                    image: new DecorationImage(
+                      image: new NetworkImage(snapshot.data!),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(50.0)),
+                    border: new Border.all(
+                      color: Colors.blue.shade300,
+                      width: 4.0,
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator();
+        },
       ),
       title: Text(
         '${propuesta.nombre}',
         style: estilo,
       ),
-      //trailing: Row(
-      //  mainAxisSize: MainAxisSize.min,
-      //  children: [
-      //    TrailingButton(
-      //      color: Colors.blue,
-      //      texto: "ACEPTAR",
-      //    ),
-      //    TrailingButton(color: Colors.red, texto: "RECHAZAR")
-      //  ],
-      //),
-    );
-  }
-}
-
-class TrailingButton extends StatelessWidget {
-  const TrailingButton({
-    Key? key,
-    required this.texto,
-    required this.color,
-  }) : super(key: key);
-
-  final String? texto;
-  final Color? color;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: Size(40, 40),
-        shape: StadiumBorder(),
-        elevation: 5,
-        primary: color,
-      ),
-      child: Text(texto!),
-      onPressed: () {},
     );
   }
 }
@@ -188,21 +176,28 @@ class ContenedorGrafico extends StatelessWidget {
               'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
               style: estilo,
             ),
-            Container(
-              width: 60.0,
-              height: 60.0,
-              decoration: new BoxDecoration(
-                color: Colors.blue.shade300,
-                image: new DecorationImage(
-                  image: new NetworkImage(preferenciasUsuario.imageUsuario),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
-                border: new Border.all(
+            InkWell(
+              borderRadius: BorderRadius.circular(50),
+              focusColor: Colors.blue,
+              highlightColor: Colors.black,
+              splashColor: Colors.blue,
+              child: Container(
+                width: 60.0,
+                height: 60.0,
+                decoration: new BoxDecoration(
                   color: Colors.blue.shade300,
-                  width: 4.0,
+                  image: new DecorationImage(
+                    image: new NetworkImage(preferenciasUsuario.imageUsuario),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                  border: new Border.all(
+                    color: Colors.blue.shade300,
+                    width: 4.0,
+                  ),
                 ),
               ),
+              onTap: () {},
             ),
           ],
         ),
@@ -256,14 +251,6 @@ class ContenedorGrafico extends StatelessWidget {
               'Ofertas',
               style: estilo,
             )),
-        ElevatedButton(
-            onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) {
-                    return UploadPropuesta();
-                  },
-                ),
-            child: Text('Upload'))
       ],
     );
   }

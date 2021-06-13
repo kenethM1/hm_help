@@ -66,6 +66,22 @@ class ContratistasProvider {
     }
   }
 
+  Future<String?> contratistaImageURL(String nombreContratista) async {
+    final contratistas = await _procesarRespuesta();
+
+    var nombre = nombreContratista.split(' ');
+
+    String? img;
+
+    contratistas.forEach((contratista) {
+      (contratista.nombre == nombre[0]) ? img = contratista.image_URL! : null;
+    });
+
+    return (img!.isNotEmpty)
+        ? img
+        : 'https://pics.freeicons.io/uploads/icons/png/6822363841598811069-512.png';
+  }
+
   bool verifyConnection(http.Response peticion) {
     if (peticion.statusCode != 200) {
       return false;
