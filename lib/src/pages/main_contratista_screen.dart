@@ -21,67 +21,64 @@ class MainContratistaScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            ContenedorGrafico(
-              estilo: estilos.estilo,
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.only(top: 10),
-                child: StreamBuilder<List<Propuesta>>(
-                  stream: propuestasProvider.propuestasStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return RefreshIndicator(
-                        onRefresh: () {
-                          propuestasProvider.montoTotal();
-                          propuestasProvider.gananciasPorMes();
-                          return propuestasProvider.getPropuestas();
-                        },
-                        child: buildListaOfertas(
-                            snapshot, propuestasProvider, estilos),
-                      );
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+      child: Column(
+      children: [
+      ContenedorGrafico(estilo: estilos.estilo,),
+      Expanded(child: Container(
+      decoration: BoxDecoration(
+      color: Colors.blue,
+      borderRadius: BorderRadius.circular(20)),
+      padding: EdgeInsets.only(top: 10),
+      child: StreamBuilder<List<Propuesta>>(
+      stream: propuestasProvider.propuestasStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+        return RefreshIndicator(
+          onRefresh: () {
+          propuestasProvider.montoTotal();
+          propuestasProvider.gananciasPorMes();
+        return propuestasProvider.getPropuestas();},
+          child: buildListaOfertas(
+          snapshot, propuestasProvider, estilos),
+  );
+        } else {
+        return Center(child: CircularProgressIndicator());
+  }
+  },
+  ),
+  ),
+  )
+  ],
+  ),
+  ),
+  );
   }
 
   ListView buildListaOfertas(AsyncSnapshot<List<Propuesta>> snapshot,
-      PropuestasProvider propuestasProvider, Styles estilos) {
+    PropuestasProvider propuestasProvider, Styles estilos) {
     return ListView.separated(
-        separatorBuilder: (context, index) {
-          return Divider(
-            color: Colors.white,
-            thickness: 1.4,
-            endIndent: 4,
-            indent: 4,
-          );
-        },
-        itemCount: snapshot.data!.length,
-        itemBuilder: (context, index) {
-          List<Propuesta> propuestas = snapshot.data!.toList();
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-            child: TileOferta(
-              funcion: propuestasProvider.recargar,
-              propuesta: propuestas[index],
-              estilo: estilos.estiloWhite,
-            ),
-          );
-        });
+      separatorBuilder: (context, index) {
+    return Divider(
+      color: Colors.white,
+      thickness: 1.4,
+      endIndent: 4,
+      indent: 4,
+  );
+  },
+      itemCount: snapshot.data!.length,
+      itemBuilder: (context, index) {
+      List<Propuesta> propuestas = snapshot.data!.toList();
+        return Container(
+          decoration: BoxDecoration(
+          color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+          child: TileOferta(
+          funcion: propuestasProvider.recargar,
+          propuesta: propuestas[index],
+          estilo: estilos.estiloWhite,
+  ),
+  );
+  }
+  );
   }
 }
 
@@ -101,39 +98,30 @@ class TileOferta extends StatelessWidget {
     return ListTile(
       hoverColor: Colors.blue,
       onTap: () {
-        showDialog(
-            barrierColor: Color.fromRGBO(135, 206, 235, 90),
-            context: context,
-            builder: (context) {
-              return PropuestaDialog(
-                recargar: funcion,
-                propuestaList: propuesta,
-              );
-            });
-      },
+      showDialog(
+      barrierColor: Color.fromRGBO(135, 206, 235, 90),
+      context: context,
+      builder: (context) {
+    return PropuestaDialog(
+      recargar: funcion,
+      propuestaList: propuesta,
+  );
+  }
+  );
+  },
       subtitle: Text(
-        propuesta.rubro.toString(),
-        style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
-      ),
+      propuesta.rubro.toString(),
+      style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
+  ),
       leading: Icon(
-        Icons.person,
-        size: 50,
-      ),
+      Icons.person,
+      size: 50,
+  ),
       title: Text(
-        '${propuesta.nombre}',
-        style: estilo,
-      ),
-      //trailing: Row(
-      //  mainAxisSize: MainAxisSize.min,
-      //  children: [
-      //    TrailingButton(
-      //      color: Colors.blue,
-      //      texto: "ACEPTAR",
-      //    ),
-      //    TrailingButton(color: Colors.red, texto: "RECHAZAR")
-      //  ],
-      //),
-    );
+      '${propuesta.nombre}',
+      style: estilo,
+  ),
+  );
   }
 }
 

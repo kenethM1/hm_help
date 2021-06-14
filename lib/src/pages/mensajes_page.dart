@@ -6,16 +6,16 @@ class MensajePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade300,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              LogoTemporal(),
-              MensajeTemporal(),
-            ],
-          ),
-        ),
-      ),
-    );
+      child: SingleChildScrollView(
+      child: Column(
+      children: [
+        LogoTemporal(),
+        MensajeTemporal(),
+  ],
+  ),
+  ),
+  ),
+  );
   }
 }
 
@@ -27,11 +27,11 @@ class LogoTemporal extends StatelessWidget {
       width: double.infinity,
       color: Colors.blue.shade300,
       child: Image(
-        height: 250,
-        width: 250,
-        image: AssetImage('assets/logo.png'),
-      ),
-    );
+      height: 250,
+      width: 250,
+      image: AssetImage('assets/logo.png'),
+  ),
+  );
   }
 }
 
@@ -40,16 +40,15 @@ class MensajeTemporal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 100.0, right: 15.0, left: 15.0),
-      child: Text(
-        "Muy pronto disfrutaras de este servicio...", 
+      child: Text("Muy pronto disfrutaras de este servicio...", 
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: Colors.white
-          ),
-      ),
-    );
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: Colors.white
+  ),
+  ),
+  );
   }
 }
 
