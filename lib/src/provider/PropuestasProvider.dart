@@ -95,14 +95,20 @@ class PropuestasProvider {
     yield total.toString();
   }
 
-  void removePropuesta(String propuestaId) async {
+  void acceptPropuesta(Propuesta propuesta) async {
+    final url = Uri.http(_url, '/api/Propuesta/UpdatePropuestaById');
+
+    final jsonbody = {'id': propuesta.id};
+  }
+
+  void removePropuesta(String propuestaID) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
     String _path = 'api/Propuesta/DeletePropuestaById';
 
     final url = Uri.http(_url, _path);
-    final jsonbody = {'id': propuestaId};
+    final jsonbody = {'id': propuestaID};
 
-    final peticion = await http.delete(url,
+    final peticion = await http.post(url,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -114,8 +120,8 @@ class PropuestasProvider {
     print(peticion.body);
 
     isOk
-        ? print('Propuesta removida con exito')
-        : print('Propuesta no removida');
+        ? print('Propuesta aceptada con exito')
+        : print('Propuesta no encontrada...');
   }
 
   bool verifyConnection(http.Response peticion) {

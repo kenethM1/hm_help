@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AlertLogin extends StatelessWidget {
-  final String? titulo = '';
-  final String? mensaje = '';
-
-  const AlertLogin(
-      {Key? key, required String? titulo, required String? mensaje})
+  const AlertLogin({Key? key, required this.titulo, required this.mensaje})
       : super(key: key);
+
+  final String? titulo;
+  final String? mensaje;
 
   @override
   Widget build(BuildContext context) {

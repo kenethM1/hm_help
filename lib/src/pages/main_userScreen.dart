@@ -92,7 +92,7 @@ class MainUsuarioScreen extends StatelessWidget {
           'CONTRATISTAS',
           style: Theme.of(context).textTheme.headline5,
         ),
-        StreamBuilder<List<Contratista>>(
+        StreamBuilder<List<Usuario>>(
           stream: contratistasProvider.contratistaStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -102,7 +102,7 @@ class MainUsuarioScreen extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      List<Contratista> contratista = snapshot.data!.toList();
+                      List<Usuario> contratista = snapshot.data!.toList();
                       return ListaContratista(contratista: contratista[index]);
                     }),
               );

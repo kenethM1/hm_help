@@ -104,6 +104,7 @@ class TileOferta extends StatelessWidget {
       hoverColor: Colors.blue,
       onTap: () {
         showDialog(
+            barrierDismissible: true,
             barrierColor: Color.fromRGBO(135, 206, 235, 90),
             context: context,
             builder: (context) {
@@ -177,7 +178,6 @@ class ContenedorGrafico extends StatelessWidget {
               style: estilo,
             ),
             InkWell(
-              borderRadius: BorderRadius.circular(50),
               focusColor: Colors.blue,
               highlightColor: Colors.black,
               splashColor: Colors.blue,
@@ -197,7 +197,9 @@ class ContenedorGrafico extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, 'userProfile');
+              },
             ),
           ],
         ),

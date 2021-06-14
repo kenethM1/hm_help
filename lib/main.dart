@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
+import 'package:hm_help/src/pages/UserProfile.dart';
 import 'package:hm_help/src/pages/homePageUser.dart';
 import 'package:hm_help/src/pages/login_screen.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
             'registro': (_) => RegistroPage(),
             'homeUser': (_) => HomePageUser(),
             'principal': (_) => MainContratistaScreen(),
+            'userProfile': (_) => UserProfile()
           }),
     );
   }

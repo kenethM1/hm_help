@@ -65,7 +65,7 @@ class ListaContratista extends StatelessWidget {
         });
   }
 
-  final Contratista contratista;
+  final Usuario contratista;
 
   const ListaContratista({
     Key? key,
