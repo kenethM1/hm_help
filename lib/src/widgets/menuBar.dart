@@ -15,14 +15,14 @@ class MenuPrincipal extends StatelessWidget {
       currentIndex: currentIndex,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "Inicio",
+        icon: Icon(Icons.home),
+        label: "Inicio",
   ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: "Mensajes",
-        ),
-        ],
-    );
+        icon: Icon(Icons.message),
+        label: "Mensajes",
+  ),
+  ],
+  );
   }
 }

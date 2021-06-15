@@ -3,6 +3,7 @@ import 'package:hm_help/src/styles/Styles.dart';
 
 class tipoCategoria extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -29,6 +30,7 @@ class tipoCategoria extends StatelessWidget {
         ]),
       ),
     );
+
   }
 }
 
@@ -64,6 +66,7 @@ class tipoCategoria2 extends StatelessWidget {
         )
       ]),
     );
+
   }
 }
 

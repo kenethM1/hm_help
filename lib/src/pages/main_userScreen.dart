@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hm_help/src/components/Carrusel.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/components/listaContratistas.dart';
@@ -7,31 +6,12 @@ import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 
 class MainUsuarioScreen extends StatelessWidget {
-/*
-  showSimpleDialog(BuildContext context){
-    TextEditingController customController = TextEditingController();
-
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text("Contratista"),
-        content: TextField(
-          controller: customController,
-        ),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("data"),
-            onPressed: (){},
-          )
-        ],
-      );
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+
         child: ListView(
           children: <Widget>[
             _barraBusqueda(),
@@ -44,35 +24,44 @@ class MainUsuarioScreen extends StatelessWidget {
     );
   }
 
-  Widget _barraBusqueda() {
+  Widget _barraBusqueda(BuildContext context) {
     final MainAxisAlignment mainAxisAlignment;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          IconButton(
-            iconSize: 40.0,
-            icon: SvgPicture.asset('assets/icons/icons8-settings.svg'),
-            onPressed: () {},
-          ),
-          Image(
-            image: AssetImage('assets/logo.png'),
-            height: 50,
-            width: 50,
-          )
-          /* IconButton(
-            iconSize: 40.0,
-            icon: AssetImage('assets/logo.png'),
-            onPressed: () {},
-          ),*/
-        ],
-      ),
-    );
-  }
 
-  Widget _tituloCategorias(context) {
-    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+      PopupMenuButton(
+        onSelected: (result){
+        if(result == 0){
+          Navigator.pushNamed(context, 'login');
+          }
+          },
+      itemBuilder: (context) => [
+      PopupMenuItem(
+        value: 0,
+        child: 
+      Row(children: [
+      Icon(Icons.logout),
+      Text("Cerrar Sesion"),
+  ],
+  ),
+  ),
+  ],
+      child: Icon(
+      Icons.settings,
+      size: 30,
+  ),
+  ),
+      Image(image: AssetImage('assets/logo.png'),
+      height: 50,
+      width: 50,
+  )
+  ],
+  ),
+  );
+  }
       children: <Widget>[
         Text(
           'CATEGORIAS',
@@ -81,6 +70,7 @@ class MainUsuarioScreen extends StatelessWidget {
         ListaCategorias(),
       ],
     );
+
   }
 
   Widget _tituloContratista(context) {
