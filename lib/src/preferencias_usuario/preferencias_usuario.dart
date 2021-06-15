@@ -1,16 +1,7 @@
+import 'package:hm_help/src/models/Usuario.dart';
+import 'package:hm_help/src/models/Usuario.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-/*
-  Recordar instalar el paquete de:
-    shared_preferences:
-
-  Inicializar en el main
-    final prefs = new PreferenciasUsuario();
-    await prefs.initPrefs();
-    
-    Recuerden que el main() debe de ser async {...
-
-*/
 
 class PreferenciasUsuario {
   static final PreferenciasUsuario _instancia =
@@ -58,5 +49,13 @@ class PreferenciasUsuario {
 
   set imageUsuario(String value) {
     _prefs!.setString('image', value);
+  }
+
+  String get correoUsuario {
+    return _prefs!.getString('correo') ?? '';
+  }
+
+  set correoUsuario(String correo) {
+    _prefs!.setString('correo', correo);
   }
 }

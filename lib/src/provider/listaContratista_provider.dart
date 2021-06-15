@@ -8,12 +8,12 @@ import 'package:http/http.dart' as http;
 class ContratistasProvider {
   final token = PreferenciasUsuario().token;
   final _contratistasStreamController =
-      StreamController<List<Contratista>>.broadcast();
+      StreamController<List<Usuario>>.broadcast();
 
-  Function(List<Contratista>) get contratistaSink =>
+  Function(List<Usuario>) get contratistaSink =>
       _contratistasStreamController.sink.add;
 
-  Stream<List<Contratista>> get contratistaStream =>
+  Stream<List<Usuario>> get contratistaStream =>
       _contratistasStreamController.stream;
 
   void dispose() {
@@ -25,17 +25,17 @@ class ContratistasProvider {
 
   final url = Uri.http(_url, _path);
 
-  Future<List<Contratista>> getContratista() async {
-    final contratista = await _procesarRespuesta();
+  Future<List<Usuario>> getContratista() async {
+    List<Usuario> contratista = await _procesarRespuesta();
 
     contratistaSink(contratista);
 
     return contratista;
   }
 
-  Future<List<Contratista>> recargar(String idPropuesta) async {
+  Future<List<Usuario>> recargar(String idPropuesta) async {
     final contratistas = await _procesarRespuesta();
-    final existing = Set<Contratista>();
+    final existing = Set<Usuario>();
     final unique = contratistas
         .where((constratistas) => existing.add(constratistas))
         .toList();
@@ -46,7 +46,7 @@ class ContratistasProvider {
     return contratistas;
   }
 
-  Future<List<Contratista>> _procesarRespuesta() async {
+  Future<List<Usuario>> _procesarRespuesta() async {
     final peticion = await http.post(url, headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -64,6 +64,23 @@ class ContratistasProvider {
     } else {
       return [];
     }
+  }
+
+  Future<String?> contratistaImageURL(String nombreContratista) async {
+    final contratistas = await _procesarRespuesta();
+
+    var nombre = nombreContratista.split(' ');
+
+    String img =
+        'https://pics.freeicons.io/uploads/icons/png/6822363841598811069-512.png';
+
+    contratistas.forEach((contratista) {
+      (contratista.nombre == nombre[0]) ? img = contratista.image_URL! : null;
+    });
+
+    return (img.isNotEmpty)
+        ? img
+        : 'https://pics.freeicons.io/uploads/icons/png/6822363841598811069-512.png';
   }
 
   bool verifyConnection(http.Response peticion) {

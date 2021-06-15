@@ -1,0 +1,37 @@
+[33m7dad4de[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{0}: commit (merge): Merge branch 'master' of https://github.com/kenethM1/hm_help
+[33m189f02f[m HEAD@{1}: commit: jsdfn
+[33m67e24a3[m HEAD@{2}: checkout: moving from SebGill10-dev/JGill to master
+[33m3fc7106[m[33m ([m[1;32mSebGill10-dev/JGill[m[33m)[m HEAD@{3}: commit (merge): Merge branch 'dev/JGill' of https://github.com/SebGill10/hm_help into SebGill10-dev/JGill
+[33m94be096[m HEAD@{4}: commit: SebGill10
+[33m67e24a3[m HEAD@{5}: checkout: moving from master to SebGill10-dev/JGill
+[33m67e24a3[m HEAD@{6}: commit: Line Funcionando
+[33m3035e5d[m HEAD@{7}: commit: Line Chart funcionando
+[33md740c1a[m HEAD@{8}: commit: Terminado
+[33me92289c[m HEAD@{9}: commit (merge): Merge branch 'master' of https://github.com/kenethM1/hm_help
+[33m330d5aa[m HEAD@{10}: commit: Grafico funcionando!
+[33ma73e339[m HEAD@{11}: pull --tags origin master: Merge made by the 'recursive' strategy.
+[33meef99b8[m HEAD@{12}: commit: Modelo Propuesta Actualizado
+[33mdabec5d[m HEAD@{13}: commit: Añadido menu para registrarse como usuario o contratista
+[33ma97c38d[m HEAD@{14}: commit: Añadí monto total de ganancias
+[33mbf40ccc[m HEAD@{15}: commit: RefressPull y remove propuesta de lista.
+[33md2edd81[m HEAD@{16}: commit: cambiods
+[33m4eb05c9[m HEAD@{17}: commit: creación de widget textfield
+[33m7fa273d[m HEAD@{18}: commit: Validators no necesarios, borrados. Y CLEANCODE aplicado.
+[33md704886[m HEAD@{19}: commit: Alpha 1.0
+[33m5178d99[m HEAD@{20}: commit (merge): Merge branch 'master' of https://github.com/kenethM1/hm_help
+[33m017aa59[m HEAD@{21}: commit: MainContratista funcionando!
+[33m6a9e739[m HEAD@{22}: commit: gg
+[33m787e885[m HEAD@{23}: commit: Muchos cambios!
+[33m157f169[m HEAD@{24}: commit (merge): Merge branch 'master' of https://github.com/kenethM1/hm_help
+[33m6991d29[m HEAD@{25}: commit: Login solucionado
+[33mb6a131b[m HEAD@{26}: pull --tags origin master: Fast-forward
+[33mde1f61f[m HEAD@{27}: commit: Login Google
+[33m28ad36d[m HEAD@{28}: commit: Guardado Token en Storage del telefono
+[33med37fb7[m HEAD@{29}: merge fq962-dev/fernando: Merge made by the 'recursive' strategy.
+[33m54cab81[m[33m ([m[1;31morigin/fq962-dev/fernando[m[33m)[m HEAD@{30}: checkout: moving from fq962-dev/fernando to master
+[33mbcc22cd[m[33m ([m[1;32mfq962-dev/fernando[m[33m)[m HEAD@{31}: commit (merge): Merge branch 'dev/fernando'
+[33m54cab81[m[33m ([m[1;31morigin/fq962-dev/fernando[m[33m)[m HEAD@{32}: checkout: moving from master to fq962-dev/fernando
+[33m54cab81[m[33m ([m[1;31morigin/fq962-dev/fernando[m[33m)[m HEAD@{33}: commit: Versión 2.12 SDK Flutter Null Safety
+[33mc87d7aa[m HEAD@{34}: commit: Añadiendo la pagina principal de contratista
+[33m462d3f3[m HEAD@{35}: commit: Login funcionando
+[33mcba2d50[m HEAD@{36}: clone: from https://github.com/kenethM1/hm_help.git

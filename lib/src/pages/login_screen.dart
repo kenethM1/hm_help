@@ -44,19 +44,19 @@ class LoginScreen extends StatelessWidget {
             height: 30,
           ),
           _loginButton(bloc),
-          ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (context) => GoogleSignInProvider(),
-              child: StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Navigator.pushNamed(context, 'principal');
-                  } else {
-                    return SocialSignInButton();
-                  }
-                  return Text('');
-                },
-              )),
+          //ChangeNotifierProvider<GoogleSignInProvider>(
+          //    create: (context) => GoogleSignInProvider(),
+          //    child: StreamBuilder(
+          //      stream: FirebaseAuth.instance.authStateChanges(),
+          //      builder: (context, snapshot) {
+          //        if (snapshot.hasData) {
+          //          Navigator.pushNamed(context, 'principal');
+          //        } else {
+          //          return SocialSignInButton();
+          //        }
+          //        return Text('');
+          //      },
+          //    )),
           TextButton(
               onPressed: () => showDialog(
                   context: context,
@@ -148,7 +148,17 @@ Widget _loginButton(LoginBloc bloc) {
                   shape: StadiumBorder(),
                   textStyle:
                       TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              onPressed: snapshot.hasData ? () => _login(bloc, context) : null),
+              onPressed: snapshot.hasData
+                  ? () {
+                      _login(bloc, context);
+                      showDialog(
+                        context: (context),
+                        builder: (context) => Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  : null),
         );
       });
 }

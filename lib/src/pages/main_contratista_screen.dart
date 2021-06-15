@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
+import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:hm_help/src/widgets/Ganancias_widget.dart';
 import 'package:hm_help/src/widgets/Line_Chart.dart';
@@ -98,53 +100,50 @@ class TileOferta extends StatelessWidget {
     return ListTile(
       hoverColor: Colors.blue,
       onTap: () {
-      showDialog(
-      barrierColor: Color.fromRGBO(135, 206, 235, 90),
-      context: context,
-      builder: (context) {
-    return PropuestaDialog(
-      recargar: funcion,
-      propuestaList: propuesta,
-  );
-  }
-  );
-  },
+        showDialog(
+            barrierDismissible: true,
+            barrierColor: Color.fromRGBO(135, 206, 235, 90),
+            context: context,
+            builder: (context) {
+              return PropuestaDialog(
+                recargar: funcion,
+                propuestaList: propuesta,
+              );
+            });
+      },
       subtitle: Text(
-      propuesta.rubro.toString(),
-      style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
-  ),
-      leading: Icon(
-      Icons.person,
-      size: 50,
-  ),
-      title: Text(
-      '${propuesta.nombre}',
-      style: estilo,
-  ),
-  );
-  }
-}
-
-class TrailingButton extends StatelessWidget {
-  const TrailingButton({
-    Key? key,
-    required this.texto,
-    required this.color,
-  }) : super(key: key);
-
-  final String? texto;
-  final Color? color;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: Size(40, 40),
-        shape: StadiumBorder(),
-        elevation: 5,
-        primary: color,
+        propuesta.rubro.toString(),
+        style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
-      child: Text(texto!),
-      onPressed: () {},
+      leading: FutureBuilder<String?>(
+        future: ContratistasProvider()
+            .contratistaImageURL(propuesta.nombreContratista!),
+        builder: (context, snapshot) {
+          return (snapshot.hasData)
+              ? Container(
+                  width: 60.0,
+                  height: 60.0,
+                  decoration: new BoxDecoration(
+                    color: Colors.blue.shade300,
+                    image: new DecorationImage(
+                      image: new NetworkImage(snapshot.data!),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(50.0)),
+                    border: new Border.all(
+                      color: Colors.blue.shade300,
+                      width: 4.0,
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator();
+        },
+      ),
+      title: Text(
+        '${propuesta.nombre}',
+        style: estilo,
+      ),
     );
   }
 }
@@ -175,21 +174,29 @@ class ContenedorGrafico extends StatelessWidget {
               'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
               style: estilo,
             ),
-            Container(
-              width: 60.0,
-              height: 60.0,
-              decoration: new BoxDecoration(
-                color: Colors.blue.shade300,
-                image: new DecorationImage(
-                  image: new NetworkImage(preferenciasUsuario.imageUsuario),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
-                border: new Border.all(
+            InkWell(
+              focusColor: Colors.blue,
+              highlightColor: Colors.black,
+              splashColor: Colors.blue,
+              child: Container(
+                width: 60.0,
+                height: 60.0,
+                decoration: new BoxDecoration(
                   color: Colors.blue.shade300,
-                  width: 4.0,
+                  image: new DecorationImage(
+                    image: new NetworkImage(preferenciasUsuario.imageUsuario),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                  border: new Border.all(
+                    color: Colors.blue.shade300,
+                    width: 4.0,
+                  ),
                 ),
               ),
+              onTap: () {
+                Navigator.pushNamed(context, 'userProfile');
+              },
             ),
           ],
         ),
@@ -242,7 +249,7 @@ class ContenedorGrafico extends StatelessWidget {
             child: Text(
               'Ofertas',
               style: estilo,
-            ))
+            )),
       ],
     );
   }

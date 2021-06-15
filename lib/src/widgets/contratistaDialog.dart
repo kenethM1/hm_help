@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class AlertLogin extends StatelessWidget {
-  const AlertLogin({Key? key, required this.titulo, required this.mensaje})
-      : super(key: key);
+class AlertLoginContratista extends StatelessWidget {
+  final String? titulo = '';
+  final String? mensaje = '';
 
-  final String? titulo;
-  final String? mensaje;
+  const AlertLoginContratista(
+      {Key? key, required String? titulo, required String? mensaje})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class AlertLogin extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15))),
         title: Text(this.titulo.toString()),
         elevation: 3,
-        content: Text(mensaje.toString()),
+        content: Text(''),
         actions: [
           ElevatedButton(
               onPressed: () => Navigator.of(context).pop(), child: Text('Okay'))

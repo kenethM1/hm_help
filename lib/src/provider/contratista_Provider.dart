@@ -4,8 +4,6 @@ import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
-
-
   Future<Map<String, dynamic>> registro(String nombre, String correo,
       String contra, String fecha, String genero, String apellido) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
