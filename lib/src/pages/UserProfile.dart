@@ -4,8 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/provider/images_provider.dart';
+import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
+import 'package:provider/provider.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -84,6 +88,7 @@ class ImageAndCameraButton extends StatefulWidget {
 class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ImagesProvider>(context, listen: false);
     return Stack(children: [
       Container(
         height: 400,
@@ -91,22 +96,27 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
       ),
       Padding(
         padding: EdgeInsets.only(top: 250, left: widget.size.width / 5),
-        child: Container(
-          width: 250.0,
-          height: 250.0,
-          decoration: new BoxDecoration(
-            color: Colors.blue,
-            image: new DecorationImage(
-              image: new NetworkImage(widget.preferenciaUsuario.imageUsuario),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: new BorderRadius.all(new Radius.circular(150.0)),
-            border: new Border.all(
-              color: Colors.blue.shade300,
-              width: 1.0,
-            ),
-          ),
-        ),
+        child: Consumer<ImagesProvider>(builder: (context, value, child) {
+          return (value.profileImg.isNotEmpty)
+              ? Container(
+                  width: 250.0,
+                  height: 250.0,
+                  decoration: new BoxDecoration(
+                    color: Colors.blue,
+                    image: new DecorationImage(
+                      image: new NetworkImage(provider.profileImg),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(150.0)),
+                    border: new Border.all(
+                      color: Colors.blue.shade300,
+                      width: 1.0,
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator();
+        }),
       ),
       Positioned(
         top: widget.size.height * 0.55,
@@ -114,10 +124,11 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
         child: InkWell(
           focusColor: Colors.grey,
           hoverColor: Colors.grey,
-          onTap: () {
-            setState(() {
-              getImage();
-            });
+          onTap: () async {
+            final provider =
+                Provider.of<ImagesProvider>(context, listen: false);
+
+            provider.changeProfileImg = await getImage();
           },
           child: Container(
               decoration: BoxDecoration(
@@ -136,9 +147,11 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
     ]);
   }
 
-  void getImage() async {
+  Future<String> getImage() async {
     List<File> image;
+    String? imgLink;
     final preferenciasUsuarios = new PreferenciasUsuario();
+    final usuarioProvider = UsuarioProvider();
     try {
       FilePickerResult result = (await FilePicker.platform.pickFiles(
         allowMultiple: false,
@@ -146,10 +159,10 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
-      final imgLink =
-          await guardarImg(image, preferenciasUsuarios.nombreUsuario);
-      preferenciasUsuarios.imageUsuario = imgLink;
+      imgLink = await guardarImg(image, preferenciasUsuarios.nombreUsuario);
+      usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
     } catch (e) {}
+    return imgLink ?? preferenciasUsuarios.imageUsuario;
   }
 
   Future<String> guardarImg(List<File> img, String userName) async {

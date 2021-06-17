@@ -35,6 +35,14 @@ class PreferenciasUsuario {
     _prefs!.setString('nombre', value);
   }
 
+  String get apellidoUsuario {
+    return _prefs!.getString('apellido') ?? '';
+  }
+
+  set apellidoUsuario(String value) {
+    _prefs!.setString('apellido', value);
+  }
+
   int? get gananciaMaxima {
     return _prefs!.getInt('gananciaMaxima');
   }
@@ -57,5 +65,13 @@ class PreferenciasUsuario {
 
   set correoUsuario(String correo) {
     _prefs!.setString('correo', correo);
+  }
+
+  String get sexo {
+    return _prefs!.getString('sexo') ?? '';
+  }
+
+  set sexo(String value) {
+    _prefs!.setString('sexo', value);
   }
 }

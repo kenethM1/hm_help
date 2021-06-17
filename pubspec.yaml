@@ -41,6 +41,7 @@ dependencies:
   firebase_auth:
   google_sign_in: 
   provider:
+  json_serializable: ^4.1.3
   
 
   #Agregue upload file to firebase
@@ -75,6 +76,7 @@ flutter:
       - assets/construccion.jpg
       - assets/icons/
       - assets/upload.png
+      - assets/Download.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -173,14 +173,7 @@ _login(LoginBloc bloc, BuildContext context) async {
   if (respuesta['ok'] == true && respuesta['rol'] == 'Contratista') {
     Navigator.pushNamed(context, 'principal');
   } else if (respuesta['ok'] == true && respuesta['rol'] == 'Usuario') {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertLogin(
-            titulo: 'Ingresó',
-            mensaje: 'Usted es un usuario.',
-          );
-        });
+    Navigator.pushNamed(context, 'mainUser');
   } else {
     showDialog(
         context: context,

@@ -55,7 +55,9 @@ class ListaContratista extends StatelessWidget {
                     ),
                     onPressed: () {
                       showDialog(
-                          context: context, builder: (_) => UploadPropuesta());
+                          context: context,
+                          builder: (_) =>
+                              UploadPropuesta(contratista: contratista));
                     },
                   )
                 ],

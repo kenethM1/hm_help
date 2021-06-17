@@ -3,14 +3,20 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/models/Rubro.dart';
+import 'package:hm_help/src/models/Usuario.dart';
+import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:provider/provider.dart';
 
 class UploadPropuesta extends StatefulWidget {
   const UploadPropuesta({
+    required this.contratista,
     Key? key,
   }) : super(key: key);
+
+  final Usuario contratista;
 
   @override
   _UploadPropuestaState createState() => _UploadPropuestaState();
@@ -29,7 +35,7 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           width: size.width * 0.85,
-          height: size.height * 0.8,
+          height: size.height * 0.9,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -40,6 +46,29 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
               ),
               buildTituloField(provider),
               buildDescripcionField(provider),
+              Card(
+                elevation: 0,
+                child: FutureBuilder<List<Rubro>>(
+                  future: PropuestasProvider().getRubros(),
+                  builder: (context, snapshot) {
+                    return (snapshot.hasData)
+                        ? DropdownButton(
+                            value: provider.rubro,
+                            hint: Text('Elije un rubro'),
+                            onChanged: (String? value) {
+                              provider.changeRubro = value!;
+                            },
+                            items: snapshot.data!
+                                .map((rubro) => DropdownMenuItem(
+                                      child: Text(rubro.nombre!),
+                                      value: rubro.id,
+                                    ))
+                                .toList(),
+                          )
+                        : Container();
+                  },
+                ),
+              ),
               buildMontoField(provider),
               Consumer<ImagesProvider>(
                 builder: (context, imagesList, child) {
@@ -87,7 +116,7 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
             child: Text('Subir Propuesta'),
             style: ElevatedButton.styleFrom(primary: Colors.blue),
             onPressed: () {
-              provider.guardar();
+              provider.guardar(widget.contratista);
               Navigator.pop(context);
             }),
       ],

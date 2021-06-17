@@ -1,31 +1,32 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hm_help/src/models/Propuesta.dart';
+import 'package:hm_help/src/models/Usuario.dart';
+import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/ProviderValidator/ValidatorsItem.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class ImagesProvider extends ChangeNotifier {
+  String _imageProfile = new PreferenciasUsuario().imageUsuario;
   List<File> _list = [];
   List<String> _url = [];
   TaskSnapshot? taskSnapshot;
-  String _porcentaje = '0';
   ValidatorItem? _titulo = new ValidatorItem(null, null);
   ValidatorItem? _descripcion = new ValidatorItem(null, null);
   ValidatorItem? _monto = new ValidatorItem(null, null);
+  String _rubro = 'fdc8358d-b30d-48bc-ac8b-f230019e6d1f';
 
-  imagesProvider() {
-    _list = [];
-    _url = [];
-  }
+  imagesProvider() {}
 
   List<File> get listaImagenes => _list;
   List<String> get linksDescarga => _url;
   ValidatorItem get titulo => _titulo!;
   ValidatorItem get descripcion => _descripcion!;
   ValidatorItem get monto => _monto!;
-  String get porcentaje => _porcentaje;
+  String get profileImg => _imageProfile;
+  String get rubro => _rubro;
 
   set listaImagenes(List<File> list) {
     _list = list;
@@ -33,8 +34,8 @@ class ImagesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set changePorcentaje(String newvalue) {
-    _porcentaje = newvalue;
+  set changeRubro(String newRubro) {
+    _rubro = newRubro;
     notifyListeners();
   }
 
@@ -67,18 +68,32 @@ class ImagesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void guardar() async {
+  void guardar(
+    Usuario contratista,
+  ) async {
+    PropuestasProvider provider = PropuestasProvider();
     final _storage = FirebaseStorage.instance;
     await FirebaseAuth.instance.signInAnonymously();
+
+    String? monto = _monto!.value;
 
     int i = 1;
     _list.forEach((imagen) async {
       print('Subiendo imagen $i');
       final task = await _storage.ref('files/Propuesta_$i').putFile(imagen);
-      final progress = task.bytesTransferred / task.totalBytes;
-      changePorcentaje = progress.toStringAsFixed(2);
       i++;
       linksDescarga.add(await task.ref.getDownloadURL());
+
+      final propuesta = new Propuesta(
+        contratistaID: contratista.id,
+        rubroID: rubro,
+        nombre: _titulo!.value,
+        descripcion: _descripcion!.value,
+        monto: double.parse(monto!),
+      );
+
+      await provider.uploadPropuesta(propuesta, _url);
+
       listaImagenes = [];
 
       notifyListeners();
@@ -87,6 +102,11 @@ class ImagesProvider extends ChangeNotifier {
 
   void clearList() {
     _list.clear();
+    notifyListeners();
+  }
+
+  set changeProfileImg(String imgURL) {
+    _imageProfile = imgURL;
     notifyListeners();
   }
 }

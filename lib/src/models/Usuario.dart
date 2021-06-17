@@ -26,7 +26,8 @@ class Usuario {
     this.correo,
     this.rol,
     this.nombre,
-    this.apellido,
+    this.apellido, 
+    this.image_URL
   });
 
   Usuario.fromJsonMap(Map<String, dynamic> json) {

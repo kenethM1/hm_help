@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
+  final String _url = 'mahamtr1-001-site1.ctempurl.com';
   Future<Map<String, dynamic>> login(String email, String password) async {
-    const String _url = 'mahamtr1-001-site1.ctempurl.com';
     const String _path = 'api/Usuario/Login';
 
     final _prefs = PreferenciasUsuario();
@@ -29,10 +30,8 @@ class UsuarioProvider {
     final isOk = new PropuestasProvider().verifyConnection(peticion);
 
     if (isOk) {
-      _prefs.token = respuestaJson['token'];
-      _prefs.nombreUsuario = respuestaJson['nombre'];
-      _prefs.imageUsuario = respuestaJson['image_URL'];
-      _prefs.correoUsuario = email;
+      guardarPreferencias(_prefs, respuestaJson, email);
+
       return {
         'ok': true,
         'token': respuestaJson['token'],
@@ -43,9 +42,18 @@ class UsuarioProvider {
     }
   }
 
+  void guardarPreferencias(PreferenciasUsuario _prefs,
+      Map<String, dynamic> respuestaJson, String email) {
+    _prefs.token = respuestaJson['token'];
+    _prefs.nombreUsuario = respuestaJson['nombre'];
+    _prefs.imageUsuario = respuestaJson['image_URL'];
+    _prefs.correoUsuario = email;
+    _prefs.sexo = respuestaJson['sexo'];
+    _prefs.apellidoUsuario = respuestaJson['apellido'];
+  }
+
   Future<Map<String, dynamic>> nuevoUsuario(
       String nombre, String apellido, String email, String password) async {
-    String _url = 'mahamtr1-001-site1.ctempurl.com';
     String _path = '/api/Usuario/SignUpUsuario';
 
     final url = Uri.http(_url, _path);
@@ -72,5 +80,30 @@ class UsuarioProvider {
     } else {
       return {'ok': false, 'rol': respuestaJson['error']};
     }
+  }
+
+  Future updateUsuario(Usuario usuario) async {
+    final preferencias = PreferenciasUsuario();
+
+    final token = preferencias.token;
+    final uri = Uri.http(_url, '/api/Usuario/UpdateMyProfile');
+    final body = {
+      "nombre": preferencias.nombreUsuario,
+      "apellido": preferencias.apellidoUsuario,
+      "imagenURL": usuario.image_URL,
+      "sexo": preferencias.sexo
+    };
+
+    final response = await http.post(uri, body: json.encode(body), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer $token"
+    });
+
+    print(usuario.image_URL);
+
+    print(response.statusCode);
+
+    bool isOkay = new PropuestasProvider().verifyConnection(response);
   }
 }

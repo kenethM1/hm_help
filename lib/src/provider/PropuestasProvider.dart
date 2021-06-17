@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:hm_help/src/models/Propuesta.dart';
+import 'package:hm_help/src/models/Rubro.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 import "package:collection/collection.dart";
+import 'package:json_annotation/json_annotation.dart';
 
 class PropuestasProvider {
   final token = PreferenciasUsuario().token;
@@ -57,7 +59,9 @@ class PropuestasProvider {
     propuestasNoRepetidas.removeWhere((element) => element.id == idPropuesta);
 
     propuestasSink(propuestasNoRepetidas);
-
+    propuestas.forEach((element) {
+      print(element.id);
+    });
     return propuestas;
   }
 
@@ -101,6 +105,33 @@ class PropuestasProvider {
     final jsonbody = {'id': propuesta.id};
   }
 
+  Future uploadPropuesta(Propuesta propuesta, List<String> imagenes) async {
+    final url = Uri.http(_url, '/api/Propuesta/AddPropuesta');
+    @JsonSerializable(explicitToJson: true)
+    Map<dynamic, dynamic> body = {
+      'contratistaID': propuesta.contratistaID,
+      'rubroID': propuesta.rubroID,
+      'nombre': propuesta.nombre,
+      'descripcion': propuesta.descripcion,
+      'monto': propuesta.monto,
+      'imagenes': imagenes.map((imagen) {
+        return {'url : $imagen'};
+      }).toList()
+    };
+
+    final response = await http.post(
+      url,
+      body: json.encode(body),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    print(response.statusCode);
+  }
+
   void removePropuesta(String propuestaID) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
     String _path = 'api/Propuesta/DeletePropuestaById';
@@ -108,7 +139,7 @@ class PropuestasProvider {
     final url = Uri.http(_url, _path);
     final jsonbody = {'id': propuestaID};
 
-    final peticion = await http.post(url,
+    final peticion = await http.delete(url,
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -118,10 +149,6 @@ class PropuestasProvider {
 
     bool isOk = verifyConnection(peticion);
     print(peticion.body);
-
-    isOk
-        ? print('Propuesta aceptada con exito')
-        : print('Propuesta no encontrada...');
   }
 
   bool verifyConnection(http.Response peticion) {
@@ -154,6 +181,35 @@ class PropuestasProvider {
     });
 
     yield listaAgrupada;
+  }
+
+  Future<List<Rubro>> getRubros() async {
+    String _url = 'mahamtr1-001-site1.ctempurl.com';
+    String path = 'api/Rubro/GetAllRubros';
+    final token = PreferenciasUsuario().token;
+
+    final url = Uri.http(
+      _url,
+      path,
+    );
+
+    final request = await http.post(url, headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer $token",
+    });
+    print(request.statusCode);
+    final isOkay = verifyConnection(request);
+
+    if (isOkay) {
+      final decoded = json.decode(request.body);
+
+      final rubros = Rubros.fromJsonList(decoded);
+
+      return rubros.items;
+    } else {
+      return [];
+    }
   }
 
   List<Propuesta> erasePropuestas(List<Propuesta> propuestas) {

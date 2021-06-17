@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
@@ -26,10 +27,10 @@ class _PropuestaState extends State<PropuestaDialog> {
         child: Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      height: 380,
+      height: 550,
       width: 300,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           userInformacion(),
           SizedBox(
@@ -39,6 +40,7 @@ class _PropuestaState extends State<PropuestaDialog> {
             'Detalles',
             style: textStyle,
           ),
+          carrousel(widget.propuestaList),
           Text(
             widget.propuestaList.descripcion!,
             style: Theme.of(context).textTheme.bodyText1,
@@ -163,5 +165,17 @@ class _PropuestaState extends State<PropuestaDialog> {
         ],
       ),
     );
+  }
+
+  Widget carrousel(Propuesta propuestaList) {
+    return (propuestaList.imagenes!.length != 0)
+        ? CarouselSlider.builder(
+            itemCount: propuestaList.imagenes!.length,
+            itemBuilder: (context, int index, index2) =>
+                Image.network(propuestaList.imagenes![index]),
+            options: CarouselOptions(
+                autoPlay: true, autoPlayCurve: Curves.easeInOut),
+          )
+        : Container();
   }
 }

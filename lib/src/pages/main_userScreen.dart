@@ -96,7 +96,6 @@ class MainUsuarioScreen extends StatelessWidget {
                     }),
               );
             } else {
-              print(snapshot.connectionState);
               return Center(child: CircularProgressIndicator());
             }
           },
