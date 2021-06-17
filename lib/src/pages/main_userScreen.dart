@@ -6,15 +6,13 @@ import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 
 class MainUsuarioScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-
         child: ListView(
-          children: <Widget>[
-            _barraBusqueda(),
+          children: [
+            _barraBusqueda(context),
             //  _bienvenida(),
             _tituloCategorias(context),
             _tituloContratista(context),
@@ -25,43 +23,45 @@ class MainUsuarioScreen extends StatelessWidget {
   }
 
   Widget _barraBusqueda(BuildContext context) {
-    final MainAxisAlignment mainAxisAlignment;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Row(
-
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-      PopupMenuButton(
-        onSelected: (result){
-        if(result == 0){
-          Navigator.pushNamed(context, 'login');
-          }
-          },
-      itemBuilder: (context) => [
-      PopupMenuItem(
-        value: 0,
-        child: 
-      Row(children: [
-      Icon(Icons.logout),
-      Text("Cerrar Sesion"),
-  ],
-  ),
-  ),
-  ],
-      child: Icon(
-      Icons.settings,
-      size: 30,
-  ),
-  ),
-      Image(image: AssetImage('assets/logo.png'),
-      height: 50,
-      width: 50,
-  )
-  ],
-  ),
-  );
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          PopupMenuButton(
+            onSelected: (result) {
+              if (result == 0) {
+                Navigator.pushNamed(context, 'login');
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(Icons.logout),
+                    Text("Cerrar Sesion"),
+                  ],
+                ),
+              ),
+            ],
+            child: Icon(
+              Icons.settings,
+              size: 30,
+            ),
+          ),
+          Image(
+            image: AssetImage('assets/logo.png'),
+            height: 50,
+            width: 50,
+          )
+        ],
+      ),
+    );
   }
+
+  Widget _tituloCategorias(context) {
+    return Column(
       children: <Widget>[
         Text(
           'CATEGORIAS',
@@ -70,7 +70,6 @@ class MainUsuarioScreen extends StatelessWidget {
         ListaCategorias(),
       ],
     );
-
   }
 
   Widget _tituloContratista(context) {

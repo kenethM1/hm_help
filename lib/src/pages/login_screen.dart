@@ -21,6 +21,7 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(),
               Logo(),
               _form(context),
             ],

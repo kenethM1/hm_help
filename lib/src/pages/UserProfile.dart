@@ -139,14 +139,17 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
   void getImage() async {
     List<File> image;
     final preferenciasUsuarios = new PreferenciasUsuario();
-    FilePickerResult result = (await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg'],
-    ))!;
-    image = result.paths.map((path) => File(path!)).toList();
-    final imgLink = await guardarImg(image, preferenciasUsuarios.nombreUsuario);
-    preferenciasUsuarios.imageUsuario = imgLink;
+    try {
+      FilePickerResult result = (await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg'],
+      ))!;
+      image = result.paths.map((path) => File(path!)).toList();
+      final imgLink =
+          await guardarImg(image, preferenciasUsuarios.nombreUsuario);
+      preferenciasUsuarios.imageUsuario = imgLink;
+    } catch (e) {}
   }
 
   Future<String> guardarImg(List<File> img, String userName) async {
