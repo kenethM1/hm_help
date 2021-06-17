@@ -32,7 +32,7 @@ class ContratistaBloc with Validator {
   Function(String) get changeGenero => _generoController.sink.add;
 
   String? get nombre => _nombreController.value;
-  String? get apllido => _apellidoController.value;
+  String? get apellido => _apellidoController.value;
   String? get correo => _correoController.value;
   String? get contra => _contrasenaController.value;
   String? get fecha => _fechaController.value;
