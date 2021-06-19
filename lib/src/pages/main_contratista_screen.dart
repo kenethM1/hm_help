@@ -177,12 +177,13 @@ class ContenedorGrafico extends StatelessWidget {
     final provider = Provider.of<ImagesProvider>(context, listen: false);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
           height: 20,
         ),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
@@ -233,8 +234,8 @@ class ContenedorGrafico extends StatelessWidget {
               style: estilo,
             ),
             Container(
-              child: StreamBuilder<String>(
-                  stream: propuestasProvider.montoTotal(),
+              child: FutureBuilder<String>(
+                  future: propuestasProvider.montoTotal(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       print(snapshot.connectionState);

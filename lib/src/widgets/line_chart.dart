@@ -18,19 +18,21 @@ class ChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final prefs = PreferenciasUsuario();
     final List<Color> gradiente = [Colors.white, Colors.grey.shade200];
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+    return Container(
+      height: 200,
+      width: 370,
+      margin: EdgeInsets.only(bottom: 10, right: 0),
       child: Container(
-        decoration: BoxDecoration(color: Colors.blue, boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.blue,
-              blurRadius: 5,
-              spreadRadius: 30,
-              offset: Offset(0, 0))
-        ]),
-        height: 200,
-        width: 350,
-        margin: EdgeInsets.only(bottom: 10, right: 25),
+        decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.lightBlue,
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                  offset: Offset(0, 3))
+            ]),
         child: LineChart(LineChartData(
             lineTouchData: LineTouchData(enabled: false),
             titlesData: FlTitlesData(
@@ -43,7 +45,7 @@ class ChartWidget extends StatelessWidget {
             maxY: prefs.gananciaMaxima!.toDouble() + 1000,
             minY: 0,
             borderData: FlBorderData(
-                show: true,
+                show: false,
                 border: Border(left: BorderSide.none, bottom: BorderSide.none)),
             gridData: FlGridData(drawVerticalLine: false, show: false),
             lineBarsData: [
@@ -67,7 +69,7 @@ class ChartWidget extends StatelessWidget {
 
   SideTitles buildButtonTitle() {
     return SideTitles(
-      reservedSize: 5,
+      reservedSize: 40,
       interval: 2,
       margin: 5,
       getTextStyles: (value) {

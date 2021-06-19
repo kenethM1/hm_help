@@ -85,7 +85,7 @@ class PropuestasProvider {
     }
   }
 
-  Stream<String> montoTotal() async* {
+  Future<String> montoTotal() async {
     List<Propuesta> propuestas = await getPropuestas();
 
     final propuestasLimpias = erasePropuestas(propuestas);
@@ -96,7 +96,7 @@ class PropuestasProvider {
 
     print('monto total: $total');
 
-    yield total.toString();
+    return total.toString();
   }
 
   Future<bool> acceptPropuesta(Propuesta propuesta) async {
