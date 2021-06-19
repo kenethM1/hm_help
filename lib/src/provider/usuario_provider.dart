@@ -35,7 +35,8 @@ class UsuarioProvider {
       return {
         'ok': true,
         'token': respuestaJson['token'],
-        'rol': respuestaJson['rol']
+        'rol': respuestaJson['rol'],
+        'imageURL': respuestaJson['image_URL']
       };
     } else {
       return {'ok': false, 'token': 'Correo o usuario incorrecto'};

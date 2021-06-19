@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/components/Carrusel.dart';
+import 'package:hm_help/src/widgets/Carrusel.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
-import 'package:hm_help/src/components/listaContratistas.dart';
+import 'package:hm_help/src/widgets/listaContratistas.dart';
 import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 
@@ -13,7 +13,6 @@ class MainUsuarioScreen extends StatelessWidget {
         child: ListView(
           children: [
             _barraBusqueda(context),
-            //  _bienvenida(),
             _tituloCategorias(context),
             _tituloContratista(context),
           ],
@@ -50,11 +49,10 @@ class MainUsuarioScreen extends StatelessWidget {
               size: 30,
             ),
           ),
-          Image(
-            image: AssetImage('assets/logo.png'),
-            height: 50,
-            width: 50,
-          )
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () => Navigator.pushNamed(context, 'userProfile'),
+          ),
         ],
       ),
     );
@@ -79,7 +77,7 @@ class MainUsuarioScreen extends StatelessWidget {
       children: <Widget>[
         Text(
           'CONTRATISTAS',
-          style: Theme.of(context).textTheme.headline5,
+          style: new Styles().estilo,
         ),
         StreamBuilder<List<Usuario>>(
           stream: contratistasProvider.contratistaStream,

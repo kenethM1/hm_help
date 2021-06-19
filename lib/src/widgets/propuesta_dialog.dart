@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
+import 'package:hm_help/src/styles/Styles.dart';
 
 class PropuestaDialog extends StatefulWidget {
   PropuestaDialog({
@@ -71,39 +72,61 @@ class _PropuestaState extends State<PropuestaDialog> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    final propuestasProvider = new PropuestasProvider();
-                    propuestasProvider.acceptPropuesta(widget.propuestaList);
-                    Navigator.pop(context);
-                  },
-                  child: Text('Aceptar',
-                      style: textStyle.copyWith(
-                          fontWeight: FontWeight.normal, color: Colors.white))),
-              ElevatedButton(
-                onPressed: () {
-                  PropuestasProvider propuestasProvider =
-                      new PropuestasProvider();
-                  propuestasProvider
-                      .removePropuesta(widget.propuestaList.id.toString());
-                  Navigator.pop(context);
-                  widget.recargar(widget.propuestaList.id);
-                },
-                child: Text(
-                  'Rechazar',
-                  style: textStyle.copyWith(
-                      fontWeight: FontWeight.normal, color: Colors.blue),
+          (widget.propuestaList.status == 'Aceptada')
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          final propuestasProvider = new PropuestasProvider();
+                          bool isSubmited = false;
+
+                          Center(
+                            child: CircularProgressIndicator(),
+                          );
+
+                          isSubmited = await propuestasProvider
+                              .acceptPropuesta(widget.propuestaList);
+
+                          Navigator.pop(context);
+                        },
+                        child: Text('Aceptar',
+                            style: textStyle.copyWith(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white))),
+                    ElevatedButton(
+                      onPressed: () {
+                        PropuestasProvider propuestasProvider =
+                            new PropuestasProvider();
+                        propuestasProvider.removePropuesta(
+                            widget.propuestaList.id.toString());
+                        Navigator.pop(context);
+                        widget.recargar(widget.propuestaList.id);
+                      },
+                      child: Text(
+                        'Rechazar',
+                        style: textStyle.copyWith(
+                            fontWeight: FontWeight.normal, color: Colors.blue),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                      ),
+                    )
+                  ],
+                )
+              : Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Aceptada',
+                        style: new Styles().estilo.copyWith(color: Colors.blue),
+                      ),
+                      Icon(Icons.check_circle, color: Colors.blue)
+                    ],
+                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                ),
-              )
-            ],
-          ),
           SizedBox(
             height: 20,
           )
@@ -113,7 +136,6 @@ class _PropuestaState extends State<PropuestaDialog> {
   }
 
   Widget userInformacion() {
-    var nombreCliente = widget.propuestaList.nombreUsuario!.split(" ");
     var textStyle = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
@@ -129,16 +151,16 @@ class _PropuestaState extends State<PropuestaDialog> {
         children: [
           Text('Información del cliente', style: textStyle),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FutureBuilder<String?>(
-                future: ContratistasProvider().contratistaImageURL(
-                    widget.propuestaList.nombreContratista!),
+                future: ContratistasProvider()
+                    .userImageURL(widget.propuestaList.usuarioID),
                 builder: (context, snapshot) {
                   return (snapshot.hasData)
                       ? Container(
-                          width: 60.0,
-                          height: 60.0,
+                          width: 70,
+                          height: 70.0,
                           decoration: new BoxDecoration(
                             color: Colors.blue.shade300,
                             image: new DecorationImage(
@@ -156,8 +178,11 @@ class _PropuestaState extends State<PropuestaDialog> {
                       : CircularProgressIndicator();
                 },
               ),
+              SizedBox(
+                width: 50,
+              ),
               Text(
-                nombreCliente[0],
+                widget.propuestaList.nombreUsuario!.split(' ')[0],
                 style: textStyle.copyWith(fontSize: 30),
               )
             ],
@@ -172,7 +197,7 @@ class _PropuestaState extends State<PropuestaDialog> {
         ? CarouselSlider.builder(
             itemCount: propuestaList.imagenes!.length,
             itemBuilder: (context, int index, index2) =>
-                Image.network(propuestaList.imagenes![index]),
+                Image.network(propuestaList.imagenes![index].url.toString()),
             options: CarouselOptions(
                 autoPlay: true, autoPlayCurve: Curves.easeInOut),
           )

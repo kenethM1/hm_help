@@ -6,6 +6,7 @@ import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
 import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
+import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 import 'package:hm_help/src/widgets/campoContrasena.dart';
@@ -166,13 +167,16 @@ Widget _loginButton(LoginBloc bloc) {
 
 _login(LoginBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
+  final provider = Provider.of<ImagesProvider>(context, listen: false);
 
   Map respuesta = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());
 
   if (respuesta['ok'] == true && respuesta['rol'] == 'Contratista') {
+    provider.changeProfileImg = respuesta['imageURL'];
     Navigator.pushNamed(context, 'principal');
   } else if (respuesta['ok'] == true && respuesta['rol'] == 'Usuario') {
+    provider.changeProfileImg = respuesta['imageURL'];
     Navigator.pushNamed(context, 'mainUser');
   } else {
     showDialog(

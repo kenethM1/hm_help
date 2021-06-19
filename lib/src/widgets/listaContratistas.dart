@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/pages/upload_propuesta.dart';
@@ -8,6 +10,7 @@ class ListaContratista extends StatelessWidget {
 
     return showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (context) {
           return SingleChildScrollView(
             child: Container(
@@ -21,7 +24,7 @@ class ListaContratista extends StatelessWidget {
                     height: 250,
                     width: 150,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           "Informacion del contratista",
@@ -29,9 +32,13 @@ class ListaContratista extends StatelessWidget {
                         ),
                         CircleAvatar(
                           radius: 40,
-                          child: FadeInImage(
-                            placeholder: AssetImage('./assets/jar-loading.gif'),
-                            image: NetworkImage(contratista.image_URL!),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: FadeInImage(
+                              placeholder:
+                                  AssetImage('./assets/jar-loading.gif'),
+                              image: NetworkImage(contratista.image_URL!),
+                            ),
                           ),
                         ),
                         Text(
@@ -44,6 +51,7 @@ class ListaContratista extends StatelessWidget {
                     )),
                 actions: [
                   MaterialButton(
+                    color: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(20.0),
@@ -52,6 +60,7 @@ class ListaContratista extends StatelessWidget {
                     elevation: 5.0,
                     child: Text(
                       "Agregar Propuesta",
+                      style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
                       showDialog(
@@ -86,9 +95,18 @@ class ListaContratista extends StatelessWidget {
             contratista.correo.toString(),
             style: TextStyle(fontSize: 16),
           ),
-          leading: Icon(
-            Icons.person,
-            size: 50,
+          leading: Container(
+            child: CircleAvatar(
+              radius: 40,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image(
+                  image: NetworkImage(contratista.image_URL!),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           ),
           title: Text(
             contratista.nombre.toString(),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 
 class Propuestas {
@@ -27,7 +29,7 @@ class Propuesta {
   DateTime? created;
   DateTime? updated;
   String? status;
-  List<String>? imagenes;
+  List<Imagen>? imagenes;
 
   Propuesta(
       {this.rubro,
@@ -47,11 +49,11 @@ class Propuesta {
 
   Propuesta.fromJsonMap(Map<String, dynamic> json) {
     rubro = json['rubro'];
-    rubroID = json['rubroID'];
+    rubroID = json['rubroId'];
     nombreUsuario = json['nombreUsuario'];
-    usuarioID = json['usuarioID'];
+    usuarioID = json['usuarioId'];
     nombreContratista = json['nombreContratista'];
-    contratistaID = json['contratistaID'];
+    contratistaID = json['contratistaId'];
     nombre = json['nombre'];
     descripcion = json['descripcion'];
     monto = json['monto'];
@@ -59,24 +61,47 @@ class Propuesta {
     created = castStringtoDate(json['created']);
     updated = castStringtoDate(json['updated']);
     status = json['status'];
-    imagenes = getListImagenes(json['imagenes'] ?? []);
+    imagenes =
+        List<Imagen>.from(json["imagenes"].map((x) => Imagen.fromJson(x)));
   }
 
-  List<String> getListImagenes(List<dynamic> json) {
-    List<String> imagenes = [];
-
-    print(json.length);
-
-    json.forEach((imagen) => imagenes.add(imagen['url']));
-
-    return imagenes;
-  }
+  Map<String, dynamic> toJson() => {
+        "rubro": rubro,
+        "nombreUsuario": nombreUsuario,
+        "nombreContratista": nombreContratista,
+        "nombre": nombre,
+        "descripcion": descripcion,
+        "monto": monto,
+        "id": id,
+        "status": status,
+        "imagenes": List<dynamic>.from(imagenes!.map((x) => x.toJson())),
+      };
 
   DateTime castStringtoDate(String fecha) {
     DateTime date = DateTime.parse(fecha.replaceAll('T', ' '));
     DateFormat("MMMM yyyy").format(date);
     return date;
   }
+}
+
+class Imagen {
+  Imagen({
+    this.url,
+  });
+
+  final String? url;
+
+  factory Imagen.fromRawJson(String str) => Imagen.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Imagen.fromJson(Map<String, dynamic> json) => Imagen(
+        url: json["url"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "url": url,
+      };
 }
 
 class MesAgrupado {

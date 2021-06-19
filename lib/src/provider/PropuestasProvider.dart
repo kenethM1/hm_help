@@ -99,29 +99,50 @@ class PropuestasProvider {
     yield total.toString();
   }
 
-  void acceptPropuesta(Propuesta propuesta) async {
+  Future<bool> acceptPropuesta(Propuesta propuesta) async {
     final url = Uri.http(_url, '/api/Propuesta/UpdatePropuestaById');
 
-    final jsonbody = {'id': propuesta.id};
+    final jsonbody = {
+      'id': propuesta.id,
+      'contratistaId': propuesta.contratistaID,
+      'rubroId': propuesta.rubroID,
+      'nombre': propuesta.nombre,
+      'descripcion': propuesta.descripcion,
+      'monto': propuesta.monto,
+      'status': 2,
+      'imagenes': propuesta.imagenes
+    };
+
+    final response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(jsonbody));
+
+    return (response.statusCode == 200) ? true : false;
   }
 
   Future uploadPropuesta(Propuesta propuesta, List<String> imagenes) async {
     final url = Uri.http(_url, '/api/Propuesta/AddPropuesta');
-    @JsonSerializable(explicitToJson: true)
-    Map<dynamic, dynamic> body = {
-      'contratistaID': propuesta.contratistaID,
-      'rubroID': propuesta.rubroID,
-      'nombre': propuesta.nombre,
-      'descripcion': propuesta.descripcion,
-      'monto': propuesta.monto,
-      'imagenes': imagenes.map((imagen) {
-        return {'url : $imagen'};
-      }).toList()
-    };
+
+    Map<String, dynamic> imgtoJson(String url) => {
+          "url": url,
+        };
+
+    Map<String, dynamic> toJson() => {
+          'contratistaID': propuesta.contratistaID,
+          'rubroID': propuesta.rubroID,
+          'nombre': propuesta.nombre,
+          'descripcion': propuesta.descripcion,
+          'monto': propuesta.monto,
+          "imagenes": List<dynamic>.from(imagenes.map((x) => imgtoJson(x))),
+        };
 
     final response = await http.post(
       url,
-      body: json.encode(body),
+      body: json.encode(toJson()),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -158,7 +179,7 @@ class PropuestasProvider {
       return true;
   }
 
-  Stream<List<MesAgrupado>> gananciasPorMes() async* {
+  Future<List<MesAgrupado>> gananciasPorMes() async {
     final propuestas = await _procesarRespuesta();
     final prefs = PreferenciasUsuario();
 
@@ -180,7 +201,7 @@ class PropuestasProvider {
       listaAgrupada.add(mes);
     });
 
-    yield listaAgrupada;
+    return listaAgrupada;
   }
 
   Future<List<Rubro>> getRubros() async {

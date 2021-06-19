@@ -121,9 +121,17 @@ class TileOferta extends StatelessWidget {
         propuesta.rubro.toString(),
         style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
+      trailing: (propuesta.status == 'En Revisión')
+          ? Icon(
+              Icons.lock_clock,
+              color: Colors.white,
+            )
+          : Icon(
+              Icons.check_circle,
+              color: Colors.white,
+            ),
       leading: FutureBuilder<String?>(
-        future: ContratistasProvider()
-            .contratistaImageURL(propuesta.nombreContratista!),
+        future: ContratistasProvider().userImageURL(propuesta.usuarioID!),
         builder: (context, snapshot) {
           return (snapshot.hasData)
               ? Container(
@@ -241,8 +249,8 @@ class ContenedorGrafico extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        StreamBuilder<List<MesAgrupado>>(
-            stream: propuestasProvider.gananciasPorMes(),
+        FutureBuilder<List<MesAgrupado>>(
+            future: propuestasProvider.gananciasPorMes(),
             builder: (context, snapshot) {
               if (snapshot.data!.length == 0) {
                 return Center(
