@@ -25,39 +25,42 @@ class MainContratistaScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ContenedorGrafico(
-              estilo: estilos.estilo,
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.only(top: 10),
-                child: StreamBuilder<List<Propuesta>>(
-                    stream: propuestasProvider.propuestasStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Image.asset('assets/Download.png'));
-                      } else {
-                        return RefreshIndicator(
-                          onRefresh: () {
-                            propuestasProvider.montoTotal();
-                            propuestasProvider.gananciasPorMes();
-                            return propuestasProvider.getPropuestas();
-                          },
-                          child: buildListaOfertas(
-                              snapshot, propuestasProvider, estilos),
-                        );
-                      }
-                    }),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ContenedorGrafico(
+                estilo: estilos.estilo,
               ),
-            )
-          ],
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(20)),
+                  padding: EdgeInsets.only(top: 10),
+                  child: StreamBuilder<List<Propuesta>>(
+                      stream: propuestasProvider.propuestasStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.data!.isEmpty) {
+                          return Center(
+                              child: Image.asset('assets/Download.png'));
+                        } else {
+                          return RefreshIndicator(
+                            onRefresh: () {
+                              propuestasProvider.montoTotal();
+                              propuestasProvider.gananciasPorMes();
+                              return propuestasProvider.getPropuestas();
+                            },
+                            child: buildListaOfertas(
+                                snapshot, propuestasProvider, estilos),
+                          );
+                        }
+                      }),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
