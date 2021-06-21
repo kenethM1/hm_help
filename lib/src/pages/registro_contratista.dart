@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hm_help/src/bloc/bloc_files/contratista_bloc.dart';
-import 'package:hm_help/src/bloc/contratistaProvider.dart';
+import 'package:hm_help/src/bloc/bloc_provider/contratistaProvider.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/provider/contratista_Provider.dart';
 import 'package:hm_help/src/widgets/contratistaDialog.dart';
 
@@ -28,9 +29,9 @@ class _registroState extends State<RegistroPage> {
     final bloc = ProviderContratista.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Registo de los Contratistas'),
         actions: <Widget>[
           Container(
             padding: EdgeInsets.all(5.0),
@@ -42,37 +43,54 @@ class _registroState extends State<RegistroPage> {
             ),
           ),
         ],
-      ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-        children: <Widget>[
-          _crearNombre(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearApellido(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearFecha(context),
-          Divider(color: Colors.blueAccent),
-          _crearCorreo(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearContrasena(bloc),
-          Divider(color: Colors.blueAccent),
-          _crearGenero(),
-          Divider(color: Colors.blueAccent),
-          _crearbuildRadios(context, bloc),
-          Divider(color: Colors.blueAccent),
-          _crearBoton(context),
-          Divider(color: Colors.blueAccent),
-          ElevatedButton(
-            child: Text('Terminos y condiciones'),
-            style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                textStyle:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed: () => _mostrarAlert(context),
+        title: Align(
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            'Registo de los Contratistas',
+            style: TextStyle(
+                fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          Divider(),
-          _crearGuardar(bloc),
-        ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _crearNombre(bloc),
+            Divider(color: Colors.blueAccent),
+            _crearApellido(bloc),
+            Divider(color: Colors.blueAccent),
+            _crearFecha(context, bloc),
+            Divider(color: Colors.blueAccent),
+            _crearCorreo(bloc),
+            Divider(color: Colors.blueAccent),
+            _crearContrasena(bloc),
+            Divider(color: Colors.blueAccent),
+            _crearGenero(),
+            Divider(color: Colors.blueAccent),
+            _crearbuildRadios(context, bloc),
+            Divider(color: Colors.blueAccent),
+            _crearBoton(context),
+            Divider(color: Colors.blueAccent),
+            Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: SizedBox(
+                height: 35,
+                width: 230,
+                child: ElevatedButton(
+                  child: Text('Terminos y condiciones'),
+                  style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      textStyle:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () => _mostrarAlert(context),
+                ),
+              ),
+            ),
+            Divider(),
+            _crearGuardar(bloc),
+            SizedBox(height: 10),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.first_page_rounded),
@@ -84,13 +102,20 @@ class _registroState extends State<RegistroPage> {
   }
 
   Widget _crearBoton(BuildContext context) {
-    return ElevatedButton.icon(
-      label: Text('Agregar CV'),
-      icon: Icon(Icons.picture_as_pdf_rounded),
-      style: ElevatedButton.styleFrom(
-          shape: StadiumBorder(),
-          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      onPressed: () => Navigator.pushNamed(context, 'hojaVida'),
+    return Padding(
+      padding: const EdgeInsets.all(1.0),
+      child: SizedBox(
+        height: 35,
+        width: 230,
+        child: ElevatedButton.icon(
+          label: Text('Agregar CV'),
+          icon: Icon(Icons.picture_as_pdf_rounded),
+          style: ElevatedButton.styleFrom(
+              shape: StadiumBorder(),
+              textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          onPressed: () => Navigator.pushNamed(context, 'hojaVida'),
+        ),
+      ),
     );
   }
 
@@ -98,29 +123,38 @@ class _registroState extends State<RegistroPage> {
     return StreamBuilder(
       stream: bloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return ElevatedButton.icon(
-            label: Text('Guardar'),
-            icon: Icon(Icons.save),
-            style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                textStyle:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed:
-                snapshot.hasData ? () => _contratista(bloc, context) : null);
+        return Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: SizedBox(
+            height: 35,
+            width: 230,
+            child: ElevatedButton.icon(
+                icon: Icon(Icons.save),
+                label: Text('Guardar'),
+                style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    textStyle:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                onPressed: snapshot.hasData
+                    ? () => _contratista(bloc, context)
+                    : null),
+          ),
+        );
       },
     );
   }
 
   _contratista(ContratistaBloc bloc, BuildContext context) async {
     final contratistaProvider = ContratistaProvider();
+    Usuario usuario = new Usuario(
+        nombre: bloc.nombre.toString(),
+        correo: bloc.correo.toString(),
+        apellido: bloc.apellido.toString(),
+        fechaNacimiento: bloc.fecha.toString(),
+        sexo: bloc.genero.toString());
 
     Map info = await contratistaProvider.nuevoContratista(
-        bloc.nombre.toString(),
-        bloc.correo.toString(),
-        bloc.contra.toString(),
-        bloc.fecha.toString(),
-        bloc.genero.toString(),
-        bloc.apellido.toString());
+        usuario, bloc.contra.toString());
 
     if (info['ok'] == true) {
       Navigator.pushNamed(context, 'principal');
@@ -130,7 +164,7 @@ class _registroState extends State<RegistroPage> {
           builder: (context) {
             return AlertLoginContratista(
               mensaje: 'No se pudo hacer el registro',
-              titulo: 'ERROR',
+              titulo: 'Datos incompletos',
             );
           });
     }
@@ -141,12 +175,13 @@ class _registroState extends State<RegistroPage> {
       stream: bloc.nombreStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
+          margin: EdgeInsets.all(4),
           child: TextField(
             autofocus: false,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
+                    borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Ingrese sus nombres',
                 labelText: 'Nombre',
                 suffixIcon: Icon(Icons.assignment_ind_rounded),
@@ -163,12 +198,13 @@ class _registroState extends State<RegistroPage> {
       stream: bloc.apellidoStram,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
+          margin: EdgeInsets.all(4),
           child: TextField(
             autofocus: false,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
+                    borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Ingrese sus apellidos',
                 labelText: 'Apellido',
                 suffixIcon: Icon(Icons.assignment_ind_rounded),
@@ -185,11 +221,12 @@ class _registroState extends State<RegistroPage> {
       stream: bloc.correoStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
+          margin: EdgeInsets.all(4),
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               hintText: 'Ingrese su correo',
               labelText: 'No utilizado antes',
               suffixIcon: Icon(Icons.contact_mail_rounded),
@@ -207,15 +244,15 @@ class _registroState extends State<RegistroPage> {
       stream: bloc.contrasenaStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
+          margin: EdgeInsets.all(4),
           child: TextField(
             obscureText: true,
             decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
+                    borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Ingrese su contraseña',
                 labelText: 'Incluya mayusculas y minusculas por su seguridad',
                 suffixIcon: Icon(Icons.lock_open_rounded),
-                counterText: snapshot.data,
                 icon: Icon(Icons.lock_rounded)),
             onChanged: bloc.changeContrasena,
           ),
@@ -224,24 +261,28 @@ class _registroState extends State<RegistroPage> {
     );
   }
 
-  _crearFecha(BuildContext context) {
-    return TextField(
-      enableInteractiveSelection: false,
-      controller: _relacionFecha,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          hintText: 'Fecha de nacimiento',
-          labelText: 'Fecha de nacimiento',
-          suffixIcon: Icon(Icons.cake_rounded),
-          icon: Icon(Icons.calendar_today_rounded)),
-      onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
-        _seleccionarFecha(context);
-      },
+  _crearFecha(BuildContext context, ContratistaBloc bloc) {
+    return Container(
+      margin: EdgeInsets.all(4),
+      child: TextField(
+        enableInteractiveSelection: false,
+        controller: _relacionFecha,
+        decoration: InputDecoration(
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+            hintText: 'Fecha de nacimiento',
+            labelText: 'Fecha de nacimiento',
+            suffixIcon: Icon(Icons.cake_rounded),
+            icon: Icon(Icons.calendar_today_rounded)),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          _seleccionarFecha(context, bloc);
+        },
+      ),
     );
   }
 
-  _seleccionarFecha(BuildContext context) async {
+  _seleccionarFecha(BuildContext context, ContratistaBloc bloc) async {
     DateTime? seleccionado = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
@@ -253,6 +294,7 @@ class _registroState extends State<RegistroPage> {
       setState(() {
         _fecha = seleccionado.toString();
         _relacionFecha.text = _fecha;
+        bloc.changeFecha(_fecha);
       });
     }
   }
@@ -285,8 +327,10 @@ class _registroState extends State<RegistroPage> {
                   genero,
                   style: TextStyle(),
                 ),
-                onChanged: (value) =>
-                    setState(() => this.generoSeleccionado = genero),
+                onChanged: (value) => setState(() {
+                  this.generoSeleccionado = genero;
+                  bloc.changeGenero(this.generoSeleccionado);
+                }),
               );
             },
           ).toList(),

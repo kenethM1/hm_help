@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,19 +50,22 @@ class ContratistaProvider {
     }
   }
 
-  Future<Map<String, dynamic>> nuevoContratista(String nombre, String correo,
-      String contra, String fecha, String genero, String apellido) async {
+  Future<Map<String, dynamic>> nuevoContratista(
+      Usuario user, String contrasena) async {
     String _url = 'mahamtr1-001-site1.ctempurl.com';
 
     final url = Uri.http(_url, '/api/Usuario/SignUpContratista');
     final authData = {
-      'nombre': nombre,
-      'email': correo,
-      'password': contra,
-      'fecha': fecha,
-      'genero': genero,
-      'apellido': apellido,
+      'nombre': user.nombre,
+      'email': user.correo,
+      'password': contrasena,
+      'fecha': DateTime.parse(user.fechaNacimiento!).toIso8601String(),
+      'sexo': user.sexo,
+      'apellido': user.apellido,
+      'image_URL': 'https://electronicssoftware.net/wp-content/uploads/user.png'
     };
+
+    print(authData);
 
     final peticion = await http.post(url,
         headers: {
@@ -71,6 +75,8 @@ class ContratistaProvider {
         body: json.encode(authData));
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
+
+    print(peticion.statusCode);
 
     if (respuestaJson.containsKey('rol')) {
       return {'ok': true, 'rol': respuestaJson['rol']};
