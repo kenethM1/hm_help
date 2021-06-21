@@ -5,6 +5,8 @@ import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioProvider {
+  get decodedResp => null;
+
   final String _url = 'mahamtr1-001-site1.ctempurl.com';
   Future<Map<String, dynamic>> login(String email, String password) async {
     const String _path = 'api/Usuario/Login';
@@ -54,18 +56,25 @@ class UsuarioProvider {
   }
 
   Future<Map<String, dynamic>> nuevoUsuario(
-      String nombre, String apellido, String email, String password) async {
+      String email,
+      String nombre,
+      String apellido,
+      String password,
+      String sexo,
+      String imagen_URL,
+      String fecha) async {
     String _path = '/api/Usuario/SignUpUsuario';
 
     final url = Uri.http(_url, _path);
     final authData = {
+      'email': email,
       'nombre': nombre,
       'apellido': apellido,
-      'email': email,
       'password': password,
-      'sexo': 'Masculino',
-      'image_URL': 'https://www.creditosolidario.hn/csfrontend/images/user.png',
-      'fecha': "2021-06-19T21:22:06.260Z"
+      'sexo': sexo,
+      'image_URL':
+          'https://electronicssoftware.net/wp-content/uploads/user.png',
+      'fecha': fecha,
     };
 
     final peticion = await http.post(url,
@@ -75,9 +84,9 @@ class UsuarioProvider {
         },
         body: json.encode(authData));
 
-    Map<String, dynamic> respuestaJson = json.decode(peticion.body);
+    print(authData);
 
-    print(peticion.statusCode);
+    Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
     final isOk = new PropuestasProvider().verifyConnection(peticion);
 

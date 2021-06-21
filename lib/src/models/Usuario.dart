@@ -20,15 +20,17 @@ class Usuario {
   String? sexo;
   String? image_URL;
   String? apellido;
+  String? fechaNacimiento;
 
-  Usuario({
-    this.id,
-    this.correo,
-    this.rol,
-    this.nombre,
-    this.apellido, 
-    this.image_URL
-  });
+  Usuario(
+      {this.id,
+      this.correo,
+      this.rol,
+      this.nombre,
+      this.apellido,
+      this.image_URL,
+      this.fechaNacimiento,
+      this.sexo});
 
   Usuario.fromJsonMap(Map<String, dynamic> json) {
     id = json['id'];

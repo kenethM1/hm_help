@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_files/logupBlock.dart';
-export 'package:hm_help/src/bloc/bloc_files/logupBlock.dart';
+
 
 class Provider2 extends InheritedWidget {
   final logupBloc = LogupBloc();
