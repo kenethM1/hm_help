@@ -72,7 +72,7 @@ class _PropuestaState extends State<PropuestaDialog> {
           SizedBox(
             height: 20,
           ),
-          (widget.propuestaList.status == 'Aceptada')
+          (widget.propuestaList.status != 'Aceptado')
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,

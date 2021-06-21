@@ -63,6 +63,9 @@ class UsuarioProvider {
       'apellido': apellido,
       'email': email,
       'password': password,
+      'sexo': 'Masculino',
+      'image_URL': 'https://www.creditosolidario.hn/csfrontend/images/user.png',
+      'fecha': "2021-06-19T21:22:06.260Z"
     };
 
     final peticion = await http.post(url,
@@ -73,6 +76,8 @@ class UsuarioProvider {
         body: json.encode(authData));
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
+
+    print(peticion.statusCode);
 
     final isOk = new PropuestasProvider().verifyConnection(peticion);
 

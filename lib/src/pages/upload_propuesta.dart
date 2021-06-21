@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Rubro.dart';
 import 'package:hm_help/src/models/Usuario.dart';
@@ -129,6 +128,7 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
       child: Drawer(
         elevation: 0,
         child: TextField(
+          autocorrect: false,
           keyboardType: TextInputType.number,
           style: TextStyle(fontSize: 15),
           maxLines: 5,
@@ -158,6 +158,7 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
       child: Drawer(
         elevation: 0,
         child: TextField(
+          autocorrect: false,
           maxLines: 10,
           minLines: 1,
           textAlign: TextAlign.center,
@@ -185,6 +186,7 @@ class _UploadPropuestaState extends State<UploadPropuesta> {
       child: Drawer(
         elevation: 0,
         child: TextField(
+          autocorrect: false,
           textAlign: TextAlign.center,
           onChanged: (value) => provider.changeTitulo(value),
           maxLength: 25,

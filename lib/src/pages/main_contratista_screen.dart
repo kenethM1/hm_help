@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
-import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
@@ -50,8 +49,11 @@ class MainContratistaScreen extends StatelessWidget {
                             propuestasProvider.gananciasPorMes();
                             return propuestasProvider.getPropuestas();
                           },
-                          child: buildListaOfertas(
-                              snapshot, propuestasProvider, estilos),
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            child: buildListaOfertas(
+                                snapshot, propuestasProvider, estilos),
+                          ),
                         );
                       }
                     }),
@@ -121,7 +123,8 @@ class TileOferta extends StatelessWidget {
         propuesta.rubro.toString(),
         style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
-      trailing: (propuesta.status == 'En Revisión')
+      trailing: (propuesta.status == "En revisión" &&
+              propuesta.status == "En revisión")
           ? Icon(
               Icons.lock_clock,
               color: Colors.white,

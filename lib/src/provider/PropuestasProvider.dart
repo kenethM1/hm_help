@@ -5,7 +5,6 @@ import 'package:hm_help/src/models/Rubro.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:http/http.dart' as http;
 import "package:collection/collection.dart";
-import 'package:json_annotation/json_annotation.dart';
 
 class PropuestasProvider {
   final token = PreferenciasUsuario().token;
@@ -124,7 +123,8 @@ class PropuestasProvider {
     return (response.statusCode == 200) ? true : false;
   }
 
-  Future uploadPropuesta(Propuesta propuesta, List<String> imagenes) async {
+  Future<bool> uploadPropuesta(
+      Propuesta propuesta, List<String> imagenes) async {
     final url = Uri.http(_url, '/api/Propuesta/AddPropuesta');
 
     Map<String, dynamic> imgtoJson(String url) => {
@@ -150,7 +150,7 @@ class PropuestasProvider {
       },
     );
 
-    print(response.statusCode);
+    return (response.statusCode == 200) ? true : false;
   }
 
   void removePropuesta(String propuestaID) async {

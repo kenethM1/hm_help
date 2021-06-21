@@ -2,9 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:hm_help/src/provider/PropuestasProvider.dart';
-import 'package:hm_help/src/provider/line_chart.dart';
-import 'package:provider/provider.dart';
 
 class ChartWidget extends StatelessWidget {
   const ChartWidget({
@@ -21,7 +18,7 @@ class ChartWidget extends StatelessWidget {
     return Container(
       height: 200,
       width: 370,
-      margin: EdgeInsets.only(bottom: 10, right: 0),
+      margin: EdgeInsets.only(bottom: 10, right: 5),
       child: Container(
         decoration: BoxDecoration(
             color: Colors.blue,

@@ -39,11 +39,13 @@ class LoginScreen extends StatelessWidget {
         height: 600,
         color: Colors.white,
         child: Column(children: [
+          SizedBox(
+            height: 60,
+          ),
           _usuario(bloc),
           _password(bloc),
-          PasswordRecoveryButton(),
           SizedBox(
-            height: 30,
+            height: 60,
           ),
           _loginButton(bloc),
           //ChangeNotifierProvider<GoogleSignInProvider>(
@@ -126,16 +128,6 @@ class SocialSignInButton extends StatelessWidget {
   }
 }
 
-class PasswordRecoveryButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () {},
-        style: TextButton.styleFrom(primary: Colors.grey.shade500),
-        child: Text('Olvidaste tu contraseña?'));
-  }
-}
-
 Widget _loginButton(LoginBloc bloc) {
   return StreamBuilder(
       stream: bloc.formValidStream,
@@ -195,7 +187,7 @@ Widget _password(LoginBloc bloc) {
     stream: bloc.passwordStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
-          height: 75,
+          height: 80,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: CampoPersonalizado(
             isEmail: false,
@@ -212,7 +204,7 @@ Widget _usuario(LoginBloc bloc) {
     stream: bloc.emailStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
-          height: 75,
+          height: 80,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: CampoPersonalizado(
               isEmail: true, bloc: bloc, isObscure: false, texto: 'Email'));
