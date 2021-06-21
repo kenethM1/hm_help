@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Material App',
-          initialRoute: 'registro',
+          initialRoute: 'login',
           routes: {
             'login': (_) => ProviderBloc(child: LoginScreen()),
             'nuevoUser': (_) => Provider2(child: LogupUsuario()),

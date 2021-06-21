@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/bloc/bloc_files/logupBlock.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
@@ -25,13 +26,16 @@ class LogupUsuario extends StatelessWidget {
     final bloc = Provider2.of(context);
 
     return Container(
-        height: 600,
+        height: 800,
         color: Colors.white,
         child: Column(children: [
+          _correo(bloc),
           _nombre(bloc),
           _apellido(bloc),
-          _correo(bloc),
           _passWord(bloc),
+          _sexo(bloc),  
+          _fecha(bloc),
+          
           SizedBox(
             height: 30,
           ),
@@ -72,14 +76,21 @@ _logup(LogupBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
 
   print(bloc.email);
-  print(bloc.password);
   print(bloc.nombre);
   print(bloc.apellido);
+  print(bloc.password);
+  print(bloc.sexo);
+  print(bloc.imagen);
+  print(bloc.fecha);
+  
   Map info = await usuarioProvider.nuevoUsuario(
+      bloc.email.toString(),
       bloc.nombre.toString(),
       bloc.apellido.toString(),
-      bloc.email.toString(),
-      bloc.password.toString());
+      bloc.password.toString(),
+      bloc.sexo.toString(),
+      bloc.imagen.toString(),
+      bloc.fecha.toString());
 
   if (info['ok'] == true) {
     Navigator.pushNamed(context, 'mainUser');
@@ -93,36 +104,6 @@ _logup(LogupBloc bloc, BuildContext context) async {
   );
   });
   }
-}
-
-Widget _passWord(LogupBloc bloc) {
-  return StreamBuilder(
-    stream: bloc.passwordStream,
-    builder: (BuildContext context, AsyncSnapshot snapshot) {
-      return Container(
-        height: 75,
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-        child: TextField(
-          scrollPadding: EdgeInsets.only(bottom: 15),
-          autocorrect: false,
-          obscureText: true,
-          textAlign: TextAlign.center,
-          onChanged: bloc.changePassword,
-          decoration: InputDecoration(
-              focusColor: Colors.blue,
-              fillColor: Colors.grey.shade300,
-              filled: true,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Contraseña',
-              hintStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold)),
-        ),
-      );
-    },
-  );
 }
 
 Widget _correo(LogupBloc bloc) {
@@ -207,6 +188,120 @@ Widget _apellido(LogupBloc bloc) {
     ),
     );
     },
+  );
+}
+
+Widget _passWord(LogupBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.passwordStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          obscureText: true,
+          textAlign: TextAlign.center,
+          onChanged: bloc.changePassword,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Contraseña',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+        ),
+      );
+    },
+  );
+}
+
+Widget _sexo(LogupBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.sexoStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+  return Container(
+    height: 75,
+    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+    child: TextField(
+    scrollPadding: EdgeInsets.only(bottom: 15),
+    autocorrect: false,
+    textAlign: TextAlign.center,
+    decoration: InputDecoration(
+    focusColor: Colors.blue,
+    fillColor: Colors.grey.shade300,
+    filled: true,
+    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+    hintText: 'Sexo',
+    hintStyle: TextStyle(
+    color: Colors.grey.shade400,
+    fontSize: 21,
+    fontWeight: FontWeight.bold)),
+    onChanged: bloc.changeSexo,
+  ),
+  );
+  },
+  );
+}
+
+Widget _imagen(LogupBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.imagenStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+  return Container(
+    height: 75,
+    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+    child: TextField(
+    scrollPadding: EdgeInsets.only(bottom: 15),
+    autocorrect: false,
+    textAlign: TextAlign.center,
+    decoration: InputDecoration(
+    focusColor: Colors.blue,
+    fillColor: Colors.grey.shade300,
+    filled: true,
+    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+    hintText: 'Imagen',
+    hintStyle: TextStyle(
+    color: Colors.grey.shade400,
+    fontSize: 21,
+    fontWeight: FontWeight.bold)),
+    onChanged: bloc.changeImagen,
+  ),
+  );
+  },
+  );
+}
+
+Widget _fecha(LogupBloc bloc) {
+  return StreamBuilder(
+    stream: bloc.fechaStream,
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+  return Container(
+    height: 75,
+    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+    child: TextField(
+    scrollPadding: EdgeInsets.only(bottom: 15),
+    autocorrect: false,
+    textAlign: TextAlign.center,
+    decoration: InputDecoration(
+    focusColor: Colors.blue,
+    fillColor: Colors.grey.shade300,
+    filled: true,
+    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+    hintText: 'Fecha',
+    hintStyle: TextStyle(
+    color: Colors.grey.shade400,
+    fontSize: 21,
+    fontWeight: FontWeight.bold)),
+    onChanged: bloc.changeFecha,
+  ),
+  );
+  },
   );
 }
 
