@@ -51,7 +51,7 @@ class MainUsuarioScreen extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.person),
-            onPressed: () => Navigator.pushNamed(context, 'userProfile'),
+            onPressed: () => Navigator.pushNamed(context, 'perfilUsuario'),
           ),
         ],
       ),

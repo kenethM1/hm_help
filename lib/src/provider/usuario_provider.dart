@@ -67,7 +67,7 @@ class UsuarioProvider {
       'apellido': apellido,
       'password': password,
       'sexo': sexo,
-      'image_URL': 'https://electronicssoftware.net/wp-content/uploads/user.png',
+      'image_URL': imagen_URL,
       'fecha': fecha,
     };
 
