@@ -18,14 +18,13 @@ class PerfilUsuario extends StatefulWidget {
 
   @override
   _UserProfileState createState() => _UserProfileState();
-  
 }
 
 class _UserProfileState extends State<PerfilUsuario> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    
+
     final preferenciaUsuario = PreferenciasUsuario();
     return Scaffold(
         body: SingleChildScrollView(
@@ -38,15 +37,15 @@ class _UserProfileState extends State<PerfilUsuario> {
           children: [
             ImageAndCameraButton(
                 size: size, preferenciaUsuario: preferenciaUsuario),
-               RaisedButton(
-                 child: Text("Foto de Perfil"),
-                 onPressed: getImage,
-               ),
+            ElevatedButton(
+              child: Text("Foto de Perfil"),
+              onPressed: getImage,
+            ),
             SizedBox(
               height: 10,
             ),
             Text(
-              preferenciaUsuario.nombreUsuario.toUpperCase(),
+              preferenciaUsuario.nombre.toUpperCase(),
               style: new Styles().estilo.copyWith(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -78,39 +77,45 @@ class _UserProfileState extends State<PerfilUsuario> {
     ));
   }
 
-void _fotoCamara(){
+  void _fotoCamara() {
     final ImagePicker picture = ImagePicker();
     picture.getImage(source: ImageSource.camera);
-}
-void _fotoGaleria(){
+  }
+
+  void _fotoGaleria() {
     final ImagePicker picture = ImagePicker();
     picture.getImage(source: ImageSource.gallery);
-}
-
-  Future<void> _opciondeFoto(){
-  return showDialog(context: context, 
-  builder: (BuildContext context){
-    return AlertDialog(
-      content: SingleChildScrollView(
-        child: ListBody(children: <Widget>[
-          GestureDetector(
-            child: Text("Tomar Foto"),
-            onTap: (){_fotoCamara();},
-          ),
-          Padding(padding: EdgeInsets.all(8.0),
-          ),
-          GestureDetector(
-            child: Text("Seleccionar Foto"),
-            onTap: (){},
-          )
-        ],),
-      ),
-    );
   }
-  );
-}
 
- Future<String> getImage() async {
+  Future<void> _opciondeFoto() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Tomar Foto"),
+                    onTap: () {
+                      _fotoCamara();
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text("Seleccionar Foto"),
+                    onTap: () {},
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<String> getImage() async {
     List<File> image;
     String? imgLink;
     final preferenciasUsuarios = new PreferenciasUsuario();
@@ -122,10 +127,10 @@ void _fotoGaleria(){
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
-      imgLink = await guardarImg(image, preferenciasUsuarios.nombreUsuario);
+      imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
       usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
     } catch (e) {}
-    return imgLink ?? preferenciasUsuarios.imageUsuario;
+    return imgLink ?? preferenciasUsuarios.imgURL;
   }
 
   Future<String> guardarImg(List<File> img, String userName) async {
@@ -138,9 +143,7 @@ void _fotoGaleria(){
 
     return linkDescarga;
   }
-
 }
-
 
 class ImageAndCameraButton extends StatefulWidget {
   const ImageAndCameraButton({
@@ -185,7 +188,6 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
                       width: 1.0,
                     ),
                   ),
-                  
                 )
               : CircularProgressIndicator();
         }),
@@ -219,8 +221,6 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
     ]);
   }
 
-  
-
   Future<String> getImage() async {
     List<File> image;
     String? imgLink;
@@ -233,10 +233,10 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
-      imgLink = await guardarImg(image, preferenciasUsuarios.nombreUsuario);
+      imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
       usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
     } catch (e) {}
-    return imgLink ?? preferenciasUsuarios.imageUsuario;
+    return imgLink ?? preferenciasUsuarios.imgURL;
   }
 
   Future<String> guardarImg(List<File> img, String userName) async {
@@ -250,4 +250,3 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
     return linkDescarga;
   }
 }
-

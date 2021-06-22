@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_provider/contratistaProvider.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
-import 'package:hm_help/src/bloc/contratistaProvider.dart';
 import 'package:hm_help/src/pages/PerfilUsuario.dart';
 import 'package:hm_help/src/pages/UserProfile.dart';
 import 'package:hm_help/src/pages/homePageUser.dart';
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
             'homeUser': (_) => HomePageUser(),
             'principal': (_) => MainContratistaScreen(),
             'userProfile': (_) => UserProfile(),
-            'perfilUsuario':(_) => PerfilUsuario(),
+            'perfilUsuario': (_) => PerfilUsuario(),
             'hojaVida': (_) => PdfContratistaPage(),
           }),
     );

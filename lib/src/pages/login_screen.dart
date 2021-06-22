@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
@@ -15,12 +14,11 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade300,
+      // backgroundColor: Colors.blue.shade300,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(),
               Logo(),
               _form(context),
             ],
@@ -38,27 +36,14 @@ class LoginScreen extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           SizedBox(
-            height: 60,
+            height: 30,
           ),
           _usuario(bloc),
           _password(bloc),
           SizedBox(
-            height: 60,
+            height: 30,
           ),
           _loginButton(bloc),
-          //ChangeNotifierProvider<GoogleSignInProvider>(
-          //    create: (context) => GoogleSignInProvider(),
-          //    child: StreamBuilder(
-          //      stream: FirebaseAuth.instance.authStateChanges(),
-          //      builder: (context, snapshot) {
-          //        if (snapshot.hasData) {
-          //          Navigator.pushNamed(context, 'principal');
-          //        } else {
-          //          return SocialSignInButton();
-          //        }
-          //        return Text('');
-          //      },
-          //    )),
           TextButton(
               onPressed: () => showDialog(
                   context: context,
@@ -181,9 +166,22 @@ class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 3,
+              color: Colors.grey,
+              spreadRadius: 2,
+              offset: Offset(0, 1))
+        ],
+        color: Colors.blue,
+      ),
+      height: 360,
       width: double.infinity,
-      color: Colors.blue.shade300,
       child: Image(
         height: 250,
         width: 250,
