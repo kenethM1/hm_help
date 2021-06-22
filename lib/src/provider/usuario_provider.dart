@@ -3,10 +3,9 @@ import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UsuarioProvider {
-  get decodedResp => null;
-
   final String _url = 'mahamtr1-001-site1.ctempurl.com';
   Future<Map<String, dynamic>> login(String email, String password) async {
     const String _path = 'api/Usuario/Login';
@@ -45,19 +44,25 @@ class UsuarioProvider {
     }
   }
 
-  void guardarPreferencias(PreferenciasUsuario _prefs,
-      Map<String, dynamic> respuestaJson, String email) {
-    _prefs.token = respuestaJson['token'];
-    _prefs.nombreUsuario = respuestaJson['nombre'];
-    _prefs.imageUsuario = respuestaJson['image_URL'];
+  Future<void> guardarPreferencias(PreferenciasUsuario _prefs,
+      Map<String, dynamic> respuestaJson, String email) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    String json = jsonEncode(respuestaJson);
+
+    pref.setString('userData', json);
+
     _prefs.correoUsuario = email;
-    _prefs.sexo = respuestaJson['sexo'];
-    _prefs.apellidoUsuario = respuestaJson['apellido'];
   }
 
   Future<Map<String, dynamic>> nuevoUsuario(
-      String email, String nombre, String apellido, String password,
-      String sexo, String imagen_URL, String fecha) async {
+      String email,
+      String nombre,
+      String apellido,
+      String password,
+      String sexo,
+      String imagen_URL,
+      String fecha) async {
     String _path = '/api/Usuario/SignUpUsuario';
 
     final url = Uri.http(_url, _path);
@@ -68,6 +73,7 @@ class UsuarioProvider {
       'password': password,
       'sexo': sexo,
       'image_URL': imagen_URL,
+
       'fecha': fecha,
     };
 
@@ -78,19 +84,15 @@ class UsuarioProvider {
         },
         body: json.encode(authData));
 
-        print(authData);
+    print(authData);
 
     Map<String, dynamic> respuestaJson = json.decode(peticion.body);
 
-    print(respuestaJson);
+    final isConnectionOk = new PropuestasProvider().verifyConnection(peticion);
 
-    final isOk = new PropuestasProvider().verifyConnection(peticion);
-
-    if (isOk) {
-      return {'ok': true, 'rol': respuestaJson['rol']};
-    } else {
-      return {'ok': false, 'rol': respuestaJson['error']};
-    }
+    return (isConnectionOk)
+        ? {'ok': true, 'rol': respuestaJson['rol']}
+        : {'ok': false, 'rol': respuestaJson['error']};
   }
 
   Future updateUsuario(Usuario usuario) async {
@@ -99,8 +101,8 @@ class UsuarioProvider {
     final token = preferencias.token;
     final uri = Uri.http(_url, '/api/Usuario/UpdateMyProfile');
     final body = {
-      "nombre": preferencias.nombreUsuario,
-      "apellido": preferencias.apellidoUsuario,
+      "nombre": preferencias.nombre,
+      "apellido": preferencias.apellido,
       "imagenURL": usuario.image_URL,
       "sexo": preferencias.sexo
     };
@@ -110,10 +112,6 @@ class UsuarioProvider {
       "Accept": "application/json",
       "Authorization": "Bearer $token"
     });
-
-    print(usuario.image_URL);
-
-    print(response.statusCode);
 
     bool isOkay = new PropuestasProvider().verifyConnection(response);
   }

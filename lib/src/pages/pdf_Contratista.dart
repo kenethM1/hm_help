@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hm_help/src/pages/pdf_Widget.dart';
+import 'package:hm_help/src/widgets/pdf_Widget.dart';
 import 'package:path/path.dart';
 import '../provider/firebase_Api.dart';
 
@@ -50,6 +50,17 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
       appBar: AppBar(
         title: Text('Hoja de vida'),
         centerTitle: true,
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.all(5.0),
+            margin: EdgeInsets.only(left: 8.0),
+            child: Image(
+              height: 90,
+              width: 90,
+              image: AssetImage('assets/logo.png'),
+            ),
+          ),
+        ],
       ),
       body: Container(
           padding: EdgeInsets.all(25),
@@ -58,10 +69,17 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ButtonWidget(
-                  text: 'Seleccionar Archivo PDF',
-                  icon: Icons.picture_as_pdf_rounded,
-                  onClicked: selectFile,
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: SizedBox(
+                    height: 35,
+                    width: 350,
+                    child: ButtonWidget(
+                      text: 'Seleccionar Archivo PDF',
+                      icon: Icons.picture_as_pdf_rounded,
+                      onClicked: selectFile,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -72,13 +90,31 @@ class _PdfContratistaPageState extends State<PdfContratistaPage> {
                       color: Colors.black),
                 ),
                 SizedBox(height: 18),
-                ButtonWidget(
-                  text: 'Cargar Documento',
-                  icon: Icons.cloud_upload_outlined,
-                  onClicked: uploadFile,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 35,
+                    width: 350,
+                    child: ButtonWidget(
+                      text: 'Cargar Documento',
+                      icon: Icons.cloud_upload_outlined,
+                      onClicked: uploadFile,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 50),
                 task != null ? buildUploadStatus(task!) : Container(),
+                SizedBox(height: 1),
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      "Regresar al registro",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 15,
+                      ),
+                    ))
               ],
             ),
           )),

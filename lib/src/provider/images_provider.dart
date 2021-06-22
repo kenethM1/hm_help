@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
 import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
@@ -9,7 +10,7 @@ import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/ProviderValidator/ValidatorsItem.dart';
 
 class ImagesProvider extends ChangeNotifier {
-  String _imageProfile = new PreferenciasUsuario().imageUsuario;
+  String _imageProfile = new PreferenciasUsuario().imgURL;
   List<File> _list = [];
   List<String> _url = [];
   TaskSnapshot? taskSnapshot;
@@ -68,36 +69,36 @@ class ImagesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void guardar(
-    Usuario contratista,
-  ) async {
+  void guardar(Usuario contratista) async {
     PropuestasProvider provider = PropuestasProvider();
     final _storage = FirebaseStorage.instance;
     await FirebaseAuth.instance.signInAnonymously();
 
     String? monto = _monto!.value;
 
-    int i = 1;
+    int iterador = 0;
     _list.forEach((imagen) async {
-      print('Subiendo imagen $i');
-      final task = await _storage.ref('files/Propuesta_$i').putFile(imagen);
-      i++;
+      print('Subiendo imagen $iterador');
+      final task = await _storage
+          .ref('files/Propuesta_$iterador-${_titulo!.value}')
+          .putFile(imagen);
+      iterador++;
+
       linksDescarga.add(await task.ref.getDownloadURL());
 
-      final propuesta = new Propuesta(
-        contratistaID: contratista.id,
-        rubroID: rubro,
-        nombre: _titulo!.value,
-        descripcion: _descripcion!.value,
-        monto: double.parse(monto!),
-      );
-
-      await provider.uploadPropuesta(propuesta, _url);
-
       listaImagenes = [];
-
-      notifyListeners();
     });
+
+    final propuesta = new Propuesta(
+      contratistaID: contratista.id,
+      rubroID: rubro,
+      nombre: _titulo!.value,
+      descripcion: _descripcion!.value,
+      monto: double.parse(monto!),
+    );
+
+    bool isOk = await provider.uploadPropuesta(propuesta, _url);
+    notifyListeners();
   }
 
   void clearList() {

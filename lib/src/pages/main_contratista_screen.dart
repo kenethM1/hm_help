@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Propuesta.dart';
-import 'package:hm_help/src/pages/upload_propuesta.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
@@ -26,40 +25,45 @@ class MainContratistaScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ContenedorGrafico(
-              estilo: estilos.estilo,
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.only(top: 10),
-                child: StreamBuilder<List<Propuesta>>(
-                    stream: propuestasProvider.propuestasStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Image.asset('assets/Download.png'));
-                      } else {
-                        return RefreshIndicator(
-                          onRefresh: () {
-                            propuestasProvider.montoTotal();
-                            propuestasProvider.gananciasPorMes();
-                            return propuestasProvider.getPropuestas();
-                          },
-                          child: buildListaOfertas(
-                              snapshot, propuestasProvider, estilos),
-                        );
-                      }
-                    }),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ContenedorGrafico(
+                estilo: estilos.estilo,
               ),
-            )
-          ],
-        ),
+              Expanded(
+                child: buildListViewPropuestas(propuestasProvider, estilos),
+              )
+            ]),
       ),
+    );
+  }
+
+  Container buildListViewPropuestas(
+      PropuestasProvider propuestasProvider, Styles estilos) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+      padding: EdgeInsets.only(top: 10),
+      child: StreamBuilder<List<Propuesta>>(
+          stream: propuestasProvider.propuestasStream,
+          builder: (context, snapshot) {
+            if (snapshot.data!.isEmpty) {
+              return Center(child: Image.asset('assets/Download.png'));
+            } else {
+              return RefreshIndicator(
+                onRefresh: () {
+                  propuestasProvider.montoTotal();
+                  propuestasProvider.gananciasPorMes();
+                  return propuestasProvider.getPropuestas();
+                },
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  child:
+                      buildListaOfertas(snapshot, propuestasProvider, estilos),
+                ),
+              );
+            }
+          }),
     );
   }
 
@@ -121,7 +125,8 @@ class TileOferta extends StatelessWidget {
         propuesta.rubro.toString(),
         style: estilo.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
       ),
-      trailing: (propuesta.status == 'En Revisión')
+      trailing: (propuesta.status == "En revisión" &&
+              propuesta.status == "En revisión")
           ? Icon(
               Icons.lock_clock,
               color: Colors.white,
@@ -187,7 +192,7 @@ class ContenedorGrafico extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
+              'Resumen Anual de ${preferenciasUsuario.nombre}',
               style: estilo,
             ),
             InkWell(

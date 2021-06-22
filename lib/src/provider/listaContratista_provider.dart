@@ -82,9 +82,6 @@ class ContratistasProvider {
   }
 
   bool verifyConnection(http.Response peticion) {
-    if (peticion.statusCode != 200) {
-      return false;
-    } else
-      return true;
+    return (peticion.statusCode != 200) ? false : true;
   }
 }

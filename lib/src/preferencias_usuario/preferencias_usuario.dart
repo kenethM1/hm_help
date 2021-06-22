@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenciasUsuario {
@@ -16,28 +18,34 @@ class PreferenciasUsuario {
     this._prefs = await SharedPreferences.getInstance();
   }
 
+  String get imgURL {
+    Map user = decodeUserData();
+
+    return user['image_URL'];
+  }
+
   String get token {
-    return _prefs!.getString('token') ?? '';
+    Map user = decodeUserData();
+
+    return user['token'];
   }
 
-  set token(String value) {
-    _prefs!.setString('token', value);
+  String get nombre {
+    Map user = decodeUserData();
+
+    return user['nombre'];
   }
 
-  String get nombreUsuario {
-    return _prefs!.getString('nombre') ?? '';
+  String get apellido {
+    Map user = decodeUserData();
+
+    return user['apellido'];
   }
 
-  set nombreUsuario(String value) {
-    _prefs!.setString('nombre', value);
-  }
+  String get sexo {
+    Map user = decodeUserData();
 
-  String get apellidoUsuario {
-    return _prefs!.getString('apellido') ?? '';
-  }
-
-  set apellidoUsuario(String value) {
-    _prefs!.setString('apellido', value);
+    return user['sexo'];
   }
 
   int? get gananciaMaxima {
@@ -48,12 +56,8 @@ class PreferenciasUsuario {
     _prefs!.setInt('gananciaMaxima', value!);
   }
 
-  String get imageUsuario {
-    return _prefs!.getString('image') ?? '';
-  }
-
-  set imageUsuario(String value) {
-    _prefs!.setString('image', value);
+  set usuario(String json) {
+    _prefs!.setString('userData', json);
   }
 
   String get cvUsuario {
@@ -72,11 +76,11 @@ class PreferenciasUsuario {
     _prefs!.setString('correo', correo);
   }
 
-  String get sexo {
-    return _prefs!.getString('sexo') ?? '';
-  }
+  Map decodeUserData() {
+    String? data = _prefs!.getString('userData');
 
-  set sexo(String value) {
-    _prefs!.setString('sexo', value);
+    Map user = jsonDecode(data!);
+
+    return user;
   }
 }
