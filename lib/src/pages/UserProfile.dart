@@ -38,7 +38,7 @@ class _UserProfileState extends State<UserProfile> {
               height: 10,
             ),
             Text(
-              preferenciaUsuario.nombreUsuario.toUpperCase(),
+              preferenciaUsuario.nombre.toUpperCase(),
               style: new Styles().estilo.copyWith(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -159,10 +159,10 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
-      imgLink = await guardarImg(image, preferenciasUsuarios.nombreUsuario);
+      imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
       usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
     } catch (e) {}
-    return imgLink ?? preferenciasUsuarios.imageUsuario;
+    return imgLink ?? preferenciasUsuarios.imgURL;
   }
 
   Future<String> guardarImg(List<File> img, String userName) async {

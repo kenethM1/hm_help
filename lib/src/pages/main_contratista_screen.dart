@@ -31,36 +31,39 @@ class MainContratistaScreen extends StatelessWidget {
                 estilo: estilos.estilo,
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20)),
-                  padding: EdgeInsets.only(top: 10),
-                  child: StreamBuilder<List<Propuesta>>(
-                      stream: propuestasProvider.propuestasStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.data!.isEmpty) {
-                          return Center(
-                              child: Image.asset('assets/Download.png'));
-                        } else {
-                          return RefreshIndicator(
-                            onRefresh: () {
-                              propuestasProvider.montoTotal();
-                              propuestasProvider.gananciasPorMes();
-                              return propuestasProvider.getPropuestas();
-                            },
-                            child: Scrollbar(
-                              isAlwaysShown: true,
-                              child: buildListaOfertas(
-                                  snapshot, propuestasProvider, estilos),
-                            ),
-                          );
-                        }
-                      }),
-                ),
+                child: buildListViewPropuestas(propuestasProvider, estilos),
               )
             ]),
       ),
+    );
+  }
+
+  Container buildListViewPropuestas(
+      PropuestasProvider propuestasProvider, Styles estilos) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+      padding: EdgeInsets.only(top: 10),
+      child: StreamBuilder<List<Propuesta>>(
+          stream: propuestasProvider.propuestasStream,
+          builder: (context, snapshot) {
+            if (snapshot.data!.isEmpty) {
+              return Center(child: Image.asset('assets/Download.png'));
+            } else {
+              return RefreshIndicator(
+                onRefresh: () {
+                  propuestasProvider.montoTotal();
+                  propuestasProvider.gananciasPorMes();
+                  return propuestasProvider.getPropuestas();
+                },
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  child:
+                      buildListaOfertas(snapshot, propuestasProvider, estilos),
+                ),
+              );
+            }
+          }),
     );
   }
 
@@ -189,7 +192,7 @@ class ContenedorGrafico extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'Resumen Anual de ${preferenciasUsuario.nombreUsuario}',
+              'Resumen Anual de ${preferenciasUsuario.nombre}',
               style: estilo,
             ),
             InkWell(

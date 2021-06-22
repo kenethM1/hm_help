@@ -10,7 +10,7 @@ import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/ProviderValidator/ValidatorsItem.dart';
 
 class ImagesProvider extends ChangeNotifier {
-  String _imageProfile = new PreferenciasUsuario().imageUsuario;
+  String _imageProfile = new PreferenciasUsuario().imgURL;
   List<File> _list = [];
   List<String> _url = [];
   TaskSnapshot? taskSnapshot;

@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
-import 'package:hm_help/src/provider/GoogleSignIn_Provider.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
@@ -74,22 +72,6 @@ class LoginScreen extends StatelessWidget {
               ))
         ]));
   }
-
-  ChangeNotifierProvider<GoogleSignInProvider> googlesigninButton() {
-    return ChangeNotifierProvider<GoogleSignInProvider>(
-        create: (context) => GoogleSignInProvider(),
-        child: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Navigator.pushNamed(context, 'principal');
-            } else {
-              return SocialSignInButton();
-            }
-            return Text('');
-          },
-        ));
-  }
 }
 
 class ForgetPassButton extends StatelessWidget {
@@ -108,23 +90,6 @@ class ForgetPassButton extends StatelessWidget {
           '¿No tienes cuenta? Registrate!',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ));
-  }
-}
-
-class SocialSignInButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-        margin: EdgeInsets.only(left: 30),
-        child: SignInButton(Buttons.Google, elevation: 0, onPressed: () {
-          final provider =
-              Provider.of<GoogleSignInProvider>(context, listen: false);
-          provider.login();
-        }),
-      ),
-    );
   }
 }
 

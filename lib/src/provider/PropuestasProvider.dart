@@ -32,11 +32,16 @@ class PropuestasProvider {
 
   static String _url = 'mahamtr1-001-site1.ctempurl.com';
   static String _path = 'api/Propuesta/GetMyPropuestas';
+  Map<String, String> header = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer ${PreferenciasUsuario().token}",
+  };
 
   final url = Uri.http(_url, _path);
 
   Future<List<Propuesta>> getPropuestas() async {
-    final propuestas = await _procesarRespuesta();
+    final propuestas = await procesarRespuesta();
 
     final existing = Set<Propuesta>();
     final unique =
@@ -48,28 +53,17 @@ class PropuestasProvider {
   }
 
   Future<List<Propuesta>> recargar(String idPropuesta) async {
-    final propuestas = await _procesarRespuesta();
+    final propuestas = await procesarRespuesta();
 
-    final existing = Set<Propuesta>();
+    propuestas.removeWhere((element) => element.id == idPropuesta);
 
-    final propuestasNoRepetidas =
-        propuestas.where((propuestas) => existing.add(propuestas)).toList();
+    propuestasSink(propuestas);
 
-    propuestasNoRepetidas.removeWhere((element) => element.id == idPropuesta);
-
-    propuestasSink(propuestasNoRepetidas);
-    propuestas.forEach((element) {
-      print(element.id);
-    });
     return propuestas;
   }
 
-  Future<List<Propuesta>> _procesarRespuesta() async {
-    final peticion = await http.post(url, headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": "Bearer $token",
-    });
+  Future<List<Propuesta>> procesarRespuesta() async {
+    final peticion = await http.post(url, headers: header);
 
     bool isOk = verifyConnection(peticion);
 
@@ -112,13 +106,8 @@ class PropuestasProvider {
       'imagenes': propuesta.imagenes
     };
 
-    final response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: json.encode(jsonbody));
+    final response =
+        await http.post(url, headers: header, body: json.encode(jsonbody));
 
     return (response.statusCode == 200) ? true : false;
   }
@@ -140,15 +129,8 @@ class PropuestasProvider {
           "imagenes": List<dynamic>.from(imagenes.map((x) => imgtoJson(x))),
         };
 
-    final response = await http.post(
-      url,
-      body: json.encode(toJson()),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
+    final response =
+        await http.post(url, body: json.encode(toJson()), headers: header);
 
     return (response.statusCode == 200) ? true : false;
   }
@@ -160,27 +142,19 @@ class PropuestasProvider {
     final url = Uri.http(_url, _path);
     final jsonbody = {'id': propuestaID};
 
-    final peticion = await http.delete(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode(jsonbody));
+    final peticion =
+        await http.delete(url, headers: header, body: json.encode(jsonbody));
 
     bool isOk = verifyConnection(peticion);
     print(peticion.body);
   }
 
   bool verifyConnection(http.Response peticion) {
-    if (peticion.statusCode != 200) {
-      return false;
-    } else
-      return true;
+    return (peticion.statusCode != 200) ? false : true;
   }
 
   Future<List<MesAgrupado>> gananciasPorMes() async {
-    final propuestas = await _procesarRespuesta();
+    final propuestas = await procesarRespuesta();
     final prefs = PreferenciasUsuario();
 
     final propuestasLimpias = erasePropuestas(propuestas);
@@ -214,11 +188,7 @@ class PropuestasProvider {
       path,
     );
 
-    final request = await http.post(url, headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": "Bearer $token",
-    });
+    final request = await http.post(url, headers: header);
     print(request.statusCode);
     final isOkay = verifyConnection(request);
 
@@ -234,10 +204,7 @@ class PropuestasProvider {
   }
 
   List<Propuesta> erasePropuestas(List<Propuesta> propuestas) {
-    propuestas.removeWhere((element) =>
-        element.status == 'En revisión' ||
-        element.status == 'En proceso' ||
-        element.status == 'Rechazado');
+    propuestas.removeWhere((element) => element.status != 'Aceptado');
     return propuestas;
   }
 }
