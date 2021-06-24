@@ -109,10 +109,11 @@ Widget _loginButton(LoginBloc bloc) {
 
 _login(LoginBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
-  final provider = Provider.of<ImagesProvider>(context, listen: false);
 
   Map respuesta = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());
+
+  final provider = Provider.of<ImagesProvider>(context, listen: false);
 
   if (respuesta['ok'] == true && respuesta['rol'] == 'Contratista') {
     provider.changeProfileImg = respuesta['imageURL'];

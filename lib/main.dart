@@ -33,7 +33,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => new UiProvider()),
-        ChangeNotifierProvider(create: (_) => new ImagesProvider())
+        ChangeNotifierProvider<ImagesProvider>(
+            create: (_) => new ImagesProvider())
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
