@@ -77,9 +77,9 @@ class PreferenciasUsuario {
   }
 
   Map decodeUserData() {
-    String? data = _prefs!.getString('userData');
+    String? data = _prefs!.getString('userData') ?? '';
 
-    Map user = jsonDecode(data!);
+    Map user = jsonDecode(data);
 
     return user;
   }

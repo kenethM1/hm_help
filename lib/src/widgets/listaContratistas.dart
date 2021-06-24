@@ -37,7 +37,7 @@ class ListaContratista extends StatelessWidget {
                             child: FadeInImage(
                               placeholder:
                                   AssetImage('./assets/jar-loading.gif'),
-                              image: NetworkImage(contratista.image_URL!),
+                              image: NetworkImage(contratista.imageURL!),
                             ),
                           ),
                         ),
@@ -101,7 +101,7 @@ class ListaContratista extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image(
-                  image: NetworkImage(contratista.image_URL!),
+                  image: NetworkImage(contratista.imageURL!),
                   fit: BoxFit.fill,
                 ),
               ),

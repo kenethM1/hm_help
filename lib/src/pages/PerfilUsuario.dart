@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
@@ -128,7 +127,7 @@ class _UserProfileState extends State<PerfilUsuario> {
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
       imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
-      usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
+      usuarioProvider.updateUsuario(Usuario(imageURL: imgLink));
     } catch (e) {}
     return imgLink ?? preferenciasUsuarios.imgURL;
   }
@@ -234,7 +233,7 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
       ))!;
       image = result.paths.map((path) => File(path!)).toList();
       imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
-      usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
+      usuarioProvider.updateUsuario(Usuario(imageURL: imgLink));
     } catch (e) {}
     return imgLink ?? preferenciasUsuarios.imgURL;
   }

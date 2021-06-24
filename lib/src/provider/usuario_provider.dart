@@ -73,7 +73,6 @@ class UsuarioProvider {
       'password': password,
       'sexo': sexo,
       'image_URL': imagen_URL,
-
       'fecha': fecha,
     };
 
@@ -103,7 +102,7 @@ class UsuarioProvider {
     final body = {
       "nombre": preferencias.nombre,
       "apellido": preferencias.apellido,
-      "imagenURL": usuario.image_URL,
+      "imagenURL": usuario.imageURL,
       "sexo": preferencias.sexo
     };
 

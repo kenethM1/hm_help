@@ -1,13 +1,6 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
-import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/styles/Styles.dart';
 import 'package:provider/provider.dart';
 
@@ -128,7 +121,7 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
             final provider =
                 Provider.of<ImagesProvider>(context, listen: false);
 
-            provider.changeProfileImg = await getImage();
+            provider.changeProfileImg = await provider.getImage();
           },
           child: Container(
               decoration: BoxDecoration(
@@ -145,34 +138,5 @@ class _ImageAndCameraButtonState extends State<ImageAndCameraButton> {
         ),
       )
     ]);
-  }
-
-  Future<String> getImage() async {
-    List<File> image;
-    String? imgLink;
-    final preferenciasUsuarios = new PreferenciasUsuario();
-    final usuarioProvider = UsuarioProvider();
-    try {
-      FilePickerResult result = (await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg'],
-      ))!;
-      image = result.paths.map((path) => File(path!)).toList();
-      imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
-      usuarioProvider.updateUsuario(Usuario(image_URL: imgLink));
-    } catch (e) {}
-    return imgLink ?? preferenciasUsuarios.imgURL;
-  }
-
-  Future<String> guardarImg(List<File> img, String userName) async {
-    final _storage = FirebaseStorage.instance;
-    await FirebaseAuth.instance.signInAnonymously();
-
-    final task =
-        await _storage.ref('files/ProfilePic_$userName').putFile(img[0]);
-    final linkDescarga = await task.ref.getDownloadURL();
-
-    return linkDescarga;
   }
 }

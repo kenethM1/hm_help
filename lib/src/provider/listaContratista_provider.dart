@@ -74,7 +74,7 @@ class ContratistasProvider {
 
     for (var usuario in usuarios) {
       if (usuario.id == idUsuario!) {
-        return usuario.image_URL!;
+        return usuario.imageURL!;
       }
     }
 

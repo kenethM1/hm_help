@@ -10,16 +10,16 @@ class LogupUsuario extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade300,
       body: SafeArea(
-      child: SingleChildScrollView(
-      child: Column(
-      children: [
-        Logo(),
-        _form(context),
-  ],
-  ),
-  ),
-  ),
-  );
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Logo(),
+              _form(context),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _form(BuildContext context) {
@@ -33,56 +33,44 @@ class LogupUsuario extends StatelessWidget {
           _nombre(bloc),
           _apellido(bloc),
           _passWord(bloc),
-          _sexo(bloc),  
+          _sexo(bloc),
           _fecha(bloc),
-          
           SizedBox(
             height: 30,
           ),
           logUpButton(bloc),
           TextButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
-            child: Text('¿Ya tienes cuenta? Inicia Sesion!',
-            style:TextStyle(
-              color: Colors.black, 
-              fontWeight: FontWeight.bold),
-  )
-  )
-  ])
-  );
+              onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+              child: Text(
+                '¿Ya tienes cuenta? Inicia Sesion!',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ))
+        ]));
   }
 }
 
 Widget logUpButton(LogupBloc bloc) {
   return StreamBuilder(
-    stream: bloc.formValidStream,
-    builder: (context, snapshot) {
-  return Container(
-    width: 230,
-    height: 50,
-    child: ElevatedButton(
-    child: Text('Registrate'),
-    style: ElevatedButton.styleFrom(
-    shape: StadiumBorder(),
-    textStyle:TextStyle(
-      fontSize: 24, 
-      fontWeight: FontWeight.bold)),
-      onPressed: snapshot.hasData ? () => _logup(bloc, context) : null),
-  );
-  });
+      stream: bloc.formValidStream,
+      builder: (context, snapshot) {
+        return Container(
+          width: 230,
+          height: 50,
+          child: ElevatedButton(
+              child: Text('Registrate'),
+              style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  textStyle:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              onPressed: snapshot.hasData ? () => _logup(bloc, context) : null),
+        );
+      });
 }
 
 _logup(LogupBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
 
-  print(bloc.email);
-  print(bloc.nombre);
-  print(bloc.apellido);
-  print(bloc.password);
-  print(bloc.sexo);
-  print(bloc.imagen);
-  print(bloc.fecha);
-  
   Map info = await usuarioProvider.nuevoUsuario(
       bloc.email.toString(),
       bloc.nombre.toString(),
@@ -96,13 +84,13 @@ _logup(LogupBloc bloc, BuildContext context) async {
     Navigator.pushNamed(context, 'mainUser');
   } else {
     showDialog(
-      context: context,
-      builder: (context) {
-      return AlertLogin(
-      titulo: 'Posible error',
-      mensaje: 'Verifique sus datos',
-  );
-  });
+        context: context,
+        builder: (context) {
+          return AlertLogin(
+            titulo: 'Posible error',
+            mensaje: 'Verifique sus datos',
+          );
+        });
   }
 }
 
@@ -114,23 +102,24 @@ Widget _correo(LogupBloc bloc) {
         height: 75,
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         child: TextField(
-        scrollPadding: EdgeInsets.only(bottom: 15),
-        autocorrect: false,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-        focusColor: Colors.blue,
-        fillColor: Colors.grey.shade300,
-        filled: true,
-        border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        hintText: 'Email',
-        hintStyle: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 21,
-        fontWeight: FontWeight.bold)),
-        onChanged: bloc.changeEmail,
-  ),
-  );
-  },
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Email',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeEmail,
+        ),
+      );
+    },
   );
 }
 
@@ -138,27 +127,28 @@ Widget _nombre(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.nombreStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  return Container(
-    height: 75,
-    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-    child: TextField(
-    scrollPadding: EdgeInsets.only(bottom: 15),
-    autocorrect: false,
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-    focusColor: Colors.blue,
-    fillColor: Colors.grey.shade300,
-    filled: true,
-    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-    hintText: 'Nombre',
-    hintStyle: TextStyle(
-    color: Colors.grey.shade400,
-    fontSize: 21,
-    fontWeight: FontWeight.bold)),
-    onChanged: bloc.changeNombre,
-  ),
-  );
-  },
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Nombre',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeNombre,
+        ),
+      );
+    },
   );
 }
 
@@ -166,27 +156,27 @@ Widget _apellido(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.apellidoStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  return Container(
-    height: 75,
-    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-    child: TextField(
-    scrollPadding: EdgeInsets.only(bottom: 15),
-    autocorrect: false,
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-    focusColor: Colors.blue,
-    fillColor: Colors.grey.shade300,
-    filled: true,
-    border:
-    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-    hintText: 'Apellido',
-    hintStyle: TextStyle(
-    color: Colors.grey.shade400,
-    fontSize: 21,
-    fontWeight: FontWeight.bold)),
-      onChanged: bloc.changeApellido,
-    ),
-    );
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Apellido',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeApellido,
+        ),
+      );
     },
   );
 }
@@ -225,27 +215,28 @@ Widget _sexo(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.sexoStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  return Container(
-    height: 75,
-    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-    child: TextField(
-    scrollPadding: EdgeInsets.only(bottom: 15),
-    autocorrect: false,
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-    focusColor: Colors.blue,
-    fillColor: Colors.grey.shade300,
-    filled: true,
-    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-    hintText: 'Sexo',
-    hintStyle: TextStyle(
-    color: Colors.grey.shade400,
-    fontSize: 21,
-    fontWeight: FontWeight.bold)),
-    onChanged: bloc.changeSexo,
-  ),
-  );
-  },
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Sexo',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeSexo,
+        ),
+      );
+    },
   );
 }
 
@@ -253,27 +244,28 @@ Widget _imagen(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.imagenStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  return Container(
-    height: 75,
-    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-    child: TextField(
-    scrollPadding: EdgeInsets.only(bottom: 15),
-    autocorrect: false,
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-    focusColor: Colors.blue,
-    fillColor: Colors.grey.shade300,
-    filled: true,
-    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-    hintText: 'Imagen',
-    hintStyle: TextStyle(
-    color: Colors.grey.shade400,
-    fontSize: 21,
-    fontWeight: FontWeight.bold)),
-    onChanged: bloc.changeImagen,
-  ),
-  );
-  },
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Imagen',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeImagen,
+        ),
+      );
+    },
   );
 }
 
@@ -281,27 +273,28 @@ Widget _fecha(LogupBloc bloc) {
   return StreamBuilder(
     stream: bloc.fechaStream,
     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  return Container(
-    height: 75,
-    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-    child: TextField(
-    scrollPadding: EdgeInsets.only(bottom: 15),
-    autocorrect: false,
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-    focusColor: Colors.blue,
-    fillColor: Colors.grey.shade300,
-    filled: true,
-    border:OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-    hintText: 'Fecha',
-    hintStyle: TextStyle(
-    color: Colors.grey.shade400,
-    fontSize: 21,
-    fontWeight: FontWeight.bold)),
-    onChanged: bloc.changeFecha,
-  ),
-  );
-  },
+      return Container(
+        height: 75,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        child: TextField(
+          scrollPadding: EdgeInsets.only(bottom: 15),
+          autocorrect: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusColor: Colors.blue,
+              fillColor: Colors.grey.shade300,
+              filled: true,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              hintText: 'Fecha',
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold)),
+          onChanged: bloc.changeFecha,
+        ),
+      );
+    },
   );
 }
 
@@ -316,7 +309,6 @@ class Logo extends StatelessWidget {
         height: 250,
         width: 250,
         image: AssetImage('assets/logo.png'),
-       
       ),
     );
   }

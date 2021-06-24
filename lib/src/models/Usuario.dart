@@ -18,7 +18,7 @@ class Usuario {
   String? rol;
   String? nombre;
   String? sexo;
-  String? image_URL;
+  String? imageURL;
   String? apellido;
   String? fechaNacimiento;
 
@@ -28,7 +28,7 @@ class Usuario {
       this.rol,
       this.nombre,
       this.apellido,
-      this.image_URL,
+      this.imageURL,
       this.fechaNacimiento,
       this.sexo});
 
@@ -38,7 +38,7 @@ class Usuario {
     rol = json['rol'];
     nombre = json['nombre'];
     sexo = json['sexo'];
-    image_URL = json['image_URL'];
+    imageURL = json['image_URL'];
     apellido = json['apellido'];
   }
 }

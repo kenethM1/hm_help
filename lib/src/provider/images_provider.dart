@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/PropuestasProvider.dart';
 import 'package:hm_help/src/provider/ProviderValidator/ValidatorsItem.dart';
+import 'package:hm_help/src/provider/usuario_provider.dart';
 
 class ImagesProvider extends ChangeNotifier {
   String _imageProfile = new PreferenciasUsuario().imgURL;
@@ -99,6 +101,36 @@ class ImagesProvider extends ChangeNotifier {
 
     bool isOk = await provider.uploadPropuesta(propuesta, _url);
     notifyListeners();
+  }
+
+  Future<String> getImage() async {
+    List<File> image;
+    String? imgLink;
+    final preferenciasUsuarios = new PreferenciasUsuario();
+    final usuarioProvider = UsuarioProvider();
+    try {
+      FilePickerResult result = (await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg'],
+      ))!;
+      image = result.paths.map((path) => File(path!)).toList();
+      imgLink = await guardarImg(image, preferenciasUsuarios.nombre);
+      usuarioProvider.updateUsuario(Usuario(imageURL: imgLink));
+    } catch (e) {}
+    return imgLink ?? preferenciasUsuarios.imgURL;
+  }
+
+  Future<String> guardarImg(List<File> img, String userName) async {
+    final _storage = FirebaseStorage.instance;
+
+    await FirebaseAuth.instance.signInAnonymously();
+
+    final task =
+        await _storage.ref('files/ProfilePic_$userName').putFile(img[0]);
+    final linkDescarga = await task.ref.getDownloadURL();
+
+    return linkDescarga;
   }
 
   void clearList() {
