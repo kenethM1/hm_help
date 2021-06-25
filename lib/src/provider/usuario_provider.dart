@@ -10,8 +10,6 @@ class UsuarioProvider {
   Future<Map<String, dynamic>> login(String email, String password) async {
     const String _path = 'api/Usuario/Login';
 
-    final _prefs = PreferenciasUsuario();
-
     final url = Uri.http(_url, _path);
 
     final authData = {
@@ -31,7 +29,7 @@ class UsuarioProvider {
     final isOk = new PropuestasProvider().verifyConnection(peticion);
 
     if (isOk) {
-      guardarPreferencias(_prefs, respuestaJson, email);
+      guardarPreferencias(respuestaJson, email);
 
       return {
         'ok': true,
@@ -44,13 +42,13 @@ class UsuarioProvider {
     }
   }
 
-  Future<void> guardarPreferencias(PreferenciasUsuario _prefs,
+  Future<void> guardarPreferencias(
       Map<String, dynamic> respuestaJson, String email) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
+    final _prefs = PreferenciasUsuario();
 
     String json = jsonEncode(respuestaJson);
 
-    pref.setString('userData', json);
+    _prefs.usuario = json;
 
     _prefs.correoUsuario = email;
   }

@@ -21,31 +21,31 @@ class PreferenciasUsuario {
   String get imgURL {
     Map user = decodeUserData();
 
-    return user['image_URL'];
+    return user['image_URL'] ?? '';
   }
 
   String get token {
     Map user = decodeUserData();
 
-    return user['token'];
+    return user['token'] ?? '';
   }
 
   String get nombre {
     Map user = decodeUserData();
 
-    return user['nombre'];
+    return user['nombre'] ?? '';
   }
 
   String get apellido {
     Map user = decodeUserData();
 
-    return user['apellido'];
+    return user['apellido'] ?? '';
   }
 
   String get sexo {
     Map user = decodeUserData();
 
-    return user['sexo'];
+    return user['sexo'] ?? '';
   }
 
   int? get gananciaMaxima {
@@ -77,7 +77,11 @@ class PreferenciasUsuario {
   }
 
   Map decodeUserData() {
-    String data = _prefs!.getString('userData') ?? '';
+    String data = _prefs!.getString('userData') ?? "";
+
+    if (data.isEmpty) {
+      return {'null': 'null'};
+    }
 
     Map user = jsonDecode(data);
 

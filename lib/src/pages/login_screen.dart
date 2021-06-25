@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_files/login_bloc.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
 import 'package:hm_help/src/pages/logup_screen.dart';
+import 'package:hm_help/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:hm_help/src/provider/images_provider.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
@@ -109,6 +110,7 @@ Widget _loginButton(LoginBloc bloc) {
 
 _login(LoginBloc bloc, BuildContext context) async {
   final usuarioProvider = new UsuarioProvider();
+  final preferenciasUsuario = PreferenciasUsuario();
 
   Map respuesta = await usuarioProvider.login(
       bloc.email.toString(), bloc.password.toString());

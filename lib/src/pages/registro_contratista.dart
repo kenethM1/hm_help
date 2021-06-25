@@ -156,6 +156,8 @@ class _registroState extends State<RegistroPage> {
     Map info = await contratistaProvider.nuevoContratista(
         usuario, bloc.contra.toString());
 
+        
+
     if (info['ok'] == true) {
       Navigator.pushNamed(context, 'principal');
     } else {
