@@ -75,6 +75,7 @@ class ImagesProvider extends ChangeNotifier {
     PropuestasProvider provider = PropuestasProvider();
     final _storage = FirebaseStorage.instance;
     await FirebaseAuth.instance.signInAnonymously();
+    final nombreUsuario = PreferenciasUsuario().nombre;
 
     String? monto = _monto!.value;
 
@@ -82,9 +83,9 @@ class ImagesProvider extends ChangeNotifier {
     _list.forEach((imagen) async {
       print('Subiendo imagen $iterador');
       final task = await _storage
-          .ref('files/Propuesta_$iterador-${_titulo!.value}')
+          .ref(
+              'files/$nombreUsuario/Propuesta_${_titulo!.value}-${DateTime.now().toString()}')
           .putFile(imagen);
-      iterador++;
 
       linksDescarga.add(await task.ref.getDownloadURL());
 

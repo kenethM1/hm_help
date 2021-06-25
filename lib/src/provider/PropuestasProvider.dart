@@ -129,6 +129,8 @@ class PropuestasProvider {
           "imagenes": List<dynamic>.from(imagenes.map((x) => imgtoJson(x))),
         };
 
+    print(toJson());
+
     final response =
         await http.post(url, body: json.encode(toJson()), headers: header);
 

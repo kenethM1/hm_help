@@ -208,20 +208,10 @@ class ContenedorGrafico extends StatelessWidget {
                       ? Container(
                           width: 60.0,
                           height: 60.0,
-                          decoration: new BoxDecoration(
-                            color: Colors.blue.shade300,
-                            image: new DecorationImage(
-                              image: new NetworkImage(provider.profileImg),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius:
-                                new BorderRadius.all(new Radius.circular(50.0)),
-                            border: new Border.all(
-                              color: Colors.blue.shade300,
-                              width: 4.0,
-                            ),
-                          ),
-                        )
+                          child: FadeInImage(
+                            placeholder: AssetImage('./assets/jar-loading.gif'),
+                            image: NetworkImage(value.profileImg),
+                          ))
                       : CircularProgressIndicator();
                 },
               ),
