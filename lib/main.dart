@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_provider/contratistaProvider.dart';
 import 'package:hm_help/src/bloc/bloc_provider/provider.dart';
-import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
+import 'package:hm_help/src/bloc/bloc_provider/proveedor.dart';
 import 'package:hm_help/src/pages/PerfilUsuario.dart';
 import 'package:hm_help/src/pages/UserProfile.dart';
 import 'package:hm_help/src/pages/homePageUser.dart';
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           initialRoute: 'login',
           routes: {
             'login': (_) => ProviderBloc(child: LoginScreen()),
-            'nuevoUser': (_) => Provider2(child: LogupUsuario()),
+            'nuevoUser': (_) => Proveedor(child: LogupUsuario()),
             'mainUser': (_) => MainUsuarioScreen(),
             'registro': (_) => ProviderContratista(child: RegistroPage()),
             'homeUser': (_) => HomePageUser(),
