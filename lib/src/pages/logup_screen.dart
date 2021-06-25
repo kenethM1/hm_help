@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_files/logupBlock.dart';
-import 'package:hm_help/src/bloc/bloc_provider/provider2.dart';
+import 'package:hm_help/src/bloc/bloc_provider/proveedor.dart';
+import 'package:hm_help/src/models/Usuario.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 
@@ -23,7 +24,7 @@ class LogupUsuario extends StatelessWidget {
   }
 
   Widget _form(BuildContext context) {
-    final bloc = Provider2.of(context);
+    final bloc = Proveedor.of(context);
 
     return Container(
         height: 800,
@@ -69,16 +70,16 @@ Widget logUpButton(LogupBloc bloc) {
 }
 
 _logup(LogupBloc bloc, BuildContext context) async {
-  final usuarioProvider = new UsuarioProvider();
+  final usuarioProvider = UsuarioProvider();
+    Usuario usuario = new Usuario(
+        nombre: bloc.nombre.toString(),
+        correo: bloc.email.toString(),
+        apellido: bloc.apellido.toString(),
+        fechaNacimiento: bloc.fecha.toString(),
+        sexo: bloc.sexo.toString());
 
   Map info = await usuarioProvider.nuevoUsuario(
-      bloc.email.toString(),
-      bloc.nombre.toString(),
-      bloc.apellido.toString(),
-      bloc.password.toString(),
-      bloc.sexo.toString(),
-      bloc.imagen.toString(),
-      bloc.fecha.toString());
+        usuario, bloc.password.toString());
 
   if (info['ok'] == true) {
     Navigator.pushNamed(context, 'mainUser');

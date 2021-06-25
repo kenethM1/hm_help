@@ -54,24 +54,19 @@ class UsuarioProvider {
   }
 
   Future<Map<String, dynamic>> nuevoUsuario(
-      String email,
-      String nombre,
-      String apellido,
-      String password,
-      String sexo,
-      String imagen_URL,
-      String fecha) async {
+      Usuario usuario,
+      String password) async {
     String _path = '/api/Usuario/SignUpUsuario';
 
     final url = Uri.http(_url, _path);
     final authData = {
-      'email': email,
-      'nombre': nombre,
-      'apellido': apellido,
+      'email': usuario.correo,
+      'nombre': usuario.nombre,
+      'apellido': usuario.apellido,
       'password': password,
-      'sexo': sexo,
-      'image_URL': imagen_URL,
-      'fecha': fecha,
+      'sexo': usuario.sexo,
+      'image_URL': 'https://electronicssoftware.net/wp-content/uploads/user.png',
+      'fecha': usuario.fechaNacimiento,
     };
 
     final peticion = await http.post(url,
