@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hm_help/src/pages/login_screen.dart';
 import 'package:hm_help/src/widgets/Carrusel.dart';
 import 'package:hm_help/src/provider/listaContratista_provider.dart';
 import 'package:hm_help/src/widgets/listaContratistas.dart';
@@ -30,7 +31,7 @@ class MainUsuarioScreen extends StatelessWidget {
           PopupMenuButton(
             onSelected: (result) {
               if (result == 0) {
-                Navigator.pushNamed(context, 'login');
+                Navigator.pushNamedAndRemoveUntil(context, 'login', (Route<dynamic> route) => false);
               }
             },
             itemBuilder: (context) => [

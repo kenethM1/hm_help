@@ -107,4 +107,7 @@ class UsuarioProvider {
 
     bool isOkay = new PropuestasProvider().verifyConnection(response);
   }
+  bool verifyConnection(http.Response peticion) {
+    return (peticion.statusCode != 200) ? false : true;
+  }
 }
