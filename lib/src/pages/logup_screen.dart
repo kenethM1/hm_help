@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hm_help/src/bloc/bloc_files/logupBlock.dart';
 import 'package:hm_help/src/bloc/bloc_provider/proveedor.dart';
 import 'package:hm_help/src/models/Usuario.dart';
+import 'package:hm_help/src/pages/main_userScreen.dart';
 import 'package:hm_help/src/provider/usuario_provider.dart';
 import 'package:hm_help/src/widgets/AlertLogin_Dialog.dart';
 
@@ -82,7 +83,8 @@ _logup(LogupBloc bloc, BuildContext context) async {
         usuario, bloc.password.toString());
 
   if (info['ok'] == true) {
-    Navigator.pushNamed(context, 'mainUser');
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute<Null>(
+      builder: (BuildContext context) => MainUsuarioScreen()), (Route<dynamic> route) => false);
   } else {
     showDialog(
         context: context,
@@ -287,7 +289,7 @@ Widget _fecha(LogupBloc bloc) {
               filled: true,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              hintText: 'Fecha',
+              hintText: 'Fecha (1990-12-25)',
               hintStyle: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 21,
